@@ -1,0 +1,101 @@
+<!-- 个人档案页 -->
+<view class="profile-container" style="padding-top: {{statusBarHeight}}px;">
+
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
+    <text class="top-title">我的成长档案</text>
+    <view class="top-right"></view>
+  </view>
+
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <view class="user-avatar" bindtap="onEditProfile">
+      <text wx:if="{{userInfo.avatar}}" class="avatar-img">👤</text>
+      <text wx:else class="avatar-placeholder">👤</text>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickname}}</text>
+      <text class="user-join">加入时间：{{userInfo.created_at}}</text>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-grid">
+    <view class="stat-card">
+      <text class="stat-num">{{stats.totalCheckins}}</text>
+      <text class="stat-label">打卡次数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{stats.totalPoints}}</text>
+      <text class="stat-label">访问点位</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{stats.totalBehaviors}}</text>
+      <text class="stat-label">探索行为</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{stats.streak}}</text>
+      <text class="stat-label">连续打卡</text>
+    </view>
+  </view>
+
+  <!-- 学段设置 -->
+  <view class="stage-section">
+    <text class="section-title">🎓 学段设置</text>
+    <text class="stage-hint">选择孩子学段，推荐更适合的教育切片</text>
+    <view class="stage-chips">
+      <view class="stage-chip {{stage === '全部' ? 'stage-active' : ''}}" data-stage="全部" bindtap="onStageChange">全部</view>
+      <view class="stage-chip {{stage === '小学' ? 'stage-active' : ''}}" data-stage="小学" bindtap="onStageChange">小学</view>
+      <view class="stage-chip {{stage === '初中' ? 'stage-active' : ''}}" data-stage="初中" bindtap="onStageChange">初中</view>
+      <view class="stage-chip {{stage === '高中' ? 'stage-active' : ''}}" data-stage="高中" bindtap="onStageChange">高中</view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="action-btn primary" bindtap="onCheckin">
+      <text class="action-icon">📝</text>
+      <text class="action-text">立即打卡</text>
+    </view>
+  </view>
+
+  <!-- 打卡历史 -->
+  <view class="history-section">
+    <text class="section-title">📅 打卡历史</text>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+
+    <view wx:elif="{{checkins.length === 0}}" class="empty-state">
+      <text class="empty-icon">📸</text>
+      <text class="empty-text">还没有打卡记录</text>
+      <text class="empty-hint">点击"立即打卡"记录你的成长足迹</text>
+    </view>
+
+    <view wx:else class="checkin-list">
+      <view class="checkin-item" wx:for="{{checkins}}" wx:key="_id" data-id="{{item._id}}" bindtap="onCheckinDetail">
+        <view class="checkin-header">
+          <text class="checkin-point">{{item.point_name}}</text>
+          <text class="checkin-date">{{item.date}}</text>
+        </view>
+        <view class="checkin-behavior" wx:if="{{item.behavior}}">
+          <text>行为：</text>
+          <text class="behavior-tag">{{item.behavior}}</text>
+        </view>
+        <view class="checkin-rating" wx:if="{{item.rating}}">
+          <text>评价：</text>
+          <text wx:if="{{item.rating === 'great'}}">🌟 很棒</text>
+          <text wx:elif="{{item.rating === 'good'}}">👍 不错</text>
+          <text wx:elif="{{item.rating === 'ok'}}">👍 还行</text>
+          <text wx:else>🤔 待改进</text>
+        </view>
+        <view class="checkin-notes" wx:if="{{item.notes}}">
+          <text>{{item.notes}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,184 @@
+<!-- 首页：石榴籽成长快乐导引地图 -->
+<wxs module="helper" src="../../utils/helper.wxs" />
+<view class="page-container">
+
+  <!-- ===== 标题栏 ===== -->
+  <view class="top-title" style="padding-top: {{statusBarHeight}}px;">
+    <view class="title-bar">
+      <text class="title-bar-text">石榴籽成长快乐导引地图</text>
+    </view>
+  </view>
+
+  <!-- ===== 统一搜索栏：地点 / 孩子行为 / 子素养 / 教案 ===== -->
+  <view class="global-search" style="top: {{searchTop}}px;">
+    <view class="gs-box">
+      <text class="gs-icon">🔍</text>
+      <input
+        class="gs-input"
+        placeholder="搜索地点、孩子行为（如顶嘴/磨蹭）或素养…"
+        value="{{searchValue}}"
+        confirm-type="search"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <text class="gs-clear" wx:if="{{searchValue}}" bindtap="onSearchClear">✕</text>
+    </view>
+  </view>
+
+  <!-- ===== 地图视图 ===== -->
+  <view class="map-view" wx:if="{{view === 'map'}}">
+    <map
+      id="mainMap"
+      class="main-map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      bindmarkertap="onMapMarkerTap"
+      show-location
+      enable-zoom
+      enable-scroll
+    ></map>
+
+    <view class="map-empty-hint" wx:if="{{showEmptyHint}}">
+      <view class="empty-state-map">
+        <text class="title">没有找到匹配的地点</text>
+        <text class="desc">试试调整搜索条件或筛选维度</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 卡片列表视图 ===== -->
+  <scroll-view class="card-view" wx:else scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="card-view-header">
+      <text class="result-count">找到 <text class="count-num">{{resultCount}}</text> 个地点</text>
+    </view>
+
+    <!-- 行为 → 子素养 → 对症教案 推荐（方案A：内嵌在卡片列表上方） -->
+    <view class="behavior-rec" wx:if="{{behaviorRecs.length > 0}}">
+      <view class="rec-head-row">
+        <view class="rec-title">👶 行为教案推荐</view>
+        <text class="rec-clear" bindtap="clearBehaviorRecs">✕ 清除</text>
+      </view>
+      <view class="rec-label" wx:if="{{selectedBehaviorLabel}}">{{selectedBehaviorLabel}}</view>
+      <view class="rec-block" wx:for="{{behaviorRecs}}" wx:for-item="rec" wx:for-index="recIdx" wx:key="behavior">
+        <view class="rec-beh-head">
+          <text class="rec-beh-name">「{{rec.behavior}}」</text>
+          <text class="rec-beh-sub">{{rec.subs.join(' / ')}}</text>
+        </view>
+        <view class="rec-guide" wx:if="{{rec.guide}}">{{rec.guide}}</view>
+        <view class="rec-slices">
+          <view
+            class="rec-slice"
+            wx:for="{{rec.matchedSlices}}"
+            wx:for-item="s"
+            wx:for-index="si"
+            wx:key="title"
+            data-rec="{{recIdx}}"
+            data-res="{{si}}"
+            bindtap="onRecSliceTap"
+          >
+            <view class="rec-slice-title">{{s.title}}</view>
+            <view class="rec-slice-meta">{{s.point}} · {{s.age}} · {{s.starTxt}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="rec-hint">点切片可查看该点位详情与教案，上述结果基于行为→子素养匹配</view>
+    </view>
+
+    <view class="card-grid" wx:if="{{cardItems.length > 0}}">
+      <view class="card" wx:for="{{cardItems}}" wx:key="id" data-id="{{item.id}}" bindtap="onCardTap">
+        <view class="card-colorbar">
+          <view class="bar-seg {{tag.barClass}}" wx:for="{{item.dimTags}}" wx:key="key"></view>
+        </view>
+        <view class="card-body">
+          <view class="card-name">{{item.n}}</view>
+          <view class="card-stars" wx:if="{{item.starsDisplay.length > 0}}">
+            <view class="star-item" wx:for="{{item.starsDisplay}}" wx:key="dim" style="color: {{item.color}};">
+              <text class="star-label">{{item.label}}</text>
+              <text class="star-icons">{{item.starStr}}</text>
+            </view>
+          </view>
+          <view class="card-tags">
+            <view class="tag-cat" wx:if="{{item.c}}" style="color: {{helper.getCatColor(item.c)}};"><text>{{item.c}}</text></view>
+            <view class="tag-dim {{tag.colorClass}}" wx:for="{{item.dimTags}}" wx:key="key">{{tag.label}}</view>
+          </view>
+          <view class="card-district">{{item.d}}<text wx:if="{{item.hoursShort}}"> · {{item.hoursShort}}</text></view>
+          <view class="card-desc">{{item.descShort}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:else>
+      <text class="title">没有找到匹配的地点</text>
+      <text class="desc">试试调整搜索条件或筛选维度</text>
+    </view>
+  </scroll-view>
+
+  <!-- ===== 主动筛选条（地图模式下在按钮上方） ===== -->
+  <view class="active-bar" wx:if="{{view === 'map'}}">
+    <view class="filter-tag filter-tag-dim" wx:for="{{filter.dims}}" wx:key="*this" style="background: {{helper.getDimColor(item)}}; color: #fff;">
+      {{helper.getDimLabel(item)}}
+      <text class="remove" data-dim="{{item}}" catchtap="onDimTagRemove">x</text>
+    </view>
+    <view class="filter-tag filter-tag-dim" wx:for="{{filter.starDims}}" wx:key="dim" style="background: {{helper.getDimColor(item.dim)}}; color: #fff;">
+      {{helper.getDimLabel(item.dim)}}≥{{helper.repeatStar(item.min)}}
+      <text class="remove" data-dim="{{item.dim}}" catchtap="onStarDimTagRemove">x</text>
+    </view>
+    <view class="filter-tag filter-tag-issue" wx:for="{{filter.issues}}" wx:key="*this">
+      {{item.slice(0, 12)}}{{item.length > 12 ? '...' : ''}}
+      <text class="remove" data-issue="{{item}}" catchtap="onIssueTagRemove">x</text>
+    </view>
+    <view class="filter-tag filter-tag-cat" wx:for="{{filter.cats}}" wx:key="*this" style="background: {{helper.getCatColor(item)}}; color: #fff;">
+      {{item}}
+      <text class="remove" data-cat="{{item}}" catchtap="onCatTagRemove">x</text>
+    </view>
+    <view class="filter-tag filter-tag-topic" wx:for="{{filter.topics}}" wx:key="*this" style="background: #dc2626; color: #fff;">
+      {{item}}
+      <text class="remove" data-topic="{{item}}" catchtap="onTopicTagRemove">x</text>
+    </view>
+  </view>
+
+  <!-- ===== 底部操作栏（所有视图均显示） ===== -->
+  <view class="bottom-actions">
+    <view class="bottom-bar-inner">
+      <view class="bottom-btn bottom-btn-primary" bindtap="toggleView">
+        <text class="bottom-btn-text" wx:if="{{view === 'map'}}">列表</text>
+        <text class="bottom-btn-text" wx:else>地图</text>
+      </view>
+      <view class="bottom-btn bottom-btn-accent" bindtap="openFilterSheet" style="position:relative">
+        <text class="bottom-btn-text">筛选</text>
+        <view class="badge" wx:if="{{filterBadge > 0}}">{{filterBadge}}</view>
+      </view>
+      <view class="bottom-btn bottom-btn-plain" bindtap="goRecommend">
+        <text class="bottom-btn-text">行为寻课</text>
+      </view>
+      <view class="bottom-btn bottom-btn-plain" bindtap="goNear">
+        <text class="bottom-btn-text">附近</text>
+      </view>
+      <view class="bottom-btn bottom-btn-plain" bindtap="goProfile">
+        <text class="bottom-btn-text">我的</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 筛选面板（组件） ===== -->
+  <filter-sheet
+    wx:if="{{showFilterSheet}}"
+    subLiteraciesByDim="{{subLiteraciesByDim}}"
+    subsToBehaviors="{{subsToBehaviors}}"
+    searchValue="{{searchValue}}"
+    topics="{{filter.topics}}"
+    stage="{{stage}}"
+    bind:filterchange="onFilterChange"
+    bind:behaviorselect="onBehaviorSelect"
+    bind:close="closeFilterSheet"
+  ></filter-sheet>
+
+  <!-- ===== 反馈面板（组件） ===== -->
+  <feedback-popup
+    wx:if="{{showFeedback}}"
+    bind:close="closeFeedback"
+  ></feedback-popup>
+
+</view>

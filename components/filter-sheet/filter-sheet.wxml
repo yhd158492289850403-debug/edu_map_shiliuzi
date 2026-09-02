@@ -1,0 +1,103 @@
+<!-- 筛选面板组件 v3 · 层级折叠 + 多选行为 -->
+<view class="sheet-overlay" bindtap="onOverlayTap"></view>
+<view class="filter-sheet">
+
+  <view class="sheet-handle"></view>
+  <view class="sheet-header">
+    <text class="sheet-title">筛选条件</text>
+    <button class="sheet-close" bindtap="onClose">✕</button>
+  </view>
+
+  <scroll-view class="sheet-body" scroll-y>
+
+    <!-- 搜索 -->
+    <view class="filter-section">
+      <text class="filter-section-title">搜索</text>
+      <input class="search-box" placeholder="搜索地点名称、孩子问题…" value="{{localSearch}}" bindinput="onSearchInput" />
+    </view>
+
+    <!-- ===== 素养维度（层级折叠 drill-down） ===== -->
+    <view class="filter-section">
+      <view class="fold-header {{dimFoldOpen ? 'open' : ''}}" bindtap="toggleDimFold">
+        <text class="fold-title">🎨 孩子的问题（可多选）</text>
+        <text class="fold-arrow">{{dimFoldOpen ? '▼' : '▶'}}</text>
+      </view>
+
+      <view class="fold-body" wx:if="{{dimFoldOpen}}">
+
+        <!-- Level 2: 六维 chips -->
+        <view class="dim-chips">
+          <view
+            class="dim-chip {{item.active ? 'active' : ''}}"
+            wx:for="{{dimChips}}"
+            wx:key="key"
+            data-dim="{{item.key}}"
+            bindtap="selectDim"
+            style="color:{{item.active ? '#fff' : item.color}}; border-color:{{item.active ? 'transparent' : item.color}}; background:{{item.active ? item.color : '#fff'}}"
+          >{{item.label}}</view>
+        </view>
+
+        <!-- Level 3: 子素养列表 -->
+        <view class="sub-list" wx:if="{{selectedDim && subList.length > 0}}">
+          <view class="sub-item {{selectedSub === item.name ? 'sub-active' : ''}}" wx:for="{{subList}}" wx:key="name" data-sub="{{item.name}}" bindtap="selectSub">
+            <text class="sub-name">{{item.name}}</text>
+            <text class="sub-beh-count">{{item.behCount}}行为</text>
+          </view>
+        </view>
+        <view class="sub-empty" wx:if="{{selectedDim && subList.length === 0}}">该维度下暂无已映射的子素养</view>
+
+        <!-- Level 4: 行为列表（多选） -->
+        <view class="action-list" wx:if="{{selectedSub && actionList.length > 0}}">
+          <text class="action-hint">点选多个问题，整合成一个方案 ↓</text>
+          <view class="action-item {{item.checked ? 'action-checked' : ''}}" wx:for="{{actionList}}" wx:key="name" data-name="{{item.name}}" bindtap="selectAction">
+            <view class="action-check">{{item.checked ? '☑' : '☐'}}</view>
+            <text class="action-name">{{item.name}}</text>
+            <text class="action-count" wx:if="{{item.sliceCount > 0}}">{{item.sliceCount}}个教案</text>
+          </view>
+        </view>
+
+      </view>
+    </view>
+
+    <!-- ===== 专题分类（层级折叠） ===== -->
+    <view class="filter-section">
+      <view class="fold-header {{topicFoldOpen ? 'open' : ''}}" bindtap="toggleTopicFold">
+        <text class="fold-title">📂 专题分类</text>
+        <text class="fold-arrow">{{topicFoldOpen ? '▼' : '▶'}}</text>
+      </view>
+      <view class="fold-body" wx:if="{{topicFoldOpen}}">
+        <view class="dim-chips">
+          <view
+            class="dim-chip {{item.active ? 'active' : ''}}"
+            wx:for="{{topicChips}}"
+            wx:key="key"
+            data-topic="{{item.key}}"
+            bindtap="toggleTopic"
+            style="color:{{item.active ? '#fff' : '#dc2626'}}; border-color:{{item.active ? 'transparent' : '#dc2626'}}; background:{{item.active ? '#dc2626' : '#fff'}}"
+          >{{item.label}}</view>
+        </view>
+        <view class="sub-empty" wx:if="{{selectedTopics.length > 0}}">已选：{{selectedTopics.join('、')}}</view>
+      </view>
+    </view>
+
+    <!-- 已选行为标签栏 -->
+    <view class="selected-bar" wx:if="{{selectedBehaviors.length > 0}}">
+      <text class="selected-label">已选 {{selectedBehaviors.length}} 个问题：</text>
+      <view class="selected-tags">
+        <view class="selected-tag" wx:for="{{selectedBehaviors}}" wx:key="*this">
+          <text>{{item}}</text>
+          <text class="tag-x" data-name="{{item}}" catchtap="removeBehavior">✕</text>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+  <view class="sheet-actions">
+    <button class="sheet-btn btn-reset" bindtap="onReset">重置</button>
+    <button class="sheet-btn btn-apply" bindtap="onApply">
+      确定{{selectedBehaviors.length > 0 ? '（' + selectedBehaviors.length + '个问题）' : ''}}
+    </button>
+  </view>
+
+</view>

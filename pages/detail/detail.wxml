@@ -1,0 +1,170 @@
+<!-- 详情页 -->
+<view class="detail-container" wx:if="{{location}}">
+
+  <!-- 顶部返回栏 -->
+  <view class="detail-top-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="back-btn" bindtap="onBack">
+      <text class="back-arrow">&lt;</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="top-title-text">{{location.n}}</text>
+  </view>
+
+  <!-- 颜色条 -->
+  <view class="detail-colorbar">
+    <view class="bar-seg" wx:for="{{barColors}}" wx:key="*this" style="background: {{item}}"></view>
+  </view>
+
+  <view class="detail-content">
+    <!-- 名称 -->
+    <view class="detail-name">{{location.n}}</view>
+
+    <!-- 维度标签 -->
+    <view class="detail-tags">
+      <view class="tag-dim" wx:for="{{dimTags}}" wx:key="key" style="background: {{item.color}}">{{item.label}}</view>
+    </view>
+
+    <!-- 六维素养星级 -->
+    <view class="info-section star-section">
+      <view class="section-title">六维素养星级</view>
+      <view class="point-star-grid">
+        <view class="point-star-item" wx:for="{{pointStars}}" wx:key="dim">
+          <view class="ps-dim" style="color: {{item.color}};">{{item.label}}</view>
+          <view class="ps-stars" style="color: {{item.color}};">
+            <text wx:if="{{item.n > 0}}">{{item.starStr}}</text>
+            <text wx:else class="ps-none">—</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="info-section">
+      <view class="section-title">基本信息</view>
+      <view class="info-grid">
+        <view class="info-row">
+          <text class="info-label">区域</text>
+          <text class="info-value">{{location.d}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">地址</text>
+          <text class="info-value">{{location.a}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">类别</text>
+          <text class="info-value">{{location.c}}</text>
+        </view>
+        <view class="info-row" wx:if="{{location.fee && location.fee !== '待确认' && location.fee !== '待补充'}}">
+          <text class="info-label">收费情况</text>
+          <text class="info-value">{{location.fee}}</text>
+        </view>
+        <view class="info-row" wx:if="{{location.h}}">
+          <text class="info-label">开放信息</text>
+          <text class="info-value">{{location.h}}</text>
+        </view>
+        <view class="info-row" wx:if="{{location.p && location.p !== '待补充'}}">
+          <text class="info-label">联系电话</text>
+          <text class="info-value">{{location.p}}</text>
+        </view>
+      </view>
+      <view class="nav-action" bindtap="onNav"><text class="nav-action-text">🗺 导航到此处</text></view>
+    </view>
+
+    <!-- 核心育人价值 -->
+    <view class="info-section">
+      <view class="section-title">核心育人价值</view>
+      <view class="section-body">{{location.v}}</view>
+    </view>
+
+    <!-- 适配行为问题 -->
+    <view class="info-section">
+      <view class="section-title">适配行为问题</view>
+      <view class="tag-list">
+        <view class="tag-behavior" wx:for="{{location.is}}" wx:key="*this">{{item}}</view>
+        <text class="tag-empty" wx:if="{{!location.is || location.is.length === 0}}">通用型</text>
+      </view>
+    </view>
+
+    <!-- 引导建议 -->
+    <view class="info-section">
+      <view class="section-title">引导建议</view>
+      <view class="section-body">{{location.g}}</view>
+    </view>
+
+    <!-- 推荐活动 -->
+    <view class="info-section">
+      <view class="section-title">推荐活动</view>
+      <view class="section-body">{{location.ac}}</view>
+    </view>
+
+    <!-- 预期发展素养 -->
+    <view class="info-section">
+      <view class="section-title">预期发展素养</view>
+      <view class="section-body">{{location.co}}</view>
+    </view>
+
+    <!-- 教育切片 -->
+    <view class="info-section" wx:if="{{sliceGroups.length > 0}}">
+      <view class="section-title">教育切片（{{location.sliceCount}}）</view>
+      <view
+        class="slice-group"
+        wx:for="{{sliceGroups}}"
+        wx:for-index="gIdx"
+        wx:for-item="group"
+        wx:key="dim"
+      >
+        <view class="slice-group-title" style="color: {{group.color}}">
+          {{group.dimLabel}}<text class="slice-group-count">{{group.slices.length}}</text>
+        </view>
+        <view class="slice-card" wx:for="{{group.slices}}" wx:for-index="iIdx" wx:key="title"
+          data-g="{{gIdx}}" data-i="{{iIdx}}" bindtap="onSliceTap">
+          <view class="slice-card-head">
+            <view class="slice-title">{{item.title}}</view>
+            <view class="slice-star" wx:if="{{item.starStr}}" style="color: {{group.color}}">{{item.starStr}}</view>
+            <view class="slice-stage-tag slice-tag-rec" wx:if="{{item.stageLabel === '推荐'}}">推荐</view>
+            <view class="slice-stage-tag slice-tag-adv" wx:elif="{{item.stageLabel === '进阶'}}">进阶</view>
+          </view>
+          <view class="slice-meta">{{item.loc}} · {{item.age}} · {{item.subsTxt}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 展开的切片教案 -->
+    <view class="info-section slice-detail" wx:if="{{expandedSlice}}">
+      <view class="section-title">{{expandedSlice.title}}</view>
+      <view class="slice-detail-stars" wx:if="{{expandedSlice.starItems.length > 0}}">
+        <view class="slice-detail-star" wx:for="{{expandedSlice.starItems}}" wx:key="dim" style="color: {{item.color}};">
+          {{item.label}} {{item.starStr}}
+        </view>
+      </view>
+      <view class="slice-seg" wx:if="{{expandedSlice.edu}}">
+        <text class="slice-seg-label">教育价值</text>
+        <text class="slice-seg-text">{{expandedSlice.edu}}</text>
+      </view>
+      <view class="slice-seg" wx:if="{{expandedSlice.pre}}">
+        <text class="slice-seg-label">行前准备</text>
+        <text class="slice-seg-text">{{expandedSlice.pre}}</text>
+      </view>
+      <view class="slice-seg" wx:if="{{expandedSlice.talk}}">
+        <text class="slice-seg-label">路上话术</text>
+        <text class="slice-seg-text">{{expandedSlice.talk}}</text>
+      </view>
+      <view class="slice-seg" wx:if="{{expandedSlice.act}}">
+        <text class="slice-seg-label">到馆做法</text>
+        <text class="slice-seg-text">{{expandedSlice.act}}</text>
+      </view>
+      <view class="slice-seg" wx:if="{{expandedSlice.post}}">
+        <text class="slice-seg-label">返程复盘</text>
+        <text class="slice-seg-text">{{expandedSlice.post}}</text>
+      </view>
+    </view>
+
+    <!-- 底部标语 -->
+    <view class="detail-footer">
+      <view class="footer-icon">🏠</view>
+      <view class="footer-text">这里是多民族家庭共同成长的地方</view>
+      <view class="footer-line"></view>
+    </view>
+  </view>
+
+</view>

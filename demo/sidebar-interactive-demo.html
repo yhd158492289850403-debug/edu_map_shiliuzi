@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>小程序 sidebar 交互 demo</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8f9fb; color: #1e293b; height: 100vh; overflow: hidden; }
+/* ===== phone frame ===== */
+.phone { width: 375px; height: 812px; margin: 0 auto; position: relative; overflow: hidden; background: #f8f9fb; border: 2px solid #ccc; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.18); margin-top: 20px; }
+.phone .statusbar { height: 44px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #94a3b8; }
+.phone .content { height: calc(100% - 44px); position: relative; overflow: hidden; }
+
+/* ===== title bar ===== */
+.title-bar { position: absolute; top: 0; left: 0; right: 0; z-index: 100; background: #fff; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+.title-text { flex: 1; font-size: 16px; font-weight: 700; text-align: center; }
+
+/* ===== global search ===== */
+.global-search { position: absolute; top: 49px; left: 0; right: 0; z-index: 100; padding: 0 12px 6px; background: #fff; }
+.gs-box { display: flex; align-items: center; background: #f1f5f9; border-radius: 20px; padding: 8px 14px; }
+.gs-icon { font-size: 14px; margin-right: 8px; }
+.gs-input { flex: 1; font-size: 14px; border: none; background: transparent; outline: none; }
+.gs-clear { font-size: 14px; color: #94a3b8; cursor: pointer; padding: 0 4px; }
+
+/* ===== map placeholder ===== */
+.map { position: absolute; top: 95px; left: 0; right: 0; bottom: 120px; background: linear-gradient(135deg,#dbeafe 0%,#bfdbfe 30%,#e0e7ff 60%,#dbeafe 100%); display: flex; align-items: center; justify-content: center; color: #3B82F6; font-size: 18px; font-weight: 600; }
+
+/* ===== bottom tabs ===== */
+.bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; z-index: 100; display: flex; gap: 6px; padding: 8px 12px; background: #fff; border-top: 1px solid #e2e8f0; }
+.btm-btn { flex: 1; height: 40px; border-radius: 20px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btm-btn.primary { background: #3B82F6; color: #fff; }
+.btm-btn.outline { background: #f1f5f9; color: #64748b; }
+
+/* ===== overlay + filter sheet ===== */
+.overlay { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,0.35); display: none; }
+.overlay.open { display: block; }
+.filter-sheet { position: absolute; bottom: 0; left: 0; right: 0; z-index: 300; background: #fff; border-radius: 16px 16px 0 0; max-height: 75%; display: none; overflow: hidden; }
+.filter-sheet.open { display: flex; flex-direction: column; }
+.sheet-handle { width: 40px; height: 4px; background: #cbd5e1; border-radius: 2px; margin: 8px auto 0; }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 8px; border-bottom: 1px solid #e2e8f0; }
+.sheet-header h2 { font-size: 16px; font-weight: 700; }
+.sheet-close { font-size: 22px; background: none; border: none; cursor: pointer; color: #64748b; padding: 4px; }
+.sheet-body { flex: 1; overflow-y: auto; padding: 12px 16px 16px; }
+.sheet-actions { display: flex; gap: 10px; padding: 12px 16px 14px; border-top: 1px solid #e2e8f0; background: #fff; }
+.sheet-actions button { flex: 1; height: 40px; border-radius: 20px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-reset { background: #f1f5f9; color: #64748b; }
+.btn-apply { background: #3B82F6; color: #fff; }
+
+/* ===== filter sections ===== */
+.filter-section { margin-bottom: 14px; }
+.filter-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+
+/* ===== fold (层级折叠) ===== */
+.fold-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; cursor: pointer; border-bottom: 1px dashed #e2e8f0; user-select: none; }
+.fold-header .fold-title { font-size: 14px; font-weight: 600; }
+.fold-header .fold-arrow { font-size: 11px; color: #94a3b8; transition: transform 0.2s; }
+.fold-header.open .fold-arrow { transform: rotate(90deg); }
+.fold-body { padding: 8px 0 4px 8px; display: none; }
+.fold-body.open { display: block; }
+
+/* ===== dim chips ===== */
+.dim-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.dim-chip { font-size: 13px; padding: 6px 14px; border-radius: 16px; cursor: pointer; background: #fff; border: 1.5px solid #e2e8f0; font-weight: 500; user-select: none; transition: all 0.2s; }
+.dim-chip.active { color: #fff !important; border-color: transparent; }
+
+/* ===== sub-lit list ===== */
+.sub-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+.sub-row { background: #f8f9fb; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.sub-row.active { border-color: #3B82F6; background: #eef2ff; }
+
+/* ===== behavior actions ===== */
+.action-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.action-item { padding: 8px 10px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; cursor: pointer; font-size: 12px; line-height: 1.5; border-left: 3px solid #3B82F6; }
+.action-item:active { background: #eef2ff; }
+.action-item .a-name { font-weight: 600; }
+.action-item .a-hint { color: #94a3b8; font-size: 11px; margin-top: 2px; }
+.action-item .a-locs { color: #3B82F6; font-size: 11px; font-weight: 500; margin-top: 3px; }
+
+/* ===== choice panel (A vs B) ===== */
+.choice-panel { position: absolute; inset: 0; z-index: 400; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; }
+.choice-panel.open { display: flex; }
+.choice-box { background: #fff; border-radius: 16px; padding: 24px 20px; width: 320px; max-width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+.choice-box h2 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.choice-box p { font-size: 13px; color: #64748b; margin-bottom: 16px; line-height: 1.6; }
+.choice-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 10px; text-align: left; }
+.choice-btn.b1 { background: #eef2ff; color: #1e40af; border: 1.5px solid #93c5fd; }
+.choice-btn.b2 { background: #fef3c7; color: #92400e; border: 1.5px solid #fcd34d; }
+.choice-btn.b2:last-child { margin-bottom: 0; }
+
+/* ===== preview toast ===== */
+.toast { position: absolute; bottom: 140px; left: 12px; right: 12px; z-index: 500; background: #1e293b; color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 13px; display: none; line-height: 1.6; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.toast.open { display: block; }
+.toast strong { color: #fbbf24; }
+.toast .close-toast { position: absolute; top: 6px; right: 10px; font-size: 18px; cursor: pointer; color: #94a3b8; }
+
+/* ===== mode indicator ===== */
+.mode-bar { position: absolute; top: 95px; right: 10px; z-index: 50; }
+.mode-badge { font-size: 11px; padding: 6px 12px; border-radius: 20px; font-weight: 600; cursor: pointer; border: none; }
+.mode-a { background: #eef2ff; color: #3B82F6; border: 1.5px solid #93c5fd; }
+.mode-b { background: #fef3c7; color: #b45309; border: 1.5px solid #fcd34d; }
+.mode-a.active, .mode-b.active { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+/* ===== behavior-rec inline (mode A) ===== */
+.beh-rec-inline { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+.beh-rec-title { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+.beh-rec-sub { font-size: 12px; color: #78350f; }
+.beh-rec-slices { margin-top: 6px; font-size: 12px; color: #92400e; }
+.beh-rec-slice { padding: 6px 8px; background: #fff; border-radius: 6px; margin-top: 4px; border-left: 3px solid #f59e0b; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="statusbar">🔋 100% · 演示模拟器</div>
+  <div class="content" id="content">
+    <!-- title bar -->
+    <div class="title-bar">
+      <span class="title-text">🪷 石榴籽成长快乐导引地图</span>
+    </div>
+    <!-- global search -->
+    <div class="global-search">
+      <div class="gs-box">
+        <span class="gs-icon">🔍</span>
+        <input class="gs-input" placeholder="搜索地点、孩子行为（如顶嘴/磨蹭）或素养…" id="searchInput" oninput="onSearch()">
+        <span class="gs-clear" id="clearBtn" onclick="clearSearch()">✕</span>
+      </div>
+    </div>
+    <!-- mode switcher -->
+    <div class="mode-bar">
+      <button class="mode-badge mode-a active" id="modeA" onclick="setMode('A')">方案A：卡片内展示</button>
+      <button class="mode-badge mode-b" id="modeB" onclick="setMode('B')" style="margin-top:6px">方案B：跳转寻课页</button>
+    </div>
+    <!-- map placeholder -->
+    <div class="map" id="mapArea">🗺 地图区域（筛选后卡片会覆盖此处）</div>
+    <!-- bottom -->
+    <div class="bottom-bar">
+      <button class="btm-btn primary" onclick="toggleSheet()">📋 筛选</button>
+      <button class="btm-btn outline">🧭 附近</button>
+      <button class="btm-btn outline">🔍 行为寻课</button>
+    </div>
+
+    <!-- overlay -->
+    <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+    <!-- filter sheet -->
+    <div class="filter-sheet" id="filterSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>🎨 筛选条件</h2>
+        <button class="sheet-close" onclick="closeSheet()">×</button>
+      </div>
+      <div class="sheet-body">
+        <!-- search inside sheet (synced) -->
+        <div class="filter-section">
+          <h3>🔍 搜索</h3>
+          <input class="gs-input" style="background:#f1f5f9;padding:10px 12px;border-radius:10px;width:100%;font-size:14px" placeholder="搜索地点名称、孩子问题…" id="sheetSearch" oninput="onSearch()">
+        </div>
+
+        <!-- 素养维度（层级折叠） -->
+        <div class="filter-section">
+          <div class="fold-header" id="dimFoldHeader" onclick="toggleDimFold()">
+            <span class="fold-title">🎨 素养维度（层级折叠）</span>
+            <span class="fold-arrow" id="dimFoldArrow">▶</span>
+          </div>
+          <div class="fold-body" id="dimFoldBody">
+            <!-- dimension chips -->
+            <div class="dim-chips" id="dimChips"></div>
+            <!-- sub-literacy list (shown when dim is selected) -->
+            <div class="sub-list" id="subList"></div>
+            <!-- behavior actions (shown when sub is selected) -->
+            <div class="action-list" id="actionList"></div>
+            <div id="actionHint" style="font-size:11px;color:#94a3b8;margin-top:4px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn-reset" onclick="resetAll()">↺ 重置</button>
+        <button class="btn-apply" onclick="applyFilter()">✔ 查看结果</button>
+      </div>
+    </div>
+
+    <!-- preview toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- choice confirmation panel (only in demo mode) -->
+    <div class="choice-panel" id="choicePanel">
+      <div class="choice-box">
+        <h2 id="choiceTitle">点击行为后…</h2>
+        <p id="choiceDesc"></p>
+        <button class="choice-btn b1" id="choiceA" onclick="doChoice('A')">✅ 方案A：在卡片视图内直接展示该行为对应的切片教案（原地展开）</button>
+        <button class="choice-btn b2" id="choiceB" onclick="doChoice('B')">🚀 方案B：跳转到「行为寻课页」看完整四段教案（离开首页）</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 静态数据（演示用，精简） =====
+const LITERACY = {
+  "体素": [
+    { sub: "冷暖自知", actions: ["天冷自己加衣", "运动出汗会主动擦干"] },
+    { sub: "饥饱感知", actions: ["饿了知道吃、饱了知道停", "不暴食、不挑食"] },
+    { sub: "身体自信", actions: ["敢于尝试新动作", "摔倒自己爬起来"] },
+  ],
+  "心素": [
+    { sub: "情绪觉知", actions: ["说出自己正在开心/难过/生气", "识别朋友的表情并说出情绪"] },
+    { sub: "情绪调节", actions: ["生气时先深呼吸", "用画画表达不开心"] },
+  ],
+  "灵素": [
+    { sub: "孝亲敬老", actions: ["给长辈倒杯水", "听长辈讲过去的故事"] },
+    { sub: "感恩知义", actions: ["说谢谢并说出原因", "做一件让父母惊喜的小事"] },
+    { sub: "正直诚实", actions: ["做错事主动承认", "不隐瞒事实"] },
+  ],
+  "智素": [
+    { sub: "好奇追问", actions: ["连续问3个为什么", "参观科技馆时记录一个新发现"] },
+    { sub: "专注力", actions: ["安静读完一本书", "连续画画/拼图15分钟"] },
+    { sub: "观察感知", actions: ["在户外找3种不同形状的叶子", "观察蚂蚁搬运食物5分钟"] },
+  ],
+  "行素": [
+    { sub: "启动执行", actions: ["说做就做，5分钟内开始", "制定明日计划并执行"] },
+    { sub: "时间管理", actions: ["用番茄钟完成作业", "不拖延起床"] },
+  ],
+  "交素": [
+    { sub: "共情回应", actions: ["朋友难过时说'我理解你'", "主动关心他人"] },
+    { sub: "倾听尊重", actions: ["等别人说完再表达", "不打断别人说话"] },
+  ],
+};
+const DIM_ORDER = ["体素","心素","灵素","智素","行素","交素"];
+const DIM_LABEL = {"体素":"身体素养","心素":"情绪素养","灵素":"价值素养","智素":"认知素养","行素":"行动素养","交素":"社交素养"};
+const DIM_COLOR = {"体素":"#EAB308","心素":"#EF4444","灵素":"#A855F7","智素":"#22C55E","行素":"#3B82F6","交素":"#F97316"};
+
+// ===== state =====
+let currentDim = null;
+let currentSub = null;
+let currentAction = null;
+let mode = 'A'; // 'A' = inline, 'B' = jump
+let search = '';
+
+// ===== init =====
+function initDimChips() {
+  const el = document.getElementById('dimChips');
+  el.innerHTML = DIM_ORDER.map(d => {
+    const color = DIM_COLOR[d];
+    const isActive = currentDim === d;
+    return `<span class="dim-chip ${isActive?'active':''}" 
+      style="color:${isActive?'#fff':color};border-color:${isActive?'transparent':color};background:${isActive?color:'#fff'}"
+      onclick="selectDim('${d}')">${DIM_LABEL[d]}</span>`;
+  }).join('');
+}
+
+function renderSubList() {
+  const el = document.getElementById('subList');
+  const al = document.getElementById('actionList');
+  const hint = document.getElementById('actionHint');
+  if (!currentDim) { el.innerHTML=''; al.innerHTML=''; hint.innerHTML=''; return; }
+  const subs = LITERACY[currentDim];
+  el.innerHTML = subs.map(s => {
+    const isActive = currentSub === s.sub;
+    return `<div class="sub-row ${isActive?'active':''}" onclick="selectSub('${s.sub}')">
+      ${s.sub} <span style="float:right;color:#94a3b8;font-size:11px">${s.actions.length}行为</span>
+    </div>`;
+  }).join('');
+  if (currentSub) {
+    const subsObj = subs.find(s=>s.sub===currentSub);
+    if(subsObj){
+      al.innerHTML = subsObj.actions.map(a => 
+        `<div class="action-item ${currentAction===a?'active':''}" onclick="selectAction('${a.replace(/'/g,"\\'")}','${currentDim}','${currentSub}')">
+          <div class="a-name">${a}</div>
+        </div>`
+      ).join('');
+      hint.innerHTML = '点击行为 → ' + (mode==='A'?'在卡片视图内展示对应点位 & 切片':'跳转寻课页查看四段教案');
+    }
+  } else {
+    al.innerHTML = ''; hint.innerHTML = '';
+  }
+}
+
+// ===== interactions =====
+function toggleDimFold() {
+  const h = document.getElementById('dimFoldHeader');
+  const b = document.getElementById('dimFoldBody');
+  const isOpen = b.classList.contains('open');
+  b.classList.toggle('open', !isOpen);
+  h.classList.toggle('open', !isOpen);
+}
+
+function selectDim(d) {
+  if(currentDim===d){ currentDim=null; currentSub=null; currentAction=null; }
+  else { currentDim=d; currentSub=null; currentAction=null; }
+  initDimChips(); renderSubList();
+}
+
+function selectSub(s) {
+  if(currentSub===s){ currentSub=null; currentAction=null; }
+  else { currentSub=s; currentAction=null; }
+  renderSubList();
+}
+
+function selectAction(action, dim, sub) {
+  currentAction = (currentAction===action) ? null : action;
+  if(currentAction){
+    // show choice panel (demo)
+    showChoicePanel(action, dim, sub);
+  }
+  renderSubList();
+}
+
+// ===== choice panel =====
+let pendingAction=null, pendingDim=null, pendingSub=null;
+function showChoicePanel(action, dim, sub) {
+  pendingAction=action; pendingDim=dim; pendingSub=sub;
+  const p = document.getElementById('choicePanel');
+  document.getElementById('choiceTitle').innerHTML = `点击「${action}」后`;
+  document.getElementById('choiceDesc').innerHTML = `维度: <b>${DIM_LABEL[dim]}</b> → 子素养: <b>${sub}</b> → 行为: <b>${action}</b><br><br>您选择过哪种交互方式：在首页卡片视图内展示，还是跳转寻课页？`;
+  p.classList.add('open');
+}
+
+function doChoice(choice) {
+  document.getElementById('choicePanel').classList.remove('open');
+  if(choice==='A') setMode('A'); else setMode('B');
+  if(choice==='A') {
+    showToast(`<strong>方案A 预览</strong><br>卡片视图会插入「<b>${pendingSub}</b> · <b>${pendingAction?.slice(0,12)}</b>」的推荐切片，可在首页直接看到教案摘要`);
+  } else {
+    showToast(`<strong>方案B 预览</strong><br>页面跳转到「行为寻课页」，输入「${pendingSub}」展示完整四段教案（行前/路上/到馆/返程）`);
+  }
+}
+
+function showToast(html) {
+  const t = document.getElementById('toast');
+  t.innerHTML = html + '<span class="close-toast" onclick="this.parentElement.classList.remove(\'open\')">×</span>';
+  t.classList.add('open');
+}
+
+// ===== mode toggle =====
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeA').classList.toggle('active', m==='A');
+  document.getElementById('modeB').classList.toggle('active', m==='B');
+}
+
+// ===== search =====
+function onSearch() {
+  const v = document.getElementById('searchInput').value || document.getElementById('sheetSearch').value;
+  search = v;
+  document.getElementById('searchInput').value = v;
+  document.getElementById('sheetSearch').value = v;
+  document.getElementById('clearBtn').style.display = v ? 'block' : 'none';
+  // demo: show a toast describing what happens
+  if(v) showToast(`<strong>搜索「${v}」</strong><br>匹配地点 + 若命中行为关键词/子素养，维度折叠自动展开`);
+}
+
+function clearSearch() { search=''; document.getElementById('searchInput').value=''; document.getElementById('sheetSearch').value=''; document.getElementById('clearBtn').style.display='none'; }
+
+// ===== sheet toggle =====
+function toggleSheet() { document.getElementById('overlay').classList.add('open'); document.getElementById('filterSheet').classList.add('open'); }
+function closeSheet() { document.getElementById('overlay').classList.remove('open'); document.getElementById('filterSheet').classList.remove('open'); }
+
+function applyFilter() { closeSheet(); showToast('<strong>筛选已应用</strong><br>' + (currentDim?`维度:${DIM_LABEL[currentDim]}`:'(全部)') + (currentSub?` · 子素养:${currentSub}`:'') + (currentAction?` · 行为:${currentAction}`:'')); }
+
+function resetAll() { currentDim=null; currentSub=null; currentAction=null; initDimChips(); renderSubList(); }
+
+// ===== boot =====
+initDimChips();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "envId": "cloud1-d5gyas9xgbb003681",
+  "functionRoot": "./cloudfunctions",
+  "functions": [
+    {
+      "name": "login",
+      "handler": "index.main",
+      "runtime": "Nodejs16.13",
+      "installDependency": true
+    }
+  ]
+}

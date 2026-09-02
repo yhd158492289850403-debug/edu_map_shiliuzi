@@ -1,0 +1,44 @@
+<!-- 反馈弹窗组件 -->
+<view class="feedback-overlay" bindtap="onOverlayTap"></view>
+<view class="feedback-panel" wx:if="{{!submitted}}">
+  <button class="feedback-close" bindtap="onCancel">x</button>
+  <view class="feedback-content">
+    <text class="feedback-title">意见反馈</text>
+    <text class="feedback-subtitle">帮助我们改进，让导引地图更好用</text>
+
+    <!-- 姓名（选填） -->
+    <view class="feedback-field">
+      <label class="field-label">您的姓名（选填）</label>
+      <input class="feedback-input" placeholder="请输入您的姓名" maxlength="50" value="{{name}}" bindinput="onNameInput" />
+    </view>
+
+    <!-- 反馈内容 -->
+    <view class="feedback-field">
+      <label class="field-label">
+        <text>反馈内容（必填，10-500字）</text>
+        <text class="char-count">{{charCount}}</text>
+      </label>
+      <textarea class="feedback-textarea" placeholder="请输入您的意见或建议…" maxlength="500" value="{{message}}" bindinput="onMsgInput" auto-height />
+    </view>
+
+    <!-- 错误提示 -->
+    <text class="feedback-error" wx:if="{{error}}">{{error}}</text>
+
+    <!-- 按钮 -->
+    <view class="feedback-actions">
+      <button class="btn-cancel" bindtap="onCancel">取消</button>
+      <button class="btn-send {{submitting ? 'btn-disabled' : ''}}" bindtap="onSubmit" disabled="{{submitting}}">
+        <text wx:if="{{!submitting}}">发送反馈</text>
+        <text wx:else>发送中...</text>
+      </button>
+    </view>
+  </view>
+</view>
+
+<view class="feedback-panel" wx:else>
+  <view class="feedback-content feedback-success">
+    <text class="success-icon">OK</text>
+    <text class="success-title">感谢您的反馈！</text>
+    <text class="success-desc">您的意见对我们非常重要，我们会认真阅读每一条反馈。</text>
+  </view>
+</view>

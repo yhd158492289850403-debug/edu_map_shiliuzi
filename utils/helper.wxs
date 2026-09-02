@@ -1,0 +1,70 @@
+/**
+ * WXS 辅助函数 - 在 WXML 中调用
+ */
+var getDimColor = function(dim) {
+  var colors = {
+    '体素': '#EAB308',
+    '心素': '#EF4444',
+    '灵素': '#A855F7',
+    '智素': '#22C55E',
+    '行素': '#3B82F6',
+    '交素': '#F97316'
+  };
+  return colors[dim] || '#64748b';
+};
+
+var getDimLabel = function(dim) {
+  var labels = {
+    '体素': '身体素养',
+    '心素': '情绪素养',
+    '灵素': '价值素养',
+    '智素': '认知素养',
+    '行素': '行动素养',
+    '交素': '社交素养'
+  };
+  return labels[dim] || dim;
+};
+
+var getDimClass = function(dim) {
+  var map = {
+    '体素': 'ti',
+    '心素': 'xin',
+    '灵素': 'ling',
+    '智素': 'zhi',
+    '行素': 'xing',
+    '交素': 'jiao'
+  };
+  return map[dim] || 'default';
+};
+
+var getCatColor = function(cat) {
+  var colors = {
+    '自然生态公园': '#22c55e',
+    '综合文化场馆': '#6366f1',
+    '红色纪念场馆': '#ef4444',
+    '城市书房': '#0ea5e9',
+    '青少年活动中心': '#f59e0b',
+    '群众文化馆': '#8b5cf6',
+    '社区成长空间': '#14b8a6',
+    '公共图书馆': '#a16207',
+    '科技科普场馆': '#0891b2',
+    '综合实践基地': '#059669',
+    '生态农耕体验': '#65a30d',
+    '红色教育': '#dc2626'
+  };
+  return colors[cat] || '#64748b';
+};
+
+var repeatStar = function(n) {
+  var s = '';
+  for (var i = 0; i < n; i++) s += '★';
+  return s;
+};
+
+module.exports = {
+  getDimColor: getDimColor,
+  getDimLabel: getDimLabel,
+  getDimClass: getDimClass,
+  getCatColor: getCatColor,
+  repeatStar: repeatStar
+};

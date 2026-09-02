@@ -1,0 +1,155 @@
+/* 行为寻课页样式 */
+.rec-container {
+  min-height: 100vh;
+  background: #f8f9fb;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #e2e8f0;
+}
+.btn-back { font-size: 26rpx; color: #3B82F6; padding: 8rpx 0; flex-shrink: 0; }
+.top-title { flex: 1; text-align: center; font-size: 30rpx; font-weight: 700; color: #1e293b; }
+.top-right { font-size: 24rpx; color: #64748b; padding: 8rpx 0; flex-shrink: 0; }
+
+.search-wrap {
+  display: flex;
+  gap: 16rpx;
+  padding: 20rpx 24rpx;
+  background: #fff;
+}
+.kw-input {
+  flex: 1;
+  background: #f1f5f9;
+  border-radius: 30rpx;
+  padding: 16rpx 24rpx;
+  font-size: 28rpx;
+}
+.search-btn {
+  background: #3B82F6;
+  color: #fff;
+  border-radius: 30rpx;
+  padding: 14rpx 30rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.hot-wrap { padding: 24rpx; }
+.hot-title { font-size: 24rpx; color: #64748b; }
+.hot-tags { display: flex; flex-wrap: wrap; gap: 14rpx; margin: 16rpx 0; }
+.hot-tag {
+  padding: 10rpx 24rpx;
+  background: #fff;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #1e293b;
+}
+.rec-desc { font-size: 24rpx; color: #94a3b8; line-height: 1.7; background: #fff; border-radius: 10rpx; padding: 16rpx; }
+
+.result { flex: 1; padding: 16rpx 24rpx; box-sizing: border-box; }
+.noresult { text-align: center; color: #94a3b8; font-size: 26rpx; padding: 60rpx 0; }
+.rec-item {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 18rpx;
+}
+.rec-head { display: flex; align-items: center; gap: 12rpx; flex-wrap: wrap; }
+.rec-beh { font-size: 30rpx; font-weight: 700; color: #b45309; }
+.rec-sub { font-size: 22rpx; color: #64748b; }
+.rec-scene { font-size: 22rpx; color: #92400e; margin-top: 8rpx; }
+.rec-guide { font-size: 24rpx; color: #92400e; background: #fff7ed; border-radius: 8rpx; padding: 10rpx 14rpx; margin: 10rpx 0; line-height: 1.6; }
+
+.slice-card {
+  background: #f8f9fb;
+  border-radius: 10rpx;
+  padding: 14rpx 16rpx;
+  margin: 10rpx 0;
+  border-left: 6rpx solid #f59e0b;
+}
+.slice-title { font-size: 26rpx; font-weight: 600; color: #1e293b; }
+.slice-meta { font-size: 20rpx; color: #94a3b8; margin-top: 4rpx; }
+
+.slice-list {
+  margin: 10rpx 0;
+}
+
+.lesson {
+  border: 1rpx solid #fde68a;
+  background: #fffdf5;
+  border-radius: 10rpx;
+  padding: 14rpx;
+  margin-top: 10rpx;
+  margin-bottom: 10rpx;
+}
+.lesson-seg { display: flex; margin-bottom: 12rpx; }
+.ls-label { width: 140rpx; flex-shrink: 0; font-size: 22rpx; font-weight: 600; color: #b45309; }
+.ls-text { flex: 1; font-size: 24rpx; color: #1e293b; line-height: 1.7; }
+.lesson-nav { text-align: right; color: #3B82F6; font-size: 24rpx; padding-top: 6rpx; }
+.lesson-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 12rpx 0;
+  border-top: 1rpx solid #fde68a;
+  color: #3B82F6;
+  font-size: 26rpx;
+  font-weight: 500;
+  margin-top: 10rpx;
+}
+.lesson-share:active {
+  background: #eef2ff;
+}
+
+.lesson-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid #fde68a;
+  margin-top: 12rpx;
+}
+.lesson-action-item {
+  flex: 1;
+  min-width: 0;
+  padding: 12rpx 16rpx;
+  background: #f8f9fb;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  text-align: center;
+  color: #475569;
+}
+/* 分享按钮：重置微信 button 默认样式 */
+.share-btn {
+  background: #f8f9fb !important;
+  border: none !important;
+  border-radius: 10rpx !important;
+  padding: 12rpx 16rpx !important;
+  font-size: 24rpx !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+}
+.share-btn::after {
+  border: none !important;
+}
+.lesson-action-item:active {
+  background: #e2e8f0;
+}
+.lesson-action-item.primary {
+  background: #3B82F6;
+  color: #fff;
+}
+.lesson-action-item.primary:active {
+  background: #2563eb;
+}

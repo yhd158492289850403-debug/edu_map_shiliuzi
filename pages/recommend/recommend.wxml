@@ -1,0 +1,75 @@
+<!-- 行为寻课页 -->
+<view class="rec-container" style="padding-top: {{statusBarHeight}}px;">
+
+  <view class="top-bar">
+    <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
+    <text class="top-title">行为寻课</text>
+    <view class="top-right" bindtap="onClear">清空</view>
+  </view>
+
+  <!-- 搜索 -->
+  <view class="search-wrap">
+    <input class="kw-input" placeholder="输入一个孩子行为，如：顶嘴、磨蹭、怕黑…" value="{{kw}}" bindinput="onKw" confirm-type="search" bindconfirm="onSearch" />
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 热门行为 -->
+  <view class="hot-wrap" wx:if="{{recs.length === 0}}">
+    <text class="hot-title">试试这些常见孩子行为</text>
+    <view class="hot-tags">
+      <view class="hot-tag" wx:for="{{hotBehaviors}}" wx:key="*this" data-b="{{item}}" bindtap="onHot">{{item}}</view>
+    </view>
+    <view class="rec-desc">输入孩子的一个行为 → 匹配 1-3 项子素养 → 推荐对症的教育切片教案 → 点开可看四段教案并导航去点位。</view>
+  </view>
+
+  <!-- 结果 -->
+  <scroll-view class="result" scroll-y enhanced show-scrollbar="{{false}}" wx:if="{{recs.length > 0}}">
+    <view class="noresult" wx:if="{{empty}}">未匹配到行为，试试上面的热门行为或换个说法</view>
+
+    <view class="rec-item" wx:for="{{recs}}" wx:for-item="rec" wx:for-index="g" wx:key="behavior">
+      <view class="rec-head">
+        <text class="rec-beh">「{{rec.behavior}}」</text>
+        <text class="rec-sub">{{rec.subs.join(' / ')}}</text>
+      </view>
+      <view class="rec-scene" wx:if="{{rec.scene}}">情境：{{rec.scene}}</view>
+      <view class="rec-guide" wx:if="{{rec.guide}}">引导：{{rec.guide}}</view>
+
+      <!-- 切片列表 -->
+      <view class="slice-list">
+        <view
+          wx:for="{{rec.matchedSlices}}"
+          wx:for-item="s"
+          wx:for-index="si"
+          wx:key="title"
+        >
+          <!-- 切片卡片 -->
+          <view class="slice-card" data-g="{{g}}" data-s="{{si}}" bindtap="onSliceTap">
+            <view class="slice-title">{{s.title}}</view>
+            <view class="slice-meta">{{s.point}} · {{s.age}} · {{s.starTxt}}</view>
+          </view>
+
+          <!-- 展开教案（仅在选中切片时显示） -->
+          <view class="lesson" wx:if="{{s._expanded}}">
+            <view class="lesson-seg" wx:if="{{s.edu}}"><text class="ls-label">教育价值</text><text class="ls-text">{{s.edu}}</text></view>
+            <view class="lesson-seg" wx:if="{{s.pre}}"><text class="ls-label">行前准备</text><text class="ls-text">{{s.pre}}</text></view>
+            <view class="lesson-seg" wx:if="{{s.talk}}"><text class="ls-label">路上话术</text><text class="ls-text">{{s.talk}}</text></view>
+            <view class="lesson-seg" wx:if="{{s.act}}"><text class="ls-label">到馆做法</text><text class="ls-text">{{s.act}}</text></view>
+            <view class="lesson-seg" wx:if="{{s.post}}"><text class="ls-label">返程复盘</text><text class="ls-text">{{s.post}}</text></view>
+            <view class="lesson-actions">
+              <view class="lesson-action-item" data-id="{{s.pointId}}" bindtap="onGoDetail">
+                <text>📍 查看点位详情</text>
+              </view>
+              <button class="lesson-action-item share-btn" open-type="share" data-g="{{g}}">
+                <text>📤 分享完整方案</text>
+              </button>
+              <view class="lesson-action-item primary" data-g="{{g}}" data-s="{{si}}" bindtap="onCheckinFromSlice">
+                <text>📝 去打卡</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+</view>

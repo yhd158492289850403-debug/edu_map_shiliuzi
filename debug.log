@@ -1,0 +1,4 @@
+[0822/222531.362:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: 拒绝访问。 (0x5)
+[0822/222531.879:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: 拒绝访问。 (0x5)
+[0822/222532.283:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: 拒绝访问。 (0x5)
+[0822/222532.679:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: 拒绝访问。 (0x5)

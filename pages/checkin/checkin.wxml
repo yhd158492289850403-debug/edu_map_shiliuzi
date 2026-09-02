@@ -1,0 +1,115 @@
+<!-- 打卡页 -->
+<view class="checkin-container" style="padding-top: {{statusBarHeight}}px;">
+
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
+    <text class="top-title">📝 记录成长</text>
+    <view class="top-right"></view>
+  </view>
+
+  <scroll-view class="form-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+
+    <!-- 选择点位 -->
+    <view class="form-section">
+      <text class="form-label">📍 访问点位</text>
+      <view class="picker-trigger" bindtap="onShowPointPicker">
+        <text wx:if="{{selectedPoint}}">{{selectedPoint.name}}</text>
+        <text wx:else class="placeholder">点击选择点位</text>
+      </view>
+    </view>
+
+    <!-- 关联行为 -->
+    <view class="form-section">
+      <text class="form-label">🎯 实践行为</text>
+      <view class="picker-trigger" bindtap="onShowBehaviorPicker">
+        <text wx:if="{{selectedBehavior}}">{{selectedBehavior}}</text>
+        <text wx:else class="placeholder">选择关联的行为（可选）</text>
+      </view>
+    </view>
+
+    <!-- 评价 -->
+    <view class="form-section">
+      <text class="form-label">⭐ 体验评价</text>
+      <view class="rating-grid">
+        <view class="rating-item {{rating === 'great' ? 'active' : ''}}" data-rating="great" bindtap="onRatingSelect">
+          <text class="rating-icon">🌟</text>
+          <text class="rating-text">很棒</text>
+        </view>
+        <view class="rating-item {{rating === 'good' ? 'active' : ''}}" data-rating="good" bindtap="onRatingSelect">
+          <text class="rating-icon">👍</text>
+          <text class="rating-text">不错</text>
+        </view>
+        <view class="rating-item {{rating === 'ok' ? 'active' : ''}}" data-rating="ok" bindtap="onRatingSelect">
+          <text class="rating-icon">👍</text>
+          <text class="rating-text">还行</text>
+        </view>
+        <view class="rating-item {{rating === 'bad' ? 'active' : ''}}" data-rating="bad" bindtap="onRatingSelect">
+          <text class="rating-icon">🤔</text>
+          <text class="rating-text">待改进</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 孩子感受 -->
+    <view class="form-section">
+      <text class="form-label">💭 孩子的感受</text>
+      <textarea class="notes-input" placeholder="记录孩子的感受、发现、成长…" value="{{notes}}" bindinput="onNotesInput" maxlength="500" />
+      <text class="char-count">{{notes.length}}/500</text>
+    </view>
+
+    <!-- 照片 -->
+    <view class="form-section">
+      <text class="form-label">📸 照片（可选）</text>
+      <view class="photo-grid">
+        <view class="photo-item" wx:for="{{photos}}" wx:key="*this">
+          <image src="{{item}}" mode="aspectFill" class="photo-img" />
+          <view class="photo-remove" data-idx="{{index}}" bindtap="onRemovePhoto">×</view>
+        </view>
+        <view class="photo-add" wx:if="{{photos.length < 3}}" bindtap="onChoosePhoto">
+          <text class="add-icon">+</text>
+          <text class="add-text">添加照片</text>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-bar">
+    <button class="submit-btn" bindtap="onSubmit" disabled="{{submitting}}">
+      <text wx:if="{{submitting}}">提交中...</text>
+      <text wx:else>✅ 完成打卡</text>
+    </button>
+  </view>
+
+  <!-- 点位选择弹窗 -->
+  <view class="picker-overlay" wx:if="{{showPointPicker}}" bindtap="onClosePickers"></view>
+  <view class="picker-sheet" wx:if="{{showPointPicker}}">
+    <view class="picker-header">
+      <text>选择点位</text>
+      <text class="picker-close" bindtap="onClosePickers">✕</text>
+    </view>
+    <scroll-view class="picker-list" scroll-y>
+      <view class="picker-item" wx:for="{{points}}" wx:key="id" data-idx="{{index}}" bindtap="onPointSelect">
+        <text class="picker-item-name">{{item.name}}</text>
+        <text class="picker-item-meta">{{item.district}} · {{item.category}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 行为选择弹窗 -->
+  <view class="picker-overlay" wx:if="{{showBehaviorPicker}}" bindtap="onClosePickers"></view>
+  <view class="picker-sheet" wx:if="{{showBehaviorPicker}}">
+    <view class="picker-header">
+      <text>选择行为</text>
+      <text class="picker-close" bindtap="onClosePickers">✕</text>
+    </view>
+    <scroll-view class="picker-list" scroll-y>
+      <view class="picker-item" wx:for="{{behaviors}}" wx:key="*this" data-idx="{{index}}" bindtap="onBehaviorSelect">
+        <text class="picker-item-name">{{item}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+</view>

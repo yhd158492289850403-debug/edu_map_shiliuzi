@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/near/near",
+    "pages/recommend/recommend",
+    "pages/profile/profile",
+    "pages/checkin/checkin"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f9fb"
+  },
+  "usingComponents": {
+    "filter-sheet": "/components/filter-sheet/filter-sheet",
+    "feedback-popup": "/components/feedback-popup/feedback-popup"
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于查找附近的教育基地并导航"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json"
+}
