@@ -40,7 +40,9 @@ Page({
 
       // 保存到云端
       const db = wx.cloud.database();
-      await db.collection('users').update({
+      await db.collection('users').where({
+        _openid: '{openid}'
+      }).update({
         data: {
           role: this.data.selectedRole,
           updated_at: new Date()
