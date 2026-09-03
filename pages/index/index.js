@@ -124,7 +124,6 @@ Page({
       id: loc.id,
       latitude: loc.lat,
       longitude: loc.lng,
-      iconPath: `/images/markers/marker-${loc.ld}.png`,
       width: 28,
       height: 28,
       label: {

@@ -16,10 +16,7 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f8f9fb"
   },
-  "usingComponents": {
-    "filter-sheet": "/components/filter-sheet/filter-sheet",
-    "feedback-popup": "/components/feedback-popup/feedback-popup"
-  },
+  "usingComponents": {},
   "lazyCodeLoading": "requiredComponents",
   "permission": {
     "scope.userLocation": {
