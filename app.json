@@ -6,7 +6,8 @@
     "pages/recommend/recommend",
     "pages/profile/profile",
     "pages/checkin/checkin",
-    "pages/role-select/role-select"
+    "pages/role-select/role-select",
+    "pages/report/report"
   ],
   "window": {
     "navigationStyle": "custom",

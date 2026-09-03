@@ -1,0 +1,56 @@
+<view class="report-page">
+  <view class="loading" wx:if="{{isLoading}}">加载中...</view>
+  
+  <view class="report-content" wx:else>
+    <!-- 报告头部 -->
+    <view class="report-header">
+      <text class="report-title">{{report.title}}</text>
+      <text class="report-subtitle">{{report.subtitle}}</text>
+    </view>
+    
+    <!-- 雷达图 -->
+    <view class="radar-section">
+      <radar-chart scores="{{scores}}" width="300" height="300" />
+    </view>
+    
+    <!-- 维度详情 -->
+    <view class="dimensions-section">
+      <view class="dimension-item" wx:for="{{report.dimensions}}" wx:key="key">
+        <view class="dim-header">
+          <text class="dim-label">{{item.label}}</text>
+          <text class="dim-score" style="color: {{item.color}}">{{item.score}}分</text>
+        </view>
+        <text class="dim-desc">{{item.description}}</text>
+        <view class="dim-bar">
+          <view class="dim-fill" style="width: {{item.score}}%; background: {{item.color}}"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 亮点和建议 -->
+    <view class="highlights-section" wx:if="{{report.highlights}}">
+      <view class="section-title">🌟 成长亮点</view>
+      <view class="highlight-item" wx:for="{{report.highlights}}" wx:key="*this">
+        {{item}}
+      </view>
+    </view>
+    
+    <view class="suggestions-section" wx:if="{{report.suggestions}}">
+      <view class="section-title">💡 改进建议</view>
+      <view class="suggestion-item" wx:for="{{report.suggestions}}" wx:key="*this">
+        {{item}}
+      </view>
+    </view>
+    
+    <!-- 鼓励语 -->
+    <view class="encouragement" wx:if="{{report.encouragement}}">
+      <text>{{report.encouragement}}</text>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="export-btn" bindtap="onExportPDF">导出PDF</button>
+      <button class="share-btn" bindtap="onShare">分享给朋友</button>
+    </view>
+  </view>
+</view>
