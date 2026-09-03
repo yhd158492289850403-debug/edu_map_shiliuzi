@@ -147,14 +147,15 @@ async function flush() {
   behaviorQueue = [];
   
   try {
+    // 尝试调用云函数
     await wx.cloud.callFunction({
       name: 'saveBehavior',
       data: { behaviors }
     });
   } catch (err) {
-    console.error('上报行为数据失败:', err);
-    // 失败的数据放回队列
-    behaviorQueue = [...behaviors, ...behaviorQueue];
+    // 云函数未部署时，静默失败，不报错
+    console.warn('行为数据上报失败（云函数可能未部署）:', err.message);
+    // 不将数据放回队列，避免重复尝试
   }
 }
 
@@ -169,8 +170,22 @@ async function getBehaviors(options = {}) {
     });
     return result;
   } catch (err) {
-    console.error('获取行为数据失败:', err);
-    return { behaviors: [], stats: {} };
+    // 云函数未部署时，返回本地存储的数据
+    console.warn('获取行为数据失败（云函数可能未部署）:', err.message);
+    
+    // 返回默认数据
+    return { 
+      behaviors: [], 
+      stats: {
+        totalPageViews: 0,
+        totalStayDuration: 0,
+        totalCheckins: 0,
+        viewedSlices: [],
+        dimViewCount: {},
+        firstUseTime: null,
+        lastUseTime: null
+      }
+    };
   }
 }
 

@@ -16,10 +16,38 @@
     </view>
     <view class="user-info">
       <text class="user-name">{{userInfo.nickname || '微信用户'}}</text>
-      <text class="user-role" wx:if="{{isParent}}">家长</text>
-      <text class="user-role" wx:elif="{{isStudent}}">学生</text>
-      <text class="user-role" wx:elif="{{isTeacher}}">教师</text>
+      <text class="user-role-tag" bindtap="onShowRolePicker">
+        <text wx:if="{{isParent}}">家长</text>
+        <text wx:elif="{{isStudent}}">学生</text>
+        <text wx:elif="{{isTeacher}}">教师</text>
+        <text class="role-arrow">▼</text>
+      </text>
       <text class="user-join">加入时间：{{userInfo.created_at}}</text>
+    </view>
+  </view>
+
+  <!-- 身份切换弹窗 -->
+  <view class="role-picker-mask" wx:if="{{showRolePicker}}" bindtap="onCloseRolePicker"></view>
+  <view class="role-picker" wx:if="{{showRolePicker}}">
+    <view class="role-picker-header">
+      <text class="role-picker-title">切换身份</text>
+      <text class="role-picker-close" bindtap="onCloseRolePicker">✕</text>
+    </view>
+    <view class="role-picker-body">
+      <view 
+        class="role-picker-item {{item.selected ? 'role-selected' : ''}}" 
+        wx:for="{{roleOptions}}" 
+        wx:key="key"
+        data-role="{{item.key}}"
+        bindtap="onRoleSelect"
+      >
+        <text class="role-icon">{{item.icon}}</text>
+        <view class="role-info">
+          <text class="role-name">{{item.label}}</text>
+          <text class="role-desc">{{item.description}}</text>
+        </view>
+        <text class="role-check" wx:if="{{item.selected}}">✓</text>
+      </view>
     </view>
   </view>
 

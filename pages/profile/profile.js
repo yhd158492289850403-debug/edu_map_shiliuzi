@@ -2,6 +2,7 @@
  * 个人档案页 - 展示用户信息、打卡记录、成长轨迹
  */
 const app = getApp();
+const { ROLE_TYPES, ROLE_CONFIGS } = require('../../data/user-roles');
 
 Page({
   data: {
@@ -17,6 +18,8 @@ Page({
     userRole: 'parent',
     classData: null,
     students: [],
+    showRolePicker: false,
+    roleOptions: [],
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -29,13 +32,22 @@ Page({
     const windowInfo = wx.getWindowInfo();
     const stage = (app && app.globalData.stage) || '全部';
     const userRole = (app && app.globalData.userRole) || 'parent';
+    
+    // 构建角色选项
+    const roleOptions = Object.entries(ROLE_CONFIGS).map(([key, config]) => ({
+      key,
+      ...config,
+      selected: key === userRole
+    }));
+    
     this.setData({ 
       statusBarHeight: windowInfo.statusBarHeight || 44, 
       stage,
       userRole,
       isParent: userRole === 'parent',
       isStudent: userRole === 'student',
-      isTeacher: userRole === 'teacher'
+      isTeacher: userRole === 'teacher',
+      roleOptions
     });
     this.loadUserInfo();
     this.loadCheckins();
@@ -154,6 +166,59 @@ Page({
 
   onEditProfile() {
     wx.showToast({ title: '编辑资料功能开发中', icon: 'none' });
+  },
+
+  onShowRolePicker() {
+    this.setData({ showRolePicker: true });
+  },
+
+  onCloseRolePicker() {
+    this.setData({ showRolePicker: false });
+  },
+
+  async onRoleSelect(e) {
+    const role = e.currentTarget.dataset.role;
+    if (role === this.data.userRole) {
+      this.setData({ showRolePicker: false });
+      return;
+    }
+
+    try {
+      // 保存到本地
+      wx.setStorageSync('userRole', role);
+      app.globalData.userRole = role;
+
+      // 保存到云端
+      const db = wx.cloud.database();
+      await db.collection('users').where({
+        _openid: '{openid}'
+      }).update({
+        data: {
+          role: role,
+          updated_at: new Date()
+        }
+      });
+
+      // 更新界面
+      const roleOptions = this.data.roleOptions.map(opt => ({
+        ...opt,
+        selected: opt.key === role
+      }));
+
+      this.setData({
+        userRole: role,
+        isParent: role === 'parent',
+        isStudent: role === 'student',
+        isTeacher: role === 'teacher',
+        showRolePicker: false,
+        roleOptions
+      });
+
+      wx.showToast({ title: '已切换身份', icon: 'success' });
+    } catch (err) {
+      console.error('切换身份失败:', err);
+      wx.showToast({ title: '切换失败，请重试', icon: 'none' });
+    }
   },
 
   onAssessmentReady() {

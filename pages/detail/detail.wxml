@@ -116,46 +116,47 @@
         <view class="slice-group-title" style="color: {{group.color}}">
           {{group.dimLabel}}<text class="slice-group-count">{{group.slices.length}}</text>
         </view>
-        <view class="slice-card" wx:for="{{group.slices}}" wx:for-index="iIdx" wx:key="title"
-          data-g="{{gIdx}}" data-i="{{iIdx}}" bindtap="onSliceTap">
-          <view class="slice-card-head">
-            <view class="slice-title">{{item.title}}</view>
-            <view class="slice-star" wx:if="{{item.starStr}}" style="color: {{group.color}}">{{item.starStr}}</view>
-            <view class="slice-stage-tag slice-tag-rec" wx:if="{{item.stageLabel === '推荐'}}">推荐</view>
-            <view class="slice-stage-tag slice-tag-adv" wx:elif="{{item.stageLabel === '进阶'}}">进阶</view>
+        <view wx:for="{{group.slices}}" wx:for-index="iIdx" wx:key="title">
+          <view class="slice-card {{expandedSlice && expandedSlice.gIdx === gIdx && expandedSlice.iIdx === iIdx ? 'slice-card-expanded' : ''}}" 
+            data-g="{{gIdx}}" data-i="{{iIdx}}" bindtap="onSliceTap">
+            <view class="slice-card-head">
+              <view class="slice-title">{{item.title}}</view>
+              <view class="slice-star" wx:if="{{item.starStr}}" style="color: {{group.color}}">{{item.starStr}}</view>
+              <view class="slice-stage-tag slice-tag-rec" wx:if="{{item.stageLabel === '推荐'}}">推荐</view>
+              <view class="slice-stage-tag slice-tag-adv" wx:elif="{{item.stageLabel === '进阶'}}">进阶</view>
+            </view>
+            <view class="slice-meta">{{item.loc}} · {{item.age}} · {{item.subsTxt}}</view>
           </view>
-          <view class="slice-meta">{{item.loc}} · {{item.age}} · {{item.subsTxt}}</view>
+          
+          <!-- 展开的切片教案 - 在卡片下方 -->
+          <view class="slice-detail" wx:if="{{expandedSlice && expandedSlice.gIdx === gIdx && expandedSlice.iIdx === iIdx}}">
+            <view class="slice-detail-stars" wx:if="{{expandedSlice.starItems.length > 0}}">
+              <view class="slice-detail-star" wx:for="{{expandedSlice.starItems}}" wx:for-item="starItem" wx:key="dim" style="color: {{starItem.color}};">
+                {{starItem.label}} {{starItem.starStr}}
+              </view>
+            </view>
+            <view class="slice-seg" wx:if="{{expandedSlice.edu}}">
+              <text class="slice-seg-label">教育价值</text>
+              <text class="slice-seg-text">{{expandedSlice.edu}}</text>
+            </view>
+            <view class="slice-seg" wx:if="{{expandedSlice.pre}}">
+              <text class="slice-seg-label">行前准备</text>
+              <text class="slice-seg-text">{{expandedSlice.pre}}</text>
+            </view>
+            <view class="slice-seg" wx:if="{{expandedSlice.talk}}">
+              <text class="slice-seg-label">路上话术</text>
+              <text class="slice-seg-text">{{expandedSlice.talk}}</text>
+            </view>
+            <view class="slice-seg" wx:if="{{expandedSlice.act}}">
+              <text class="slice-seg-label">到馆做法</text>
+              <text class="slice-seg-text">{{expandedSlice.act}}</text>
+            </view>
+            <view class="slice-seg" wx:if="{{expandedSlice.post}}">
+              <text class="slice-seg-label">返程复盘</text>
+              <text class="slice-seg-text">{{expandedSlice.post}}</text>
+            </view>
+          </view>
         </view>
-      </view>
-    </view>
-
-    <!-- 展开的切片教案 -->
-    <view class="info-section slice-detail" wx:if="{{expandedSlice}}">
-      <view class="section-title">{{expandedSlice.title}}</view>
-      <view class="slice-detail-stars" wx:if="{{expandedSlice.starItems.length > 0}}">
-        <view class="slice-detail-star" wx:for="{{expandedSlice.starItems}}" wx:key="dim" style="color: {{item.color}};">
-          {{item.label}} {{item.starStr}}
-        </view>
-      </view>
-      <view class="slice-seg" wx:if="{{expandedSlice.edu}}">
-        <text class="slice-seg-label">教育价值</text>
-        <text class="slice-seg-text">{{expandedSlice.edu}}</text>
-      </view>
-      <view class="slice-seg" wx:if="{{expandedSlice.pre}}">
-        <text class="slice-seg-label">行前准备</text>
-        <text class="slice-seg-text">{{expandedSlice.pre}}</text>
-      </view>
-      <view class="slice-seg" wx:if="{{expandedSlice.talk}}">
-        <text class="slice-seg-label">路上话术</text>
-        <text class="slice-seg-text">{{expandedSlice.talk}}</text>
-      </view>
-      <view class="slice-seg" wx:if="{{expandedSlice.act}}">
-        <text class="slice-seg-label">到馆做法</text>
-        <text class="slice-seg-text">{{expandedSlice.act}}</text>
-      </view>
-      <view class="slice-seg" wx:if="{{expandedSlice.post}}">
-        <text class="slice-seg-label">返程复盘</text>
-        <text class="slice-seg-text">{{expandedSlice.post}}</text>
       </view>
     </view>
 

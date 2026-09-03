@@ -1,4 +1,5 @@
 const tracker = require('./tracker');
+const app = getApp();
 
 // 观察期触发条件
 const TRIGGERS = {
@@ -34,12 +35,13 @@ async function shouldStartAssessment() {
   
   // 计算进度
   const progress = calculateProgress(stats);
+  const userRole = (app && app.globalData.userRole) || 'parent';
   
   return { 
     ready: false, 
     reason: 'observing',
     progress,
-    message: getProgressMessage(progress, stats)
+    message: getProgressMessage(progress, stats, userRole)
   };
 }
 
@@ -53,11 +55,13 @@ function calculateProgress(stats) {
   return Math.min(100, Math.max(checkinProgress, daysProgress, sliceProgress));
 }
 
-function getProgressMessage(progress, stats) {
+function getProgressMessage(progress, stats, userRole) {
+  const isStudent = userRole === 'student';
+  
   if (progress < 30) {
-    return '🌱 正在观察孩子的成长轨迹...';
+    return isStudent ? '🌱 正在记录你的学习轨迹...' : '🌱 正在观察孩子的成长轨迹...';
   } else if (progress < 60) {
-    return '🌿 数据收集中，孩子正在很好地成长！';
+    return isStudent ? '🌿 数据收集中，你正在很好地成长！' : '🌿 数据收集中，孩子正在很好地成长！';
   } else if (progress < 90) {
     return '🌳 即将完成数据收集，再努力一点点！';
   } else {

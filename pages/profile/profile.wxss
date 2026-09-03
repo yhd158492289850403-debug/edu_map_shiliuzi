@@ -282,13 +282,114 @@
 }
 
 /* 用户角色标签 */
-.user-role {
+.user-role-tag {
   display: inline-block;
-  font-size: 20rpx;
+  font-size: 24rpx;
   background: rgba(255,255,255,0.3);
-  padding: 4rpx 12rpx;
+  padding: 6rpx 16rpx;
   border-radius: 20rpx;
   margin-top: 8rpx;
+}
+
+.role-arrow {
+  font-size: 16rpx;
+  margin-left: 8rpx;
+}
+
+/* 身份切换弹窗 */
+.role-picker-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+}
+
+.role-picker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20rpx 20rpx 0 0;
+  z-index: 101;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.role-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #e2e8f0;
+}
+
+.role-picker-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.role-picker-close {
+  font-size: 32rpx;
+  color: #64748b;
+  padding: 10rpx;
+}
+
+.role-picker-body {
+  padding: 20rpx 30rpx;
+}
+
+.role-picker-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  background: #f8f9fb;
+  border-radius: 16rpx;
+  border: 2rpx solid transparent;
+}
+
+.role-picker-item.role-selected {
+  background: #e8f8f5;
+  border-color: #4ECDC4;
+}
+
+.role-icon {
+  font-size: 48rpx;
+  margin-right: 24rpx;
+}
+
+.role-info {
+  flex: 1;
+}
+
+.role-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1e293b;
+  display: block;
+}
+
+.role-desc {
+  font-size: 22rpx;
+  color: #64748b;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.role-check {
+  width: 40rpx;
+  height: 40rpx;
+  background: #4ECDC4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24rpx;
 }
 
 /* 学生专属提示 */

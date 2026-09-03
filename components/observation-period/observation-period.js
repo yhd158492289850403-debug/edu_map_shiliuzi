@@ -1,4 +1,5 @@
 const { shouldStartAssessment, getProgressMessage, getNextStepMessage } = require('../../utils/observation');
+const app = getApp();
 
 Component({
   properties: {},
@@ -6,6 +7,7 @@ Component({
   data: {
     isLoading: true,
     isObserving: true,
+    isStudent: false,
     progress: 0,
     message: '',
     nextStep: '',
@@ -14,6 +16,15 @@ Component({
   
   lifetimes: {
     attached() {
+      const userRole = (app && app.globalData.userRole) || 'parent';
+      this.setData({ isStudent: userRole === 'student' });
+      this.checkStatus();
+    }
+  },
+  
+  pageLifetimes: {
+    show() {
+      // 页面显示时重新检查状态（例如从打卡页面返回）
       this.checkStatus();
     }
   },
@@ -29,7 +40,7 @@ Component({
           isLoading: false,
           isObserving: !result.ready,
           progress: result.progress || 0,
-          message: result.message || getProgressMessage(result.progress || 0, {}),
+          message: result.message || getProgressMessage(result.progress || 0, {}, this.data.isStudent ? 'student' : 'parent'),
           nextStep: getNextStepMessage(result.stats || {})
         });
         

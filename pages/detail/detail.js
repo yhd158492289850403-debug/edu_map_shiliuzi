@@ -121,8 +121,13 @@ Page({
       dimKey: s.dimKey
     });
     
+    // 切换展开/收起
+    const isExpanding = !(this.data.expandedSlice && this.data.expandedSlice.gIdx === gIdx && this.data.expandedSlice.iIdx === iIdx);
+    
     this.setData({
-      expandedSlice: this.data.expandedSlice && this.data.expandedSlice.title === s.title ? null : {
+      expandedSlice: isExpanding ? {
+        gIdx,
+        iIdx,
         title: s.title,
         loc: s.loc,
         age: s.age,
@@ -132,7 +137,7 @@ Page({
         act: s.act,
         post: s.post,
         starItems: s.starItems
-      }
+      } : null
     });
   },
 
