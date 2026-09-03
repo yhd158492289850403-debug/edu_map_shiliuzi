@@ -23,11 +23,13 @@ async function shouldStartAssessment() {
   // 从本地存储获取打卡次数
   try {
     const localCheckins = wx.getStorageSync('localCheckins') || [];
+    console.log('从本地存储读取打卡记录:', localCheckins.length, '条');
     if (localCheckins.length > totalCheckins) {
       totalCheckins = localCheckins.length;
+      console.log('使用本地存储的打卡次数:', totalCheckins);
     }
   } catch (err) {
-    // 忽略错误
+    console.error('读取本地存储失败:', err);
   }
   
   // 从本地存储获取首次使用时间
@@ -37,28 +39,19 @@ async function shouldStartAssessment() {
       if (!firstUseTime) {
         firstUseTime = Date.now();
         wx.setStorageSync('firstUseTime', firstUseTime);
+        console.log('设置首次使用时间:', firstUseTime);
       }
     } catch (err) {
       firstUseTime = Date.now();
     }
   }
   
+  console.log('观察期检查 - 打卡次数:', totalCheckins, '目标:', TRIGGERS.CHECKIN_COUNT);
+  
   // 条件1：累计打卡≥3次
   if (totalCheckins >= TRIGGERS.CHECKIN_COUNT) {
+    console.log('观察期结束：打卡次数达标');
     return { ready: true, reason: 'checkin_count', progress: 100 };
-  }
-  
-  // 条件2：使用满7天
-  if (firstUseTime) {
-    const daysDiff = (Date.now() - firstUseTime) / (1000 * 60 * 60 * 24);
-    if (daysDiff >= TRIGGERS.SESSION_DAYS) {
-      return { ready: true, reason: 'session_days', progress: 100 };
-    }
-  }
-  
-  // 条件3：查看教案≥10个
-  if (viewedSlices.length >= TRIGGERS.VIEWED_SLICES) {
-    return { ready: true, reason: 'viewed_slices', progress: 100 };
   }
   
   // 计算进度
@@ -69,10 +62,13 @@ async function shouldStartAssessment() {
   });
   const userRole = (app && app.globalData.userRole) || 'parent';
   
+  console.log('观察期进度:', progress + '%');
+  
   return { 
     ready: false, 
     reason: 'observing',
     progress,
+    stats: { totalCheckins, viewedSlices, firstUseTime },
     message: getProgressMessage(progress, { totalCheckins, viewedSlices }, userRole)
   };
 }

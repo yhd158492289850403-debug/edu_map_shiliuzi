@@ -188,13 +188,15 @@ Page({
       // 保存到本地存储（用于观察期进度条更新）
       try {
         const localCheckins = wx.getStorageSync('localCheckins') || [];
-        localCheckins.push({
+        const newCheckin = {
           ...checkinData,
           _id: 'local_' + Date.now()
-        });
+        };
+        localCheckins.push(newCheckin);
         wx.setStorageSync('localCheckins', localCheckins);
+        console.log('打卡数据已保存到本地存储，当前共', localCheckins.length, '条记录');
       } catch (storageErr) {
-        console.warn('保存到本地存储失败:', storageErr.message);
+        console.error('保存到本地存储失败:', storageErr);
       }
 
       wx.showToast({ title: '打卡成功！', icon: 'success' });
