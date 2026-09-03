@@ -1,0 +1,47 @@
+<view class="export-page">
+  <view class="loading" wx:if="{{isLoading}}">正在生成PDF...</view>
+  
+  <view class="content" wx:else>
+    <view class="header">
+      <text class="title">导出PDF报告</text>
+      <text class="subtitle">选择要导出的内容</text>
+    </view>
+    
+    <view class="options">
+      <view class="option-item" bindtap="onToggleSelectMode">
+        <text class="option-label">选择打卡记录</text>
+        <switch checked="{{selectMode}}" />
+      </view>
+    </view>
+    
+    <view class="checkin-list" wx:if="{{selectMode}}">
+      <view class="list-header">
+        <text>选择打卡记录</text>
+        <view class="select-actions">
+          <text bindtap="onSelectAll">全选</text>
+          <text bindtap="onDeselectAll">取消全选</text>
+        </view>
+      </view>
+      
+      <view 
+        class="checkin-item {{selectedCheckins.indexOf(item._id) > -1 ? 'selected' : ''}}"
+        wx:for="{{allCheckins}}"
+        wx:key="_id"
+        data-id="{{item._id}}"
+        bindtap="onToggleCheckin"
+      >
+        <view class="checkin-date">{{item.date}}</view>
+        <view class="checkin-point">{{item.point_name}}</view>
+        <view class="checkin-check" wx:if="{{selectedCheckins.indexOf(item._id) > -1}}">✓</view>
+      </view>
+      
+      <view class="empty" wx:if="{{allCheckins.length === 0}}">暂无打卡记录</view>
+    </view>
+    
+    <view class="export-actions">
+      <button class="export-btn" bindtap="onExport">
+        导出PDF {{selectMode ? '(' + selectedCheckins.length + '条记录)' : '(仅报告)'}}
+      </button>
+    </view>
+  </view>
+</view>

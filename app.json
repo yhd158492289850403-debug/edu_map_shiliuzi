@@ -7,7 +7,8 @@
     "pages/profile/profile",
     "pages/checkin/checkin",
     "pages/role-select/role-select",
-    "pages/report/report"
+    "pages/report/report",
+    "pages/pdf-export/pdf-export"
   ],
   "window": {
     "navigationStyle": "custom",
