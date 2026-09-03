@@ -26,6 +26,8 @@ exports.main = async (event, context) => {
           _openid: openid,
           nickname: '微信用户',
           avatar: '',
+          role: 'parent',  // 默认角色
+          class_id: '',     // 班级ID（教师用）
           created_at: new Date(),
           updated_at: new Date()
         }

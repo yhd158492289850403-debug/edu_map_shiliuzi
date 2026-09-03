@@ -5,7 +5,8 @@
     "pages/near/near",
     "pages/recommend/recommend",
     "pages/profile/profile",
-    "pages/checkin/checkin"
+    "pages/checkin/checkin",
+    "pages/role-select/role-select"
   ],
   "window": {
     "navigationStyle": "custom",

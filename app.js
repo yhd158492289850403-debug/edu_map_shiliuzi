@@ -3,6 +3,7 @@ App({
   globalData: {
     userInfo: null,
     openid: null,
+    userRole: 'parent',  // 默认角色
     filter: { search: '', dims: [], issues: [], unity: false, topics: [] },
     view: 'map',
     stage: '全部'
@@ -17,6 +18,21 @@ App({
       });
       // 获取 openid（容错：云函数未部署时不阻塞）
       this.getOpenid();
+    }
+    
+    // 初始化角色
+    this.initRole();
+  },
+
+  initRole() {
+    const role = wx.getStorageSync('userRole');
+    if (role) {
+      this.globalData.userRole = role;
+    } else {
+      // 首次使用，跳转角色选择页
+      wx.navigateTo({ 
+        url: '/pages/role-select/role-select?first=true' 
+      });
     }
   },
 

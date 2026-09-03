@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="header">
+    <text class="title">欢迎使用石榴籽成长快乐导引地图！</text>
+    <text class="subtitle">请选择您的身份</text>
+  </view>
+  
+  <view class="role-list">
+    <view 
+      class="role-item {{item.key === selectedRole ? 'selected' : ''}}"
+      wx:for="{{roles}}"
+      wx:key="key"
+      data-role="{{item.key}}"
+      bindtap="onRoleSelect"
+    >
+      <text class="role-icon">{{item.icon}}</text>
+      <view class="role-info">
+        <text class="role-name">{{item.label}}</text>
+        <text class="role-desc">{{item.description}}</text>
+      </view>
+      <view class="role-check" wx:if="{{item.key === selectedRole}}">✓</view>
+    </view>
+  </view>
+  
+  <view class="footer">
+    <button class="confirm-btn" bindtap="onConfirm">确认选择</button>
+    <text class="hint" wx:if="{{!isFirstTime}}">之后可以在"设置"中更改</text>
+  </view>
+</view>
