@@ -12,6 +12,9 @@ Page({
     stage: '全部',
     isObserving: true,
     isTeacher: false,
+    isStudent: false,
+    isParent: true,
+    userRole: 'parent',
     classData: null,
     students: [],
     stats: {
@@ -25,10 +28,20 @@ Page({
   onLoad() {
     const windowInfo = wx.getWindowInfo();
     const stage = (app && app.globalData.stage) || '全部';
-    this.setData({ statusBarHeight: windowInfo.statusBarHeight || 44, stage });
+    const userRole = (app && app.globalData.userRole) || 'parent';
+    this.setData({ 
+      statusBarHeight: windowInfo.statusBarHeight || 44, 
+      stage,
+      userRole,
+      isParent: userRole === 'parent',
+      isStudent: userRole === 'student',
+      isTeacher: userRole === 'teacher'
+    });
     this.loadUserInfo();
     this.loadCheckins();
-    this.checkTeacherRole();
+    if (this.data.isTeacher) {
+      this.loadClassData();
+    }
   },
 
   onShow() {
@@ -150,14 +163,6 @@ Page({
 
   goToReport() {
     wx.navigateTo({ url: '/pages/report/report' });
-  },
-
-  async checkTeacherRole() {
-    const role = app.globalData.userRole;
-    if (role === 'teacher') {
-      this.setData({ isTeacher: true });
-      await this.loadClassData();
-    }
   },
 
   async loadClassData() {

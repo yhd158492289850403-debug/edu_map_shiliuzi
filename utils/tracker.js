@@ -124,8 +124,11 @@ function trackCheckin(checkinData) {
  * 添加到队列
  */
 function addToQueue(behavior) {
-  behavior.openid = app.globalData.openid;
-  behavior.userRole = app.globalData.userRole;
+  const app = getApp();
+  if (app && app.globalData) {
+    behavior.openid = app.globalData.openid;
+    behavior.userRole = app.globalData.userRole;
+  }
   behaviorQueue.push(behavior);
   
   // 队列满10条或超过30秒，自动上报

@@ -280,3 +280,45 @@
 .export-class-btn::after {
   border: none;
 }
+
+/* 用户角色标签 */
+.user-role {
+  display: inline-block;
+  font-size: 20rpx;
+  background: rgba(255,255,255,0.3);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  margin-top: 8rpx;
+}
+
+/* 学生专属提示 */
+.student-tip {
+  padding: 24rpx;
+}
+
+.tip-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  color: white;
+  text-align: center;
+}
+
+.tip-icon {
+  font-size: 60rpx;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.tip-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.tip-desc {
+  font-size: 24rpx;
+  opacity: 0.9;
+  display: block;
+}
