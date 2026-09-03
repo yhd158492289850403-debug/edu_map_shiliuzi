@@ -3,7 +3,7 @@ const app = getApp();
 
 // 观察期触发条件
 const TRIGGERS = {
-  CHECKIN_COUNT: 10,  // 改为10次
+  CHECKIN_COUNT: 5,  // 改为5次
   SESSION_DAYS: 7,
   VIEWED_SLICES: 10
 };

@@ -25,13 +25,59 @@ Page({
       // 获取行为数据
       const behaviors = await getBehaviors();
       
+      // 从本地存储获取打卡记录
+      let checkins = [];
+      try {
+        checkins = wx.getStorageSync('localCheckins') || [];
+        console.log('从本地存储读取打卡记录:', checkins.length, '条');
+      } catch (err) {
+        console.error('读取本地存储失败:', err);
+      }
+      
+      // 如果本地存储没有，尝试从云数据库读取
+      if (checkins.length === 0) {
+        try {
+          const db = wx.cloud.database();
+          const { data } = await db.collection('checkins').where({
+            _openid: '{openid}'
+          }).get();
+          checkins = data || [];
+          console.log('从云数据库读取打卡记录:', checkins.length, '条');
+        } catch (err) {
+          console.error('读取云数据库失败:', err);
+        }
+      }
+      
+      // 构建行为数据用于计算六维分数
+      const behaviorData = {
+        viewedSlices: behaviors.stats.viewedSlices || [],
+        checkins: checkins.map(c => ({
+          pointId: c.point_id,
+          pointName: c.point_name,
+          behavior: c.behavior
+        })),
+        feedbacks: []
+      };
+      
+      console.log('行为数据:', behaviorData);
+      
       // 计算分数
-      const scores = calculateSixDimScores(behaviors.stats);
+      const scores = calculateSixDimScores(behaviorData);
+      console.log('计算的六维分数:', scores);
+      
+      // 如果分数全为0，使用初始分数
+      const hasNonZeroScore = Object.values(scores).some(s => s > 0);
+      if (!hasNonZeroScore) {
+        console.log('分数全为0，使用初始分数');
+        const initialScores = calculateInitialScores(behaviorData);
+        console.log('初始分数:', initialScores);
+        Object.assign(scores, initialScores);
+      }
       
       // 生成报告
       const report = generateReport(role, scores, behaviors.stats, {
         nickname: app.globalData.userInfo?.nickname || '用户',
-        checkinCount: behaviors.stats.totalCheckins
+        checkinCount: checkins.length
       });
       
       this.setData({
