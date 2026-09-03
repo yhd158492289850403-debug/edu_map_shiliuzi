@@ -48,6 +48,43 @@
     </view>
   </view>
 
+  <!-- 教师班级数据 -->
+  <view class="teacher-section" wx:if="{{isTeacher}}">
+    <view class="teacher-title">班级数据</view>
+    
+    <view class="class-stats">
+      <view class="class-stat-item">
+        <text class="class-stat-value">{{classData.totalStudents}}</text>
+        <text class="class-stat-label">学生总数</text>
+      </view>
+      <view class="class-stat-item">
+        <text class="class-stat-value">{{classData.activeStudents}}</text>
+        <text class="class-stat-label">活跃学生</text>
+      </view>
+      <view class="class-stat-item">
+        <text class="class-stat-value">{{classData.averageCheckins}}</text>
+        <text class="class-stat-label">平均打卡</text>
+      </view>
+    </view>
+    
+    <view class="student-list">
+      <view 
+        class="student-item" 
+        wx:for="{{students}}" 
+        wx:key="_openid"
+        data-openid="{{item._openid}}"
+        bindtap="onViewStudent"
+      >
+        <text class="student-name">{{item.nickname}}</text>
+        <text class="student-checkins">打卡{{item.behaviors.length}}次</text>
+      </view>
+    </view>
+    
+    <button class="export-class-btn" bindtap="onExportClassReport">
+      导出班级汇总表
+    </button>
+  </view>
+
   <!-- 学段设置 -->
   <view class="stage-section">
     <text class="section-title">🎓 学段设置</text>

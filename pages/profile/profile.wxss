@@ -202,3 +202,81 @@
   border-radius: 8rpx;
   line-height: 1.5;
 }
+
+/* 教师班级数据 */
+.teacher-section {
+  margin: 24rpx;
+  padding: 30rpx;
+  background: white;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+
+.teacher-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 30rpx;
+}
+
+.class-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.class-stat-item {
+  text-align: center;
+}
+
+.class-stat-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4ECDC4;
+  display: block;
+}
+
+.class-stat-label {
+  font-size: 24rpx;
+  color: #64748b;
+}
+
+.student-list {
+  margin-bottom: 30rpx;
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  margin-bottom: 10rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+}
+
+.student-name {
+  font-size: 28rpx;
+  color: #1e293b;
+}
+
+.student-checkins {
+  font-size: 24rpx;
+  color: #64748b;
+}
+
+.export-class-btn {
+  background: #667eea;
+  color: white;
+  border-radius: 50rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.export-class-btn::after {
+  border: none;
+}

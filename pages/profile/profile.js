@@ -11,6 +11,9 @@ Page({
     loading: true,
     stage: '全部',
     isObserving: true,
+    isTeacher: false,
+    classData: null,
+    students: [],
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -25,6 +28,7 @@ Page({
     this.setData({ statusBarHeight: windowInfo.statusBarHeight || 44, stage });
     this.loadUserInfo();
     this.loadCheckins();
+    this.checkTeacherRole();
   },
 
   onShow() {
@@ -146,6 +150,42 @@ Page({
 
   goToReport() {
     wx.navigateTo({ url: '/pages/report/report' });
+  },
+
+  async checkTeacherRole() {
+    const role = app.globalData.userRole;
+    if (role === 'teacher') {
+      this.setData({ isTeacher: true });
+      await this.loadClassData();
+    }
+  },
+
+  async loadClassData() {
+    try {
+      const { result } = await wx.cloud.callFunction({
+        name: 'getClassStudents'
+      });
+      
+      if (result.success) {
+        this.setData({
+          classData: result.classStats,
+          students: result.students
+        });
+      }
+    } catch (err) {
+      console.error('加载班级数据失败:', err);
+    }
+  },
+
+  onExportClassReport() {
+    wx.showToast({ title: '功能开发中', icon: 'none' });
+  },
+
+  onViewStudent(e) {
+    const openid = e.currentTarget.dataset.openid;
+    wx.navigateTo({
+      url: `/pages/student-detail/student-detail?openid=${openid}`
+    });
   },
 
   onShareAppMessage() {
