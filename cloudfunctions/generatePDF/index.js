@@ -3,20 +3,37 @@ const { PDFDocument, PageSizes, rgb, StandardFonts } = require('pdf-lib');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
+// 将中文字符转换为安全的ASCII字符串
+function sanitizeForPdf(text) {
+  if (!text) return '';
+  // 移除所有非ASCII字符，保留英文、数字、标点
+  return text.replace(/[^\x00-\x7F]/g, '').trim() || 'N/A';
+}
+
+// 获取英文维度标签
+function getDimLabelEn(dimKey) {
+  const labels = {
+    '体素': 'Physical',
+    '心素': 'Emotional',
+    '灵素': 'Value',
+    '智素': 'Cognitive',
+    '行素': 'Action',
+    '交素': 'Social'
+  };
+  return labels[dimKey] || dimKey;
+}
+
 exports.main = async (event, context) => {
   const { reportData, selectedCheckins, radarImage } = event;
   
   try {
     const pdfDoc = await PDFDocument.create();
-    
-    // 使用 Helvetica 字体（不支持中文，但可以显示英文和数字）
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     
-    // 对于中文内容，使用简单的ASCII字符替代
     const coverPage = pdfDoc.addPage(PageSizes.A4);
     const { width, height } = coverPage.getSize();
     
-    // 标题使用英文
+    // 标题
     coverPage.drawText('Growth Report', {
       x: 50,
       y: height - 100,
@@ -26,7 +43,8 @@ exports.main = async (event, context) => {
     });
     
     // 副标题
-    coverPage.drawText(reportData.subtitle || '', {
+    const subtitle = sanitizeForPdf(reportData.subtitle) || new Date().toLocaleDateString('en-US');
+    coverPage.drawText(subtitle, {
       x: 50,
       y: height - 130,
       size: 14,
@@ -51,18 +69,8 @@ exports.main = async (event, context) => {
     const detailPage = pdfDoc.addPage(PageSizes.A4);
     let yPosition = height - 50;
     
-    // 使用英文标签
-    const dimLabels = {
-      '体素': 'Physical',
-      '心素': 'Emotional',
-      '灵素': 'Value',
-      '智素': 'Cognitive',
-      '行素': 'Action',
-      '交素': 'Social'
-    };
-    
     for (const dim of (reportData.dimensions || [])) {
-      const label = dimLabels[dim.key] || dim.key;
+      const label = getDimLabelEn(dim.key);
       detailPage.drawText(`${label}: ${dim.score}`, {
         x: 50,
         y: yPosition,
@@ -72,20 +80,6 @@ exports.main = async (event, context) => {
       });
       
       yPosition -= 20;
-      
-      if (dim.description) {
-        // 截断中文描述，只显示前20个字符
-        const desc = dim.description.substring(0, 20) + (dim.description.length > 20 ? '...' : '');
-        detailPage.drawText(desc, {
-          x: 70,
-          y: yPosition,
-          size: 10,
-          font: font,
-          color: rgb(0.4, 0.4, 0.4)
-        });
-        yPosition -= 15;
-      }
-      
       yPosition -= 10;
       
       if (yPosition < 50) {
@@ -110,8 +104,8 @@ exports.main = async (event, context) => {
       yPosition -= 30;
       
       for (const checkin of selectedCheckins) {
-        const date = checkin.date ? new Date(checkin.date).toLocaleDateString() : '';
-        const pointName = checkin.point_name ? checkin.point_name.substring(0, 15) : '';
+        const date = checkin.date ? new Date(checkin.date).toLocaleDateString('en-US') : '';
+        const pointName = sanitizeForPdf(checkin.point_name);
         checkinPage.drawText(`${date} - ${pointName}`, {
           x: 50,
           y: yPosition,
@@ -121,20 +115,6 @@ exports.main = async (event, context) => {
         });
         
         yPosition -= 15;
-        
-        if (checkin.notes) {
-          const notes = checkin.notes.substring(0, 30) + (checkin.notes.length > 30 ? '...' : '');
-          checkinPage.drawText(notes, {
-            x: 70,
-            y: yPosition,
-            size: 9,
-            font: font,
-            color: rgb(0.5, 0.5, 0.5)
-          });
-          yPosition -= 12;
-        }
-        
-        yPosition -= 10;
         
         if (yPosition < 50) {
           yPosition = height - 50;
@@ -153,7 +133,7 @@ exports.main = async (event, context) => {
     
     return { success: true, fileID };
   } catch (err) {
-    console.error('生成PDF失败:', err);
+    console.error('PDF generation failed:', err);
     return { success: false, error: err.message };
   }
 };
