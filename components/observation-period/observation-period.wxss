@@ -1,0 +1,54 @@
+.observation-container {
+  padding: 20rpx;
+}
+
+.observation-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  color: white;
+}
+
+.message {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+}
+
+.progress-bar {
+  height: 20rpx;
+  background: rgba(255,255,255,0.3);
+  border-radius: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 10rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: right;
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-bottom: 20rpx;
+}
+
+.next-step {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.hint {
+  font-size: 26rpx;
+}
+
+.encouragement {
+  font-size: 24rpx;
+  opacity: 0.9;
+  line-height: 1.6;
+}

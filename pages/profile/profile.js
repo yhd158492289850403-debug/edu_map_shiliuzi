@@ -10,6 +10,7 @@ Page({
     checkins: [],
     loading: true,
     stage: '全部',
+    isObserving: true,
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -136,6 +137,15 @@ Page({
 
   onEditProfile() {
     wx.showToast({ title: '编辑资料功能开发中', icon: 'none' });
+  },
+
+  onAssessmentReady() {
+    this.setData({ isObserving: false });
+    wx.showToast({ title: '数据收集完成！', icon: 'success' });
+  },
+
+  goToReport() {
+    wx.navigateTo({ url: '/pages/report/report' });
   },
 
   onShareAppMessage() {

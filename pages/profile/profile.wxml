@@ -8,6 +8,14 @@
     <view class="top-right"></view>
   </view>
 
+  <!-- 观察期提示 -->
+  <observation-period bind:ready="onAssessmentReady" />
+
+  <!-- 已评估后显示报告入口 -->
+  <view class="report-entry" wx:if="{{!isObserving}}">
+    <button bindtap="goToReport">查看成长报告</button>
+  </view>
+
   <!-- 用户信息 -->
   <view class="user-section">
     <view class="user-avatar" bindtap="onEditProfile">

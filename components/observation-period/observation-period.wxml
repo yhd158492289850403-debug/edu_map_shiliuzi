@@ -1,0 +1,19 @@
+<view class="observation-container" wx:if="{{!isLoading && isObserving}}">
+  <view class="observation-card">
+    <view class="message">{{message}}</view>
+    
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progress}}%"></view>
+    </view>
+    
+    <view class="progress-text">{{progress}}%</view>
+    
+    <view class="next-step">
+      <text class="hint">💡 {{nextStep}}</text>
+    </view>
+    
+    <view class="encouragement">
+      <text>您的孩子正在很好地成长！每一次探访都是宝贵的经历。</text>
+    </view>
+  </view>
+</view>
