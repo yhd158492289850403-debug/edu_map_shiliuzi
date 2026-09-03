@@ -63,12 +63,13 @@ Page({
         ? this.data.allCheckins.filter(c => this.data.selectedCheckins.includes(c._id))
         : [];
       
+      // 传递给云函数时使用英文，避免pdf-lib编码问题
       const reportData = {
-        title: '成长报告',
-        subtitle: new Date().toLocaleDateString('zh-CN'),
+        title: 'Growth Report',
+        subtitle: new Date().toLocaleDateString('en-US'),
         dimensions: Object.entries(this.data.scores).map(([key, score]) => ({
           key,
-          label: getDimLabel(key),
+          label: getDimLabelEn(key),
           score
         })),
         radarData: this.data.scores
@@ -91,6 +92,18 @@ function getDimLabel(dim) {
     '智素': '认知素养',
     '行素': '行动素养',
     '交素': '社交素养'
+  };
+  return labels[dim] || dim;
+}
+
+function getDimLabelEn(dim) {
+  const labels = {
+    '体素': 'Physical',
+    '心素': 'Emotional',
+    '灵素': 'Value',
+    '智素': 'Cognitive',
+    '行素': 'Action',
+    '交素': 'Social'
   };
   return labels[dim] || dim;
 }
