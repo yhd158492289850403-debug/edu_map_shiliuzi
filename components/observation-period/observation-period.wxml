@@ -6,14 +6,18 @@
       <view class="progress-fill" style="width: {{progress}}%"></view>
     </view>
     
-    <view class="progress-text">{{progress}}%</view>
+    <view class="progress-text">
+      <text>已完成 {{stats.totalCheckins || 0}}/{{targetCheckins}} 次打卡</text>
+      <text>{{progress}}%</text>
+    </view>
     
     <view class="next-step">
       <text class="hint">💡 {{nextStep}}</text>
     </view>
     
     <view class="encouragement">
-      <text>您的孩子正在很好地成长！每一次探访都是宝贵的经历。</text>
+      <text wx:if="{{isStudent}}">你正在很好地成长！每一次学习都是宝贵的经历。</text>
+      <text wx:else>您的孩子正在很好地成长！每一次探访都是宝贵的经历。</text>
     </view>
   </view>
 </view>

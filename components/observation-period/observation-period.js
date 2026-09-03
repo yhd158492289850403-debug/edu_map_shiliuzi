@@ -11,7 +11,8 @@ Component({
     progress: 0,
     message: '',
     nextStep: '',
-    stats: {}
+    stats: {},
+    targetCheckins: 10  // 目标打卡次数
   },
   
   lifetimes: {
@@ -41,7 +42,8 @@ Component({
           isObserving: !result.ready,
           progress: result.progress || 0,
           message: result.message || getProgressMessage(result.progress || 0, {}, this.data.isStudent ? 'student' : 'parent'),
-          nextStep: getNextStepMessage(result.stats || {})
+          nextStep: getNextStepMessage(result.stats || {}),
+          stats: result.stats || {}
         });
         
         if (result.ready) {

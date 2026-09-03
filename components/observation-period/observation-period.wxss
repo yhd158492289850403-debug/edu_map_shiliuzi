@@ -30,7 +30,9 @@
 }
 
 .progress-text {
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 24rpx;
   opacity: 0.8;
   margin-bottom: 20rpx;

@@ -3,7 +3,7 @@ const app = getApp();
 
 // 观察期触发条件
 const TRIGGERS = {
-  CHECKIN_COUNT: 3,
+  CHECKIN_COUNT: 10,  // 改为10次
   SESSION_DAYS: 7,
   VIEWED_SLICES: 10
 };
@@ -24,10 +24,33 @@ async function shouldStartAssessment() {
   try {
     const localCheckins = wx.getStorageSync('localCheckins') || [];
     console.log('从本地存储读取打卡记录:', localCheckins.length, '条');
-    if (localCheckins.length > totalCheckins) {
-      totalCheckins = localCheckins.length;
-      console.log('使用本地存储的打卡次数:', totalCheckins);
+    
+    // 同时尝试从云数据库读取打卡记录
+    try {
+      const db = wx.cloud.database();
+      const { data } = await db.collection('checkins').where({
+        _openid: '{openid}'
+      }).get();
+      
+      // 合并云数据库和本地存储的打卡记录
+      const cloudCheckins = data || [];
+      console.log('从云数据库读取打卡记录:', cloudCheckins.length, '条');
+      
+      // 取两者的最大值
+      totalCheckins = Math.max(localCheckins.length, cloudCheckins.length, totalCheckins);
+      
+      // 如果云数据库有更多记录，同步到本地存储
+      if (cloudCheckins.length > localCheckins.length) {
+        wx.setStorageSync('localCheckins', cloudCheckins);
+        console.log('同步云数据库记录到本地存储');
+      }
+    } catch (cloudErr) {
+      console.warn('读取云数据库失败:', cloudErr.message);
+      // 如果云数据库读取失败，使用本地存储
+      totalCheckins = Math.max(localCheckins.length, totalCheckins);
     }
+    
+    console.log('最终打卡次数:', totalCheckins);
   } catch (err) {
     console.error('读取本地存储失败:', err);
   }
@@ -48,7 +71,7 @@ async function shouldStartAssessment() {
   
   console.log('观察期检查 - 打卡次数:', totalCheckins, '目标:', TRIGGERS.CHECKIN_COUNT);
   
-  // 条件1：累计打卡≥3次
+  // 条件1：累计打卡≥10次
   if (totalCheckins >= TRIGGERS.CHECKIN_COUNT) {
     console.log('观察期结束：打卡次数达标');
     return { ready: true, reason: 'checkin_count', progress: 100 };
