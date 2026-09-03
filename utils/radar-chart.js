@@ -15,7 +15,7 @@ const DIM_COLORS = {
 
 /**
  * 绘制雷达图
- * @param {CanvasContext} ctx - Canvas上下文
+ * @param {CanvasRenderingContext2D} ctx - Canvas上下文（新版2D API）
  * @param {Object} scores - 六维得分 {体素: 0-100, ...}
  * @param {Object} options - 配置选项
  */
@@ -62,7 +62,7 @@ function drawRadarChart(ctx, scores, options = {}) {
 function drawBackground(ctx, centerX, centerY, radius, color) {
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius + 20, 0, 2 * Math.PI);
-  ctx.setFillStyle(color);
+  ctx.fillStyle = color;
   ctx.fill();
 }
 
@@ -71,8 +71,8 @@ function drawGrid(ctx, centerX, centerY, radius, levels, color) {
     const r = (radius / levels) * i;
     ctx.beginPath();
     ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
-    ctx.setStrokeStyle(color);
-    ctx.setLineWidth(0.5);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 0.5;
     ctx.stroke();
   }
 }
@@ -86,17 +86,17 @@ function drawAxes(ctx, centerX, centerY, radius, dimCount, startAngle, angleStep
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(x, y);
-    ctx.setStrokeStyle(color);
-    ctx.setLineWidth(1);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
     ctx.stroke();
   }
 }
 
 function drawLabels(ctx, centerX, centerY, radius, dimCount, startAngle, angleStep, color) {
-  ctx.setFillStyle(color);
-  ctx.setFontSize(12);
-  ctx.setTextAlign('center');
-  ctx.setTextBaseline('middle');
+  ctx.fillStyle = color;
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
 
   for (let i = 0; i < dimCount; i++) {
     const angle = startAngle + i * angleStep;
@@ -119,10 +119,10 @@ function drawDataArea(ctx, scores, centerX, centerY, radius, dimCount, startAngl
   }
   ctx.closePath();
 
-  ctx.setFillStyle(colors.fill);
+  ctx.fillStyle = colors.fill;
   ctx.fill();
-  ctx.setStrokeStyle(colors.primary);
-  ctx.setLineWidth(2);
+  ctx.strokeStyle = colors.primary;
+  ctx.lineWidth = 2;
   ctx.stroke();
 }
 
@@ -132,10 +132,10 @@ function drawDataPoints(ctx, scores, centerX, centerY, radius, dimCount, startAn
   for (const point of points) {
     ctx.beginPath();
     ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
-    ctx.setFillStyle(color);
+    ctx.fillStyle = color;
     ctx.fill();
-    ctx.setStrokeStyle('#FFFFFF');
-    ctx.setLineWidth(2);
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 2;
     ctx.stroke();
   }
 }
@@ -143,10 +143,10 @@ function drawDataPoints(ctx, scores, centerX, centerY, radius, dimCount, startAn
 function drawValues(ctx, scores, centerX, centerY, radius, dimCount, startAngle, angleStep, color) {
   const points = getDataPoints(scores, centerX, centerY, radius, dimCount, startAngle, angleStep);
 
-  ctx.setFillStyle(color);
-  ctx.setFontSize(10);
-  ctx.setTextAlign('center');
-  ctx.setTextBaseline('bottom');
+  ctx.fillStyle = color;
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
 
   for (let i = 0; i < dimCount; i++) {
     const score = Math.round(scores[DIM_KEYS[i]] || 0);
