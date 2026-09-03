@@ -15,7 +15,141 @@
 
 ---
 
-## 二、技术栈
+## 二、功能使用指南
+
+### 2.1 首次使用 - 身份选择
+
+首次打开小程序时，需要选择身份：
+- **家长**：查看孩子成长报告，获取育儿建议
+- **学生**：查看自己的成长勋章和能力图
+- **教师**：查看班级学生数据，生成教学报告
+
+**切换身份**：在"我的"页面，点击用户名下方的身份标签，可随时切换身份。
+
+### 2.2 首页 - 找素养
+
+**视图模式**：地图视图 / 卡片列表视图（底部按钮切换）
+
+**地图视图**：微信原生 `<map>` 组件，111 个标记点，颜色按主导维度着色，点击标记跳详情页。
+
+**卡片列表**：地点卡片（名称 + 维度色条 + 六维星级 + 分类标签 + 区域 + 简介），点击跳详情页。
+
+**筛选面板**（`filter-sheet` 组件）：
+- 搜索框：支持行为关键词（"顶嘴"→自动筛选心素≥3星的点位）+ 文本模糊匹配
+- 素养维度：6 个维度 chip 多选
+- 地点分类：11 个分类 chip 多选
+- 孩子问题：74 种问题 chip 多选
+- 六维星级：每维星级阈值筛选（★★+ / ★★★）
+- 学段筛选：小学 / 初中 / 高中
+
+### 2.3 详情页 - 点位详情
+
+展示内容：
+- 维度色条 + 维度标签
+- 基本信息（区域/地址/类别/开放时间/电话）
+- 核心育人价值
+- 适配行为问题标签
+- 引导建议
+- 推荐活动
+- 预期发展素养
+- 教育切片列表（每个切片展示：标题/位置/子素养/适龄/星级/教育功能/四段教案）
+
+**切片操作**：
+- 点击切片卡片 → 展开四段教案（行前准备/路上话术/到馆做法/返程复盘）
+- 点击"📝 打卡记录"按钮 → 跳转打卡页面，自动填充点位和行为
+
+### 2.4 附近页 - 距离导航
+
+**流程**：`wx.getLocation(gcj02)` → 计算到 111 点位 Haversine 距离 → 半径筛选（2/3/5/10/不限 km）→ 维度筛选 → 文本搜索 → 距离升序列表。
+
+**每张卡片**：点位名 + 区域 + 分类 + 维度标签 + 距离 +「导航」按钮 → `wx.openLocation` 唤起微信地图导航。
+
+**降级**：定位失败时显示全部点位（按名称排序），提示用户开启权限。
+
+### 2.5 行为寻课页 - 行为→教案
+
+**完整链路**：
+```
+家长输入行为（如"顶嘴"）
+  → utils/behavior.js matchBehaviors(): 精确匹配 > 名称子串 > 别名匹配
+  → 得到子素养集合（如"情绪调节/共情回应/协商与冲突解决"）
+  → 在 459 切片中找 subs 重叠的切片（按重叠数 + 星级排序）
+  → 展示：行为名 + 场景 + 引导 + 对症切片卡片列表
+  → 每个切片可展开四段教案，可跳详情页，可直接打卡
+```
+
+**热门行为**：顶嘴 / 磨蹭 / 怕黑 / 挑食 / 不爱运动 / 沉迷手机 / 逆反 / 害羞 / 撒谎 / 不专注
+
+**支持多行为搜索**：从筛选面板多选行为时，URL 传 `behaviors=顶嘴,磨蹭`，分别推荐后合并去重。
+
+**分享**：支持转发给朋友 + 分享到朋友圈（含行为名 + 子素养 + 教案标题）。
+
+### 2.6 个人档案页 - 成长轨迹
+
+**数据来源**：云开发数据库 `checkins` 集合（按 openid 隔离）+ 本地存储。
+
+**展示内容**：
+- 用户信息（微信昵称 + 身份标签）
+- 累计打卡次数 / 去过的点位数 / 涉及的行为数 / 连续打卡天数
+- 打卡历史列表（按时间倒序）
+- 学段切换（小学/初中/高中）- 仅家长显示
+
+**观察期机制**：
+- 首次使用时，需要完成 5 次打卡才能生成成长报告
+- 观察期进度条显示"已完成 X/5 次打卡"
+- 进度条会自动从云数据库同步打卡记录
+
+**教师视图**：
+- 显示班级数据（学生总数/活跃学生/平均打卡）
+- 学生列表（可点击查看学生详情）
+- 导出班级汇总表按钮
+
+### 2.7 打卡页 - 记录成长
+
+**表单**：
+- 选择点位（从 111 个点位中选）
+- 选择行为（从 116 种行为中选，或从 recommend 页自动带入）
+- 评分（感受等级）
+- 文字笔记
+- 照片（最多 3 张，上传到云存储）
+
+**提交**：写入云开发数据库 `checkins` 集合 + 本地存储。
+
+### 2.8 成长报告页 - 六维素养报告
+
+**触发条件**：完成 5 次打卡后，在"我的"页面点击"查看成长报告"。
+
+**报告内容**：
+- 六维雷达图（体素/心素/灵素/智素/行素/交素）
+- 各维度分数（0-100分）
+- 成长亮点
+- 改进建议
+- 鼓励语
+
+**角色化报告**：
+- **家长**：温馨鼓励型，关注孩子成长
+- **学生**：活泼游戏型，关注成就徽章
+- **教师**：专业数据型，关注班级对比
+
+**操作**：
+- 点击"导出PDF" → 生成PDF报告（英文标签）
+- 点击"分享给朋友" → 微信分享
+
+### 2.9 PDF导出
+
+**使用方法**：
+1. 在成长报告页面，点击"导出PDF"按钮
+2. 系统生成PDF文件（包含雷达图和维度分数）
+3. 自动打开PDF预览
+4. 点击右上角"..." → "保存到手机"或"转发给朋友"
+
+**注意**：
+- PDF使用英文标签（Physical/Emotional/Value/Cognitive/Action/Social）
+- 需要部署 `generatePDF` 云函数
+
+---
+
+## 三、技术栈
 
 | 层级 | 技术 |
 |------|------|
@@ -25,13 +159,14 @@
 | 存储 | 云开发存储（打卡照片） |
 | 地图 | 微信原生 `<map>` 组件 + `wx.openLocation` 导航 |
 | 数据构建 | Node.js 脚本（从 docx 文本行提取切片数据） |
+| PDF生成 | pdf-lib（云函数） |
 
 **AppID**: `wx20f82f75dc26f148`  
 **云环境**: `cloud1-d5gyas9xgbb003681`
 
 ---
 
-## 三、目录结构总览
+## 四、目录结构总览
 
 ```
 edu_map_for_shiliuzi/
@@ -43,24 +178,37 @@ edu_map_for_shiliuzi/
 ├── sitemap.json              # 小程序搜索收录配置
 ├── CLAUDE.md                 # AI 代理工作规范（可忽略）
 │
-├── pages/                    # ===== 6 个页面 =====
+├── pages/                    # ===== 10 个页面 =====
 │   ├── index/                # 首页：地图视图 + 卡片列表 + 筛选面板 + 行为搜索
 │   ├── detail/               # 详情页：点位完整信息 + 切片教案 + 打卡入口
 │   ├── near/                 # 附近页：定位 → 距离排序 → 半径筛选 → 导航
 │   ├── recommend/            # 行为寻课页：行为 → 子素养 → 对症教案推荐
-│   ├── profile/              # 个人档案页：打卡统计、成长轨迹、六维分布
-│   └── checkin/              # 打卡页：选点位 + 选行为 + 评分 + 笔记 + 照片
+│   ├── profile/              # 个人档案页：打卡统计、成长轨迹、六维分布、身份切换
+│   ├── checkin/              # 打卡页：选点位 + 选行为 + 评分 + 笔记 + 照片
+│   ├── role-select/          # 身份选择页：家长/学生/教师
+│   ├── report/               # 成长报告页：六维雷达图 + 分数 + 建议
+│   ├── pdf-export/           # PDF导出页：选择打卡记录 → 导出PDF
+│   └── student-detail/       # 学生详情页：教师查看学生信息
 │
-├── components/               # ===== 2 个自定义组件 =====
+├── components/               # ===== 5 个自定义组件 =====
 │   ├── filter-sheet/         # 筛选面板：维度 / 问题 / 分类 / 星级 / 学段
-│   └── feedback-popup/       # 意见反馈弹窗
+│   ├── feedback-popup/       # 意见反馈弹窗
+│   ├── observation-period/   # 观察期进度条组件
+│   ├── radar-chart/          # 六维雷达图组件（原生Canvas）
+│   └── report-card/          # 报告卡片组件
 │
 ├── utils/                    # ===== 纯工具函数 =====
 │   ├── util.js               # 维度颜色/标签/类名、HTML 转义
 │   ├── helper.wxs            # WXS 辅助函数（WXML 中直接调用）
 │   ├── search.js             # 搜索核心：行为关键词 → 维度星级、多级评分排序
 │   ├── behavior.js           # 行为推荐核心：行为 → 子素养 → 对症切片教案
-│   └── geo.js                # Haversine 球面距离计算（km）
+│   ├── geo.js                # Haversine 球面距离计算（km）
+│   ├── tracker.js            # 行为采集：页面访问、停留时长、点击、打卡
+│   ├── assessment.js         # 六维素养评估算法
+│   ├── observation.js        # 观察期检查：打卡次数、使用天数、查看教案数
+│   ├── report-generator.js   # 报告生成：家长/学生/教师三种模板
+│   ├── radar-chart.js        # 雷达图绘制工具（原生Canvas）
+│   └── pdf-export.js         # PDF导出前端逻辑
 │
 ├── data/                     # ===== 静态数据（全部 require 引入，不走网络）=====
 │   ├── locations.js          # 【核心】111 点位 × 459 切片（含六维星级、四段教案）
@@ -72,6 +220,7 @@ edu_map_for_shiliuzi/
 │   ├── red-mapping.js        # 红色切片 → 六维素养映射
 │   ├── dimensions.js         # 6 维颜色 + 标签定义（体/心/灵/智/行/交）
 │   ├── issues.js             # 74 种孩子问题 → 维度映射
+│   ├── user-roles.js         # 用户角色配置（家长/学生/教师）
 │   └── README.md             # 数据格式文档
 │
 ├── images/                   # ===== 静态资源 =====
@@ -100,7 +249,11 @@ edu_map_for_shiliuzi/
 │   ├── addCheckin/           # 打卡：写入 checkins 集合
 │   ├── getCheckins/          # 查询：按用户获取打卡历史
 │   ├── getPlans/             # 查询：获取保存的方案
-│   └── savePlan/             # 保存：存入方案数据
+│   ├── savePlan/             # 保存：存入方案数据
+│   ├── saveBehavior/         # 保存：行为数据采集
+│   ├── getBehaviors/         # 查询：获取行为数据
+│   ├── getClassStudents/     # 查询：获取班级学生数据（教师用）
+│   └── generatePDF/          # 生成：PDF报告
 │
 ├── demo/                     # ===== 演示文件 =====
 │   └── sidebar-interactive-demo.html  # 交互式侧边栏原型演示
@@ -115,9 +268,9 @@ edu_map_for_shiliuzi/
 
 ---
 
-## 四、核心数据架构
+## 五、核心数据架构
 
-### 4.1 `data/locations.js` — 点位与切片（最核心）
+### 5.1 `data/locations.js` — 点位与切片（最核心）
 
 ```
 LOCATIONS = [
@@ -166,7 +319,7 @@ LOCATIONS = [
 ]
 ```
 
-### 4.2 `data/behaviors.js` — 行为映射（116 种行为）
+### 5.2 `data/behaviors.js` — 行为映射（116 种行为）
 
 ```
 BEHAVIORS = {
@@ -184,7 +337,7 @@ BEHAVIORS = {
 }
 ```
 
-### 4.3 `data/sub_literacies.js` — 子素养体系（100+ 项）
+### 5.3 `data/sub_literacies.js` — 子素养体系（100+ 项）
 
 ```
 SUB_LITERACIES = {
@@ -194,7 +347,7 @@ DIMENSION_SUBS = { "心素": ["情绪调节","冲动控制",...], ... }
 SYNONYM = { "情绪恢复力": "挫折应对", ... } // 别名归并表
 ```
 
-### 4.4 六维素养体系
+### 5.4 六维素养体系
 
 | 维度键 | 显示标签 | 颜色 | 含义 |
 |--------|---------|------|------|
@@ -204,92 +357,6 @@ SYNONYM = { "情绪恢复力": "挫折应对", ... } // 别名归并表
 | `智素` | 认知素养 | 绿 `#22C55E` | 科学思维、学习能力、信息素养 |
 | `行素` | 行动素养 | 蓝 `#3B82F6` | 行动规划、实践执行、劳动 |
 | `交素` | 社交素养 | 橙 `#F97316` | 社交发起、合作沟通、倾听 |
-
----
-
-## 五、页面功能详解
-
-### 5.1 首页 `pages/index` — 找素养
-
-**视图模式**：地图视图 / 卡片列表视图（底部按钮切换）
-
-**地图视图**：微信原生 `<map>` 组件，111 个标记点，颜色按主导维度着色，点击标记跳详情页。
-
-**卡片列表**：地点卡片（名称 + 维度色条 + 六维星级 + 分类标签 + 区域 + 简介），点击跳详情页。
-
-**筛选面板**（`filter-sheet` 组件）：
-- 搜索框：支持行为关键词（"顶嘴"→自动筛选心素≥3星的点位）+ 文本模糊匹配
-- 素养维度：6 个维度 chip 多选
-- 地点分类：11 个分类 chip 多选
-- 孩子问题：74 种问题 chip 多选
-- 六维星级：每维星级阈值筛选（★★+ / ★★★）
-- 学段筛选：小学 / 初中 / 高中
-
-**搜索算法**（`utils/search.js`）：
-```
-输入文本 → 行为关键词命中？ → YES: 按维度星级筛选
-                            → NO:  名称精确子串 > 区域/类别 > 地址 > 全文本 > 拆词模糊 > 覆盖率兜底
-结果按相关度评分降序排列
-```
-
-### 5.2 详情页 `pages/detail` — 点位详情
-
-展示内容：
-- 维度色条 + 维度标签
-- 基本信息（区域/地址/类别/开放时间/电话）
-- 核心育人价值
-- 适配行为问题标签
-- 引导建议
-- 推荐活动
-- 预期发展素养
-- 教育切片列表（每个切片展示：标题/位置/子素养/适龄/星级/教育功能/四段教案）
-- 打卡入口（跳转 `checkin` 页）
-
-### 5.3 附近页 `pages/near` — 距离导航
-
-**流程**：`wx.getLocation(gcj02)` → 计算到 111 点位 Haversine 距离 → 半径筛选（2/3/5/10/不限 km）→ 维度筛选 → 文本搜索 → 距离升序列表。
-
-**每张卡片**：点位名 + 区域 + 分类 + 维度标签 + 距离 +「导航」按钮 → `wx.openLocation` 唤起微信地图导航。
-
-**降级**：定位失败时显示全部点位（按名称排序），提示用户开启权限。
-
-### 5.4 行为寻课页 `pages/recommend` — 行为→教案
-
-**完整链路**：
-```
-家长输入行为（如"顶嘴"）
-  → utils/behavior.js matchBehaviors(): 精确匹配 > 名称子串 > 别名匹配
-  → 得到子素养集合（如"情绪调节/共情回应/协商与冲突解决"）
-  → 在 459 切片中找 subs 重叠的切片（按重叠数 + 星级排序）
-  → 展示：行为名 + 场景 + 引导 + 对症切片卡片列表
-  → 每个切片可展开四段教案，可跳详情页，可直接打卡
-```
-
-**热门行为**：顶嘴 / 磨蹭 / 怕黑 / 挑食 / 不爱运动 / 沉迷手机 / 逆反 / 害羞 / 撒谎 / 不专注
-
-**支持多行为搜索**：从筛选面板多选行为时，URL 传 `behaviors=顶嘴,磨蹭`，分别推荐后合并去重。
-
-**分享**：支持转发给朋友 + 分享到朋友圈（含行为名 + 子素养 + 教案标题）。
-
-### 5.5 个人档案页 `pages/profile` — 成长轨迹
-
-**数据来源**：云开发数据库 `checkins` 集合（按 openid 隔离）。
-
-**展示内容**：
-- 累计打卡次数 / 去过的点位数 / 涉及的行为数 / 连续打卡天数
-- 打卡历史列表（按时间倒序）
-- 学段切换（小学/初中/高中）
-
-### 5.6 打卡页 `pages/checkin` — 记录成长
-
-**表单**：
-- 选择点位（从 111 个点位中选）
-- 选择行为（从 116 种行为中选，或从 recommend 页自动带入）
-- 评分（感受等级）
-- 文字笔记
-- 照片（最多 3 张，上传到云存储）
-
-**提交**：写入云开发数据库 `checkins` 集合。
 
 ---
 
@@ -330,6 +397,56 @@ SYNONYM = { "情绪恢复力": "挫折应对", ... } // 别名归并表
 | `getDimLabel(dim)` | 维度缩写 → 中文标签 |
 | `getDimClass(dim)` | 维度缩写 → WXSS 类名后缀（拼音） |
 | `escHtml(str)` | HTML 转义（防 XSS） |
+
+### `utils/tracker.js` — 行为采集
+
+| 函数 | 作用 |
+|------|------|
+| `init()` | 初始化采集器（自动拦截页面生命周期） |
+| `trackPageView(pagePath, extra)` | 记录页面访问 |
+| `trackClick(pagePath, target, extra)` | 记录点击行为 |
+| `trackStay(pagePath, duration)` | 记录停留时长 |
+| `trackSearch(keyword, results)` | 记录搜索行为 |
+| `trackCheckin(checkinData)` | 记录打卡行为 |
+| `flush()` | 上报行为数据到云函数 |
+| `getBehaviors(options)` | 获取用户行为数据 |
+
+### `utils/assessment.js` — 六维素养评估
+
+| 函数 | 作用 |
+|------|------|
+| `calculateSixDimScores(behaviors)` | 计算六维素养得分（0-100） |
+| `calculateInitialScores(behaviors)` | 基于历史行为推断初始分数 |
+| `updateScores(oldScores, newBehaviors)` | 更新分数（加权平均） |
+
+### `utils/observation.js` — 观察期检查
+
+| 函数 | 作用 |
+|------|------|
+| `shouldStartAssessment()` | 检查是否应该开始评估 |
+| `getProgressMessage(progress, stats, userRole)` | 获取进度提示信息 |
+| `getNextStepMessage(stats)` | 获取下一步提示信息 |
+
+### `utils/report-generator.js` — 报告生成
+
+| 函数 | 作用 |
+|------|------|
+| `generateReport(role, scores, behaviors, options)` | 生成报告（家长/学生/教师） |
+| `formatDimensions(scores, style)` | 格式化维度数据 |
+
+### `utils/radar-chart.js` — 雷达图绘制
+
+| 函数 | 作用 |
+|------|------|
+| `drawRadarChart(ctx, scores, options)` | 绘制雷达图（原生Canvas） |
+| `getDataPoints(scores, centerX, centerY, radius, dimCount, startAngle, angleStep)` | 获取数据点坐标 |
+
+### `utils/pdf-export.js` — PDF导出
+
+| 函数 | 作用 |
+|------|------|
+| `exportPDF(reportData, selectedCheckins)` | 导出PDF |
+| `generateFileName(nickname, type)` | 生成文件名 |
 
 ### `utils/helper.wxs` — WXS 辅助
 
@@ -392,14 +509,19 @@ node scripts/verify_e2e.js
 | `getCheckins` | 档案页加载 | 按 openid 查询打卡历史 |
 | `savePlan` | 做方案页保存 | 存入 plans 集合 |
 | `getPlans` | 做方案页加载 | 按 openid 查询已保存方案 |
+| `saveBehavior` | 行为采集 | 保存用户行为数据 |
+| `getBehaviors` | 档案页加载 | 获取用户行为数据 |
+| `getClassStudents` | 教师档案页 | 获取班级学生数据 |
+| `generatePDF` | PDF导出页 | 生成PDF报告 |
 
 ### 数据库集合
 
 | 集合 | 用途 | 关键字段 |
 |------|------|---------|
-| `users` | 用户信息 | `_openid`, `nickname`, `avatar`, `created_at` |
+| `users` | 用户信息 | `_openid`, `nickname`, `avatar`, `role`, `class_id`, `created_at` |
 | `checkins` | 打卡记录 | `_openid`, `point_id`, `point_name`, `behavior`, `rating`, `notes`, `photos[]`, `date` |
 | `plans` | 保存的方案 | `_openid`, `plan_name`, `behaviors`, `points[]`, `created_at` |
+| `behaviors` | 行为数据 | `_openid`, `type`, `page`, `target`, `timestamp`, `duration` |
 
 ---
 
@@ -420,6 +542,30 @@ node scripts/verify_e2e.js
 ### `components/feedback-popup` — 反馈弹窗
 
 简单的意见反馈表单弹窗。
+
+### `components/observation-period` — 观察期进度条
+
+显示观察期进度：
+- 进度条（百分比）
+- 已完成 X/5 次打卡
+- 下一步提示
+- 鼓励语
+
+### `components/radar-chart` — 六维雷达图
+
+使用原生Canvas绘制六维素养雷达图：
+- 六个维度轴
+- 数据区域填充
+- 数据点标记
+- 数值显示
+
+### `components/report-card` — 报告卡片
+
+展示报告内容：
+- 标题
+- 维度分数
+- 进度条
+- 鼓励语
 
 ---
 
@@ -456,6 +602,13 @@ node scripts/verify_e2e.js
 | 修改行为寻课页 | `pages/recommend/` |
 | 修改打卡功能 | `pages/checkin/` + `cloudfunctions/addCheckin/` |
 | 修改成长档案 | `pages/profile/` + `cloudfunctions/getCheckins/` |
+| 修改身份选择 | `pages/role-select/` + `data/user-roles.js` |
+| 修改成长报告 | `pages/report/` + `utils/report-generator.js` |
+| 修改PDF导出 | `pages/pdf-export/` + `cloudfunctions/generatePDF/` |
+| 修改观察期逻辑 | `utils/observation.js` + `components/observation-period/` |
+| 修改六维评估算法 | `utils/assessment.js` |
+| 修改雷达图 | `utils/radar-chart.js` + `components/radar-chart/` |
+| 修改行为采集 | `utils/tracker.js` |
 | 添加新点位 | 在 `data/locations.js` 末尾添加，`id` 接续最大编号 +1 |
 | 添加新行为 | 在 `data/behaviors.js` 中添加条目 |
 | 重新生成全部数据 | `node scripts/build_data.js`（需 `input/docx_lines.txt`） |
@@ -472,6 +625,9 @@ node scripts/verify_e2e.js
 4. **四段教案**：每个切片含 `pre`（行前）/ `talk`（路上）/ `act`（到馆）/ `post`（返程）四段式行程设计。
 5. **云开发可选**：核心功能不依赖云开发，仅打卡/档案/方案保存需要云函数支持。
 6. **自定义导航**：所有页面使用自定义导航栏（`navigationStyle: custom`），统一标题样式。
+7. **观察期机制**：首次使用需完成 5 次打卡才能生成成长报告，避免给孩子贴标签。
+8. **角色化报告**：家长/学生/教师三种角色，报告风格不同。
+9. **本地存储优先**：打卡数据同时保存到云数据库和本地存储，云函数未部署时仍可使用。
 
 ---
 
