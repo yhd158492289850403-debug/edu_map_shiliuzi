@@ -1,0 +1,157 @@
+.student-detail-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.content {
+  padding: 20rpx;
+}
+
+/* Student Info */
+.student-info {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.avatar-wrap {
+  margin-right: 24rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.info-text {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.checkin-count {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Sections */
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+/* Radar Chart */
+.radar-section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.radar-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* Report */
+.report-section {
+  margin-bottom: 20rpx;
+}
+
+/* Checkin History */
+.checkin-section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.checkin-list {
+  margin-top: 10rpx;
+}
+
+.checkin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.checkin-item:last-child {
+  border-bottom: none;
+}
+
+.checkin-left {
+  flex: 1;
+}
+
+.checkin-name {
+  font-size: 28rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.checkin-behavior {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.checkin-right {
+  display: flex;
+  align-items: center;
+}
+
+.checkin-date {
+  font-size: 24rpx;
+  color: #999;
+  margin-right: 10rpx;
+}
+
+.checkin-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* Actions */
+.actions {
+  padding: 20rpx 0 40rpx;
+}
+
+.export-btn {
+  background: #4ECDC4;
+  color: #fff;
+  border-radius: 50rpx;
+  padding: 24rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.export-btn::after {
+  border: none;
+}

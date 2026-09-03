@@ -1,0 +1,61 @@
+<view class="report-card" bindtap="onTap">
+  <!-- 头部 -->
+  <view class="card-header">
+    <view class="header-left">
+      <text class="card-title">{{title}}</text>
+      <text class="card-subtitle" wx:if="{{subtitle}}">{{subtitle}}</text>
+    </view>
+    <view class="header-right" wx:if="{{score > 0}}">
+      <text class="score-value" style="color: {{scoreColor}}">{{score}}</text>
+      <text class="score-label">分</text>
+    </view>
+  </view>
+
+  <!-- 等级标签 -->
+  <view class="level-tag" wx:if="{{level}}" style="background: {{scoreColor}}">
+    {{level}}
+  </view>
+
+  <!-- 维度列表 -->
+  <view class="dimensions" wx:if="{{dimensions.length > 0}}">
+    <view class="dim-item" wx:for="{{dimensions}}" wx:key="key">
+      <view class="dim-header">
+        <text class="dim-label">{{item.label}}</text>
+        <text class="dim-score" style="color: {{item.color}}">{{item.score}}分</text>
+      </view>
+      <view class="dim-bar">
+        <view class="dim-fill" style="width: {{item.score}}%; background: {{item.color}}"></view>
+      </view>
+      <text class="dim-desc" wx:if="{{item.description}}">{{item.description}}</text>
+    </view>
+  </view>
+
+  <!-- 亮点 -->
+  <view class="highlights" wx:if="{{highlights.length > 0}}">
+    <text class="section-label">成长亮点</text>
+    <view class="list-item" wx:for="{{highlights}}" wx:key="*this">
+      <text class="item-dot">•</text>
+      <text class="item-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 建议 -->
+  <view class="suggestions" wx:if="{{suggestions.length > 0}}">
+    <text class="section-label">改进建议</text>
+    <view class="list-item" wx:for="{{suggestions}}" wx:key="*this">
+      <text class="item-dot">•</text>
+      <text class="item-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 鼓励语 -->
+  <view class="encouragement" wx:if="{{encouragement}}">
+    <text>{{encouragement}}</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions" wx:if="{{showActions}}">
+    <button class="action-btn export-btn" catchtap="onExport">导出</button>
+    <button class="action-btn share-btn" catchtap="onShare">分享</button>
+  </view>
+</view>

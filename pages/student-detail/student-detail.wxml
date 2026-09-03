@@ -1,0 +1,74 @@
+<view class="student-detail-page">
+  <!-- Loading -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- Content -->
+  <view class="content" wx:else>
+    <!-- Student Info -->
+    <view class="student-info">
+      <view class="avatar-wrap">
+        <image 
+          class="avatar" 
+          src="{{studentInfo.avatar || '/images/default-avatar.png'}}" 
+          mode="aspectFill"
+        />
+      </view>
+      <view class="info-text">
+        <text class="nickname">{{studentInfo.nickname || '未设置昵称'}}</text>
+        <text class="checkin-count">打卡 {{checkins.length}} 次</text>
+      </view>
+    </view>
+
+    <!-- Radar Chart -->
+    <view class="radar-section" wx:if="{{scores && Object.keys(scores).length > 0}}">
+      <text class="section-title">能力雷达图</text>
+      <view class="radar-wrap">
+        <radar-chart scores="{{scores}}" width="280" height="280" />
+      </view>
+    </view>
+
+    <!-- Report Card -->
+    <view class="report-section" wx:if="{{report}}">
+      <text class="section-title">成长报告</text>
+      <report-card 
+        title="{{report.title}}"
+        subtitle="{{report.subtitle}}"
+        dimensions="{{report.dimensions}}"
+        highlights="{{report.highlights}}"
+        suggestions="{{report.recommendations}}"
+        encouragement="{{report.encouragement}}"
+        showActions="{{false}}"
+      />
+    </view>
+
+    <!-- Checkin History -->
+    <view class="checkin-section" wx:if="{{checkins.length > 0}}">
+      <text class="section-title">打卡记录</text>
+      <view class="checkin-list">
+        <view 
+          class="checkin-item" 
+          wx:for="{{checkins}}" 
+          wx:key="_id"
+          data-id="{{item._id}}"
+          bindtap="onCheckinDetail"
+        >
+          <view class="checkin-left">
+            <text class="checkin-name">{{item.point_name || '未知地点'}}</text>
+            <text class="checkin-behavior">{{item.behavior || ''}}</text>
+          </view>
+          <view class="checkin-right">
+            <text class="checkin-date">{{item.date}}</text>
+            <text class="checkin-arrow">›</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Actions -->
+    <view class="actions">
+      <button class="export-btn" bindtap="onExportPDF">导出PDF报告</button>
+    </view>
+  </view>
+</view>

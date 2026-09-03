@@ -8,7 +8,8 @@
     "pages/checkin/checkin",
     "pages/role-select/role-select",
     "pages/report/report",
-    "pages/pdf-export/pdf-export"
+    "pages/pdf-export/pdf-export",
+    "pages/student-detail/student-detail"
   ],
   "window": {
     "navigationStyle": "custom",
