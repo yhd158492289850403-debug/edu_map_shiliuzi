@@ -3,6 +3,7 @@
  */
 const { recommend, matchBehaviors } = require('../../utils/behavior');
 const { getDimColor } = require('../../utils/util');
+const tracker = require('../../utils/tracker');
 
 Page({
   data: {
@@ -50,6 +51,8 @@ Page({
     const b = e.currentTarget.dataset.b;
     this.setData({ kw: b });
     this.doSearch();
+    // 记录点击行为
+    tracker.trackClick('recommend', 'hot_behavior', { behavior: b });
   },
 
   onSearch() { this.doSearch(); },
@@ -66,6 +69,8 @@ Page({
       matchedSlices: r.matchedSlices.map(s => ({ ...s, _expanded: false }))
     }));
     this.setData({ recs, empty: recs.length === 0 });
+    // 记录搜索行为
+    tracker.trackSearch(kw, recs.length);
   },
 
   // 多行为整合搜索：对每个行为分别推荐，合并去重

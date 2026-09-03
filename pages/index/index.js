@@ -9,6 +9,7 @@ const { detectBehaviorKeywords, withSearchText, getFilteredLocations: applyFilte
 const { recommend } = require('../../utils/behavior');
 const { DIMENSION_SUBS, SUB_LITERACIES } = require('../../data/sub_literacies');
 const { BEHAVIORS } = require('../../data/behaviors');
+const tracker = require('../../utils/tracker');
 
 // 从地点数据中提取唯一分类
 const ALL_CATEGORIES = [...new Set(LOCATIONS.map(l => l.c).filter(Boolean))].sort();
@@ -190,7 +191,10 @@ Page({
 
   // ===== 卡片事件 =====
   onCardTap(e) {
-    wx.navigateTo({ url: `/pages/detail/detail?id=${e.currentTarget.dataset.id}` });
+    const id = e.currentTarget.dataset.id;
+    // 记录点击行为
+    tracker.trackClick('index', 'location_card', { locationId: id });
+    wx.navigateTo({ url: `/pages/detail/detail?id=${id}` });
   },
 
   // ===== 筛选面板 =====
@@ -299,6 +303,11 @@ Page({
     const set = { searchValue: search, filter: payload, view: search.trim() ? 'card' : 'map' };
     // 若从键盘输入（非无意义字符），保持卡片视图
     this.setData(set, () => this.refreshAll());
+    
+    // 记录搜索行为
+    if (search.trim()) {
+      tracker.trackSearch(search, this.data.resultCount);
+    }
   },
 
   onSearchConfirm(e) {

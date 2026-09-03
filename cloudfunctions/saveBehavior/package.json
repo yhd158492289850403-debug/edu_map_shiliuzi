@@ -1,0 +1,9 @@
+{
+  "name": "saveBehavior",
+  "version": "1.0.0",
+  "description": "保存用户行为数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

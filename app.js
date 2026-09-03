@@ -1,4 +1,6 @@
 // app.js
+const tracker = require('./utils/tracker');
+
 App({
   globalData: {
     userInfo: null,
@@ -22,6 +24,14 @@ App({
     
     // 初始化角色
     this.initRole();
+    
+    // 初始化行为采集
+    tracker.init();
+  },
+
+  onUnload() {
+    // 页面卸载时上报剩余数据
+    tracker.flush();
   },
 
   initRole() {

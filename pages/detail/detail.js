@@ -4,6 +4,7 @@
 const { LOCATIONS } = require('../../data/locations');
 const { DIMENSIONS, DIM_LABELS, DIM_ORDER } = require('../../data/dimensions');
 const { getDimColor, getDimLabel } = require('../../utils/util');
+const tracker = require('../../utils/tracker');
 
 Page({
   data: {
@@ -92,6 +93,17 @@ Page({
       currentStage: stage,
       statusBarHeight: windowInfo.statusBarHeight || 44
     });
+    
+    // 记录查看的切片
+    const viewedSlices = (loc.slices || []).map(s => ({
+      title: s.title,
+      dimKey: s.dimKey,
+      subs: s.subs
+    }));
+    tracker.trackPageView('detail', {
+      locationId: loc.id,
+      viewedSlices
+    });
   },
 
   onSliceTap(e) {
@@ -101,6 +113,14 @@ Page({
     if (!group) return;
     const s = group.slices[iIdx];
     if (!s) return;
+    
+    // 记录点击行为
+    tracker.trackClick('detail', 'slice', {
+      sliceIndex: iIdx,
+      sliceTitle: s.title,
+      dimKey: s.dimKey
+    });
+    
     this.setData({
       expandedSlice: this.data.expandedSlice && this.data.expandedSlice.title === s.title ? null : {
         title: s.title,

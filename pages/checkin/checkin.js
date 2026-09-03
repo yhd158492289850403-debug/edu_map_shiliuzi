@@ -3,6 +3,7 @@
  */
 const { LOCATIONS } = require('../../data/locations');
 const { BEHAVIORS } = require('../../data/behaviors');
+const tracker = require('../../utils/tracker');
 
 Page({
   data: {
@@ -143,6 +144,14 @@ Page({
     this.setData({ submitting: true });
 
     try {
+      // 记录打卡行为
+      tracker.trackCheckin({
+        pointId: this.data.selectedPoint.id,
+        pointName: this.data.selectedPoint.name,
+        behavior: this.data.selectedBehavior,
+        rating: this.data.rating
+      });
+      
       const db = wx.cloud.database();
       const checkinData = {
         point_id: this.data.selectedPoint.id,
