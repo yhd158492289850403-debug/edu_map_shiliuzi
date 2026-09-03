@@ -1,0 +1,10 @@
+.radar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16rpx;
+}
+
+.radar-canvas {
+  display: block;
+}

@@ -1,0 +1,8 @@
+<view class="radar-container">
+  <canvas 
+    type="2d" 
+    id="{{canvasId}}" 
+    class="radar-canvas"
+    style="width: {{width}}px; height: {{height}}px;"
+  />
+</view>
