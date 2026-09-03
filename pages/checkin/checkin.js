@@ -179,7 +179,23 @@ Page({
       }
 
       // Save to database
-      await db.collection('checkins').add({ data: checkinData });
+      try {
+        await db.collection('checkins').add({ data: checkinData });
+      } catch (dbErr) {
+        console.warn('保存到云数据库失败（云函数可能未部署）:', dbErr.message);
+      }
+
+      // 保存到本地存储（用于观察期进度条更新）
+      try {
+        const localCheckins = wx.getStorageSync('localCheckins') || [];
+        localCheckins.push({
+          ...checkinData,
+          _id: 'local_' + Date.now()
+        });
+        wx.setStorageSync('localCheckins', localCheckins);
+      } catch (storageErr) {
+        console.warn('保存到本地存储失败:', storageErr.message);
+      }
 
       wx.showToast({ title: '打卡成功！', icon: 'success' });
       setTimeout(() => {

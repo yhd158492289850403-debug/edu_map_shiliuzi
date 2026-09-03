@@ -141,6 +141,23 @@ Page({
     });
   },
 
+  onCheckinFromSlice(e) {
+    const gIdx = e.currentTarget.dataset.g;
+    const iIdx = e.currentTarget.dataset.i;
+    const group = this.data.sliceGroups[gIdx];
+    if (!group) return;
+    const s = group.slices[iIdx];
+    if (!s) return;
+    
+    // 跳转到打卡页面，传递点位ID和行为
+    const loc = this.data.location;
+    const params = [
+      `point_id=${loc.id}`,
+      `behavior=${encodeURIComponent(s.title)}`
+    ].join('&');
+    wx.navigateTo({ url: `/pages/checkin/checkin?${params}` });
+  },
+
   onBack() {
     wx.navigateBack();
   },

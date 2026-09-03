@@ -155,6 +155,10 @@
               <text class="slice-seg-label">返程复盘</text>
               <text class="slice-seg-text">{{expandedSlice.post}}</text>
             </view>
+            <!-- 打卡按钮 -->
+            <view class="slice-checkin-btn" bindtap="onCheckinFromSlice" data-g="{{gIdx}}" data-i="{{iIdx}}">
+              <text>📝 打卡记录</text>
+            </view>
           </view>
         </view>
       </view>

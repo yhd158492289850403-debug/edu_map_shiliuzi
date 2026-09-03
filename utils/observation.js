@@ -15,33 +15,65 @@ async function shouldStartAssessment() {
   const behaviors = await tracker.getBehaviors();
   const stats = behaviors.stats;
   
+  // 如果云函数未部署，使用本地存储的数据
+  let totalCheckins = stats.totalCheckins || 0;
+  let viewedSlices = stats.viewedSlices || [];
+  let firstUseTime = stats.firstUseTime;
+  
+  // 从本地存储获取打卡次数
+  try {
+    const localCheckins = wx.getStorageSync('localCheckins') || [];
+    if (localCheckins.length > totalCheckins) {
+      totalCheckins = localCheckins.length;
+    }
+  } catch (err) {
+    // 忽略错误
+  }
+  
+  // 从本地存储获取首次使用时间
+  if (!firstUseTime) {
+    try {
+      firstUseTime = wx.getStorageSync('firstUseTime');
+      if (!firstUseTime) {
+        firstUseTime = Date.now();
+        wx.setStorageSync('firstUseTime', firstUseTime);
+      }
+    } catch (err) {
+      firstUseTime = Date.now();
+    }
+  }
+  
   // 条件1：累计打卡≥3次
-  if (stats.totalCheckins >= TRIGGERS.CHECKIN_COUNT) {
+  if (totalCheckins >= TRIGGERS.CHECKIN_COUNT) {
     return { ready: true, reason: 'checkin_count', progress: 100 };
   }
   
   // 条件2：使用满7天
-  if (stats.firstUseTime) {
-    const daysDiff = (Date.now() - stats.firstUseTime) / (1000 * 60 * 60 * 24);
+  if (firstUseTime) {
+    const daysDiff = (Date.now() - firstUseTime) / (1000 * 60 * 60 * 24);
     if (daysDiff >= TRIGGERS.SESSION_DAYS) {
       return { ready: true, reason: 'session_days', progress: 100 };
     }
   }
   
   // 条件3：查看教案≥10个
-  if (stats.viewedSlices.length >= TRIGGERS.VIEWED_SLICES) {
+  if (viewedSlices.length >= TRIGGERS.VIEWED_SLICES) {
     return { ready: true, reason: 'viewed_slices', progress: 100 };
   }
   
   // 计算进度
-  const progress = calculateProgress(stats);
+  const progress = calculateProgress({
+    totalCheckins,
+    viewedSlices,
+    firstUseTime
+  });
   const userRole = (app && app.globalData.userRole) || 'parent';
   
   return { 
     ready: false, 
     reason: 'observing',
     progress,
-    message: getProgressMessage(progress, stats, userRole)
+    message: getProgressMessage(progress, { totalCheckins, viewedSlices }, userRole)
   };
 }
 
@@ -50,7 +82,7 @@ function calculateProgress(stats) {
   const daysProgress = stats.firstUseTime 
     ? ((Date.now() - stats.firstUseTime) / (1000 * 60 * 60 * 24) / TRIGGERS.SESSION_DAYS) * 100
     : 0;
-  const sliceProgress = (stats.viewedSlices.length / TRIGGERS.VIEWED_SLICES) * 100;
+  const sliceProgress = ((stats.viewedSlices || []).length / TRIGGERS.VIEWED_SLICES) * 100;
   
   return Math.min(100, Math.max(checkinProgress, daysProgress, sliceProgress));
 }
@@ -70,8 +102,8 @@ function getProgressMessage(progress, stats, userRole) {
 }
 
 function getNextStepMessage(stats) {
-  const checkinRemain = TRIGGERS.CHECKIN_COUNT - stats.totalCheckins;
-  const sliceRemain = TRIGGERS.VIEWED_SLICES - stats.viewedSlices.length;
+  const checkinRemain = TRIGGERS.CHECKIN_COUNT - (stats.totalCheckins || 0);
+  const sliceRemain = TRIGGERS.VIEWED_SLICES - (stats.viewedSlices || []).length;
   
   if (checkinRemain > 0 && sliceRemain > 0) {
     return `再完成${checkinRemain}次打卡或学习${sliceRemain}个教案即可生成报告`;
