@@ -1,6 +1,6 @@
-<view class="guide-overlay" wx:if="{{show && steps.length > 0}}">
-  <!-- 遮罩层 -->
-  <view class="guide-mask" bindtap="onSkip"></view>
+<view class="guide-overlay" wx:if="{{show}}">
+  <!-- 遮罩层（禁止点击穿透） -->
+  <view class="guide-mask" catchtap="onMaskTap"></view>
   
   <!-- 高亮区域 -->
   <view 
@@ -12,7 +12,7 @@
   <!-- 手指动画 -->
   <view 
     class="guide-finger {{fingerClass}}" 
-    wx:if="{{highlightRect && !isAnimating}}"
+    wx:if="{{highlightRect && isReady}}"
     style="{{fingerStyle}}"
   >
     <view class="finger-hand">👆</view>
@@ -21,16 +21,41 @@
   <!-- 气泡说明 -->
   <view 
     class="guide-bubble" 
-    wx:if="{{highlightRect && !isAnimating}}"
+    wx:if="{{currentStep && isReady}}"
     style="{{bubbleStyle}}"
   >
-    <view class="bubble-title">{{steps[currentStep].title}}</view>
-    <view class="bubble-desc">{{steps[currentStep].desc}}</view>
+    <!-- 进度条 -->
+    <view class="bubble-progress">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{globalStep / globalTotal * 100}}%"></view>
+      </view>
+      <text class="progress-text">{{globalStep}}/{{globalTotal}}</text>
+    </view>
+    
+    <!-- 站点信息 -->
+    <view class="bubble-station">
+      <text class="station-label">{{stationName}}</text>
+      <text class="station-count">({{stepInStation}}/{{stepTotal}})</text>
+    </view>
+    
+    <!-- 标题 -->
+    <view class="bubble-title">{{currentStep.title}}</view>
+    
+    <!-- 描述 -->
+    <view class="bubble-desc">{{currentStep.desc}}</view>
+    
+    <!-- 演示提示 -->
+    <view class="bubble-demo" wx:if="{{currentStep.demo}}">
+      <text class="demo-icon">💡</text>
+      <text class="demo-text">{{currentStep.demo}}</text>
+    </view>
+    
+    <!-- 操作按钮 -->
     <view class="bubble-footer">
-      <view class="bubble-skip" bindtap="onSkip">跳过</view>
-      <view class="bubble-step">{{currentStep + 1}}/{{steps.length}}</view>
+      <view class="bubble-skip" bindtap="onSkip">跳过引导</view>
       <view class="bubble-next" bindtap="onNext">
-        {{currentStep === steps.length - 1 ? '完成' : '下一步'}}
+        <text>{{globalStep === globalTotal ? '完成' : '下一步'}}</text>
+        <text class="next-arrow" wx:if="{{globalStep < globalTotal}}"> →</text>
       </view>
     </view>
   </view>

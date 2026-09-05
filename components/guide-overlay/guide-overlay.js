@@ -1,86 +1,130 @@
+const guideSteps = require('../../utils/guide-steps');
+
 Component({
   properties: {
-    // 引导步骤配置
-    steps: {
-      type: Array,
-      value: []
-    },
     // 是否显示
     show: {
+      type: Boolean,
+      value: false
+    },
+    // 当前页面路径
+    pagePath: {
+      type: String,
+      value: ''
+    },
+    // 是否全项目引导模式
+    fullGuide: {
       type: Boolean,
       value: false
     }
   },
 
   data: {
-    currentStep: 0,
+    // 当前步骤数据
+    currentStep: null,
     highlightRect: null,
     bubbleStyle: '',
     fingerStyle: '',
     fingerClass: '',
-    isAnimating: false
+    
+    // 进度信息
+    stationIndex: 0,
+    stationName: '',
+    stationTotal: 0,
+    stepInStation: 0,
+    stepTotal: 0,
+    globalStep: 0,
+    globalTotal: 0,
+    
+    // 状态
+    isAnimating: false,
+    isReady: false,
+    
+    // 步骤配置（单页面模式）
+    steps: []
   },
 
   lifetimes: {
     attached() {
-      if (this.data.show && this.data.steps.length > 0) {
-        this.startGuide();
+      if (this.data.show) {
+        this.initGuide();
       }
     }
   },
 
   observers: {
     'show': function(show) {
-      if (show && this.data.steps.length > 0) {
-        this.startGuide();
+      if (show) {
+        this.initGuide();
       }
     }
   },
 
   methods: {
-    // 开始引导
-    startGuide() {
-      this.setData({ currentStep: 0 });
-      this.showStep(0, 0);
+    // 初始化引导
+    initGuide() {
+      if (this.data.fullGuide) {
+        // 全项目引导模式
+        this.startFullGuide();
+      } else {
+        // 单页面引导模式
+        this.startPageGuide();
+      }
     },
 
-    // 显示指定步骤（带重试）
-    showStep(index, retryCount) {
-      const steps = this.data.steps;
-      if (index >= steps.length) {
+    // 开始全项目引导
+    startFullGuide() {
+      const result = guideSteps.startGuide();
+      this.updateProgress();
+      this.showCurrentStep(0);
+    },
+
+    // 开始单页面引导
+    startPageGuide() {
+      const steps = guideSteps.getPageGuideSteps(this.data.pagePath);
+      this.setData({ steps });
+      if (steps.length > 0) {
+        this.showPageStep(0, 0);
+      }
+    },
+
+    // 显示当前步骤（全项目模式）
+    showCurrentStep(retryCount) {
+      const step = guideSteps.getCurrentStep();
+      if (!step) {
         this.completeGuide();
         return;
       }
 
-      // 最多重试 10 次（每次间隔 200ms，共 2 秒）
-      if (retryCount > 10) {
-        console.warn('引导步骤 ' + index + ' 目标元素未找到，跳过');
-        this.showStep(index + 1, 0);
+      // 最多重试 15 次（每次 200ms，共 3 秒）
+      if (retryCount > 15) {
+        console.warn('引导步骤目标元素未找到，跳过');
+        const result = guideSteps.nextStep();
+        if (result.done) {
+          this.completeGuide();
+        } else if (result.navigateTo) {
+          // 需要跳转到下一个页面
+          this.triggerEvent('navigate', { page: result.navigateTo });
+        }
         return;
       }
 
-      const step = steps[index];
       this.setData({ isAnimating: true });
 
-      // 获取目标元素位置（组件内查询页面元素）
       const query = wx.createSelectorQuery();
       query.select(step.target).boundingClientRect(rect => {
         if (!rect || rect.width === 0) {
-          // 目标元素不存在或未渲染，延迟重试
           setTimeout(() => {
-            this.showStep(index, retryCount + 1);
+            this.showCurrentStep(retryCount + 1);
           }, 200);
           return;
         }
 
-        // 计算气泡位置
         const bubblePos = this.calcBubblePosition(rect, step.position);
-        
-        // 计算手指位置
         const fingerPos = this.calcFingerPosition(rect, step.finger);
 
         this.setData({
-          currentStep: index,
+          currentStep: step,
           highlightRect: {
             left: rect.left - 8,
             top: rect.top - 8,
@@ -90,22 +134,128 @@ Component({
           bubbleStyle: `left:${bubblePos.x}px;top:${bubblePos.y}px;`,
           fingerStyle: `left:${fingerPos.x}px;top:${fingerPos.y}px;`,
           fingerClass: `finger-${step.finger || 'point'}`,
-          isAnimating: false
+          isAnimating: false,
+          isReady: true
         });
       }).exec();
+    },
+
+    // 显示步骤（单页面模式）
+    showPageStep(index, retryCount) {
+      const steps = this.data.steps;
+      if (index >= steps.length) {
+        this.completeGuide();
+        return;
+      }
+
+      if (retryCount > 15) {
+        console.warn('引导步骤 ' + index + ' 目标元素未找到，跳过');
+        this.showPageStep(index + 1, 0);
+        return;
+      }
+
+      const step = steps[index];
+      this.setData({ isAnimating: true });
+
+      const query = wx.createSelectorQuery();
+      query.select(step.target).boundingClientRect(rect => {
+        if (!rect || rect.width === 0) {
+          setTimeout(() => {
+            this.showPageStep(index, retryCount + 1);
+          }, 200);
+          return;
+        }
+
+        const bubblePos = this.calcBubblePosition(rect, step.position);
+        const fingerPos = this.calcFingerPosition(rect, step.finger);
+
+        this.setData({
+          currentStep: step,
+          highlightRect: {
+            left: rect.left - 8,
+            top: rect.top - 8,
+            width: rect.width + 16,
+            height: rect.height + 16
+          },
+          bubbleStyle: `left:${bubblePos.x}px;top:${bubblePos.y}px;`,
+          fingerStyle: `left:${fingerPos.x}px;top:${fingerPos.y}px;`,
+          fingerClass: `finger-${step.finger || 'point'}`,
+          stepInStation: index + 1,
+          stepTotal: steps.length,
+          isAnimating: false,
+          isReady: true
+        });
+      }).exec();
+    },
+
+    // 更新进度信息
+    updateProgress() {
+      this.setData({
+        stationIndex: guideSteps.getCurrentStationIndex(),
+        stationName: guideSteps.getCurrentStation()?.stationName || '',
+        stationTotal: guideSteps.getTotalStations(),
+        stepInStation: guideSteps.getCurrentStepIndex() + 1,
+        stepTotal: guideSteps.getCurrentStation()?.steps.length || 0,
+        globalStep: guideSteps.getGlobalStepNumber(),
+        globalTotal: guideSteps.getTotalSteps()
+      });
+    },
+
+    // 下一步
+    onNext() {
+      if (this.data.fullGuide) {
+        // 全项目模式
+        const result = guideSteps.nextStep();
+        this.updateProgress();
+        
+        if (result.done) {
+          this.completeGuide();
+        } else if (result.navigateTo) {
+          // 需要跳转
+          this.triggerEvent('navigate', { 
+            page: result.navigateTo,
+            stationName: result.stationName
+          });
+        } else {
+          // 继续当前页面的下一步
+          this.showCurrentStep(0);
+        }
+      } else {
+        // 单页面模式
+        const nextIndex = this.data.stepInStation;
+        if (nextIndex >= this.data.steps.length) {
+          this.completeGuide();
+        } else {
+          this.showPageStep(nextIndex, 0);
+        }
+      }
+    },
+
+    // 跳过引导
+    onSkip() {
+      guideSteps.skipGuide();
+      this.setData({ show: false, isReady: false });
+      this.triggerEvent('skip');
+    },
+
+    // 完成引导
+    completeGuide() {
+      guideSteps.completeGuide();
+      this.setData({ show: false, isReady: false });
+      this.triggerEvent('complete');
     },
 
     // 计算气泡位置
     calcBubblePosition(rect, position) {
       const sysInfo = wx.getSystemInfoSync();
       const screenWidth = sysInfo.windowWidth;
-      const bubbleWidth = 240;
+      const bubbleWidth = 280;
       let x, y;
 
       switch (position) {
         case 'top':
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
-          y = rect.top - 120;
+          y = rect.top - 140;
           break;
         case 'bottom':
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
@@ -113,11 +263,11 @@ Component({
           break;
         case 'left':
           x = rect.left - bubbleWidth - 20;
-          y = rect.top + rect.height / 2 - 50;
+          y = rect.top + rect.height / 2 - 60;
           break;
         case 'right':
           x = rect.right + 20;
-          y = rect.top + rect.height / 2 - 50;
+          y = rect.top + rect.height / 2 - 60;
           break;
         default:
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
@@ -155,29 +305,6 @@ Component({
       }
 
       return { x, y };
-    },
-
-    // 下一步
-    onNext() {
-      const nextStep = this.data.currentStep + 1;
-      if (nextStep >= this.data.steps.length) {
-        this.completeGuide();
-      } else {
-        this.showStep(nextStep, 0);
-      }
-    },
-
-    // 跳过引导
-    onSkip() {
-      this.completeGuide();
-    },
-
-    // 完成引导
-    completeGuide() {
-      this.setData({ show: false });
-      wx.setStorageSync('guideCompleted', true);
-      wx.removeStorageSync('needGuide');
-      this.triggerEvent('complete');
     }
   }
 });

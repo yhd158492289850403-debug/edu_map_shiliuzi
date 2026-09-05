@@ -10,7 +10,7 @@ const { recommend } = require('../../utils/behavior');
 const { DIMENSION_SUBS, SUB_LITERACIES } = require('../../data/sub_literacies');
 const { BEHAVIORS } = require('../../data/behaviors');
 const tracker = require('../../utils/tracker');
-const { getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
+const { shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
 
 // 从地点数据中提取唯一分类
 const ALL_CATEGORIES = [...new Set(LOCATIONS.map(l => l.c).filter(Boolean))].sort();
@@ -57,7 +57,7 @@ Page({
     
     // 新手引导
     showGuide: false,
-    guideSteps: [],
+    fullGuideMode: false, // 是否全项目引导模式
 
     // 层级折叠数据（传入 filter-sheet 组件）
     subLiteraciesByDim,
@@ -74,29 +74,55 @@ Page({
     this.allLocations = LOCATIONS.map(withSearchText);
     this.refreshAll();
     
-    // 检查是否需要显示新手引导
+    // 检查是否需要显示新手引导（仅首次使用自动触发）
     this.checkGuide();
   },
   
   // 检查新手引导
   checkGuide() {
-    if (shouldShowGuide()) {
-      const steps = getGuideSteps('pages/index/index');
-      if (steps.length > 0) {
-        // 延迟显示引导，等待页面渲染完成
-        setTimeout(() => {
-          this.setData({
-            showGuide: true,
-            guideSteps: steps
-          });
-        }, 500);
-      }
+    if (shouldShowGuide() && !isGuideActiveState()) {
+      // 延迟显示引导，等待页面渲染完成
+      setTimeout(() => {
+        this.setData({ showGuide: true });
+      }, 500);
     }
+  },
+  
+  // 从全项目引导流程启动（被其他页面跳转调用）
+  startGuideFromFlow() {
+    setGuideActive(true);
+    this.setData({ 
+      showGuide: true,
+      fullGuideMode: true
+    });
+  },
+  
+  // 引导导航事件（跨页面跳转）
+  onGuideNavigate(e) {
+    const { page } = e.detail;
+    this.setData({ showGuide: false });
+    wx.navigateTo({
+      url: `/${page}`,
+      success: () => {
+        const pages = getCurrentPages();
+        const targetPage = pages[pages.length - 1];
+        if (targetPage && targetPage.startGuideFromFlow) {
+          targetPage.startGuideFromFlow();
+        }
+      }
+    });
+  },
+  
+  // 引导跳过
+  onGuideSkip() {
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
   },
   
   // 引导完成
   onGuideComplete() {
-    this.setData({ showGuide: false });
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
   },
 
   onReady() {

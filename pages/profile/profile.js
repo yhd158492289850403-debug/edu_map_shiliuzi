@@ -3,7 +3,7 @@
  */
 const app = getApp();
 const { ROLE_TYPES, ROLE_CONFIGS } = require('../../data/user-roles');
-const { resetGuide, getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
+const { resetGuide, shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -23,7 +23,7 @@ Page({
     roleOptions: [],
     // 新手引导
     showGuide: false,
-    guideSteps: [],
+    fullGuideMode: false, // 是否全项目引导模式
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -262,22 +262,46 @@ Page({
     });
   },
   
-  // 重播新手引导
+  // 重播新手引导（全项目引导）
   onReplayGuide() {
     resetGuide();
-    const steps = getGuideSteps('pages/profile/profile');
-    if (steps.length > 0) {
-      this.setData({
-        showGuide: true,
-        guideSteps: steps
-      });
-    }
+    setGuideActive(true);
+    this.setData({
+      showGuide: true,
+      fullGuideMode: true
+    });
+  },
+  
+  // 引导导航事件（跨页面跳转）
+  onGuideNavigate(e) {
+    const { page, stationName } = e.detail;
+    // 隐藏当前引导，跳转到目标页面
+    this.setData({ showGuide: false });
+    wx.navigateTo({
+      url: `/${page}`,
+      success: () => {
+        // 跳转成功后，通知目标页面启动引导
+        const pages = getCurrentPages();
+        const targetPage = pages[pages.length - 1];
+        if (targetPage && targetPage.startGuideFromFlow) {
+          targetPage.startGuideFromFlow();
+        }
+      }
+    });
+  },
+  
+  // 引导跳过
+  onGuideSkip() {
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
+    wx.showToast({ title: '已跳过引导', icon: 'none' });
   },
   
   // 引导完成
   onGuideComplete() {
-    this.setData({ showGuide: false });
-    wx.showToast({ title: '引导完成', icon: 'success' });
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
+    wx.showToast({ title: '🎉 引导完成！开始探索吧', icon: 'none', duration: 2000 });
   },
 
   onShareAppMessage() {

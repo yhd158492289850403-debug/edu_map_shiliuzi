@@ -5,7 +5,7 @@ const { LOCATIONS } = require('../../data/locations');
 const { DIM_ORDER, DIM_LABELS } = require('../../data/dimensions');
 const { getDimColor, getDimLabel } = require('../../utils/util');
 const { distKm, fmtKm } = require('../../utils/geo');
-const { getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
+const { shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -23,7 +23,7 @@ Page({
     kw: '',
     // 新手引导
     showGuide: false,
-    guideSteps: []
+    fullGuideMode: false
   },
 
   onLoad() {
@@ -42,23 +42,48 @@ Page({
   
   // 检查新手引导
   checkGuide() {
-    if (shouldShowGuide()) {
-      const steps = getGuideSteps('pages/near/near');
-      if (steps.length > 0) {
-        // 延迟显示引导，等待页面渲染完成
-        setTimeout(() => {
-          this.setData({
-            showGuide: true,
-            guideSteps: steps
-          });
-        }, 500);
-      }
+    if (shouldShowGuide() && !isGuideActiveState()) {
+      setTimeout(() => {
+        this.setData({ showGuide: true });
+      }, 500);
     }
+  },
+  
+  // 从全项目引导流程启动
+  startGuideFromFlow() {
+    setGuideActive(true);
+    this.setData({ 
+      showGuide: true,
+      fullGuideMode: true
+    });
+  },
+  
+  // 引导导航事件
+  onGuideNavigate(e) {
+    const { page } = e.detail;
+    this.setData({ showGuide: false });
+    wx.navigateTo({
+      url: `/${page}`,
+      success: () => {
+        const pages = getCurrentPages();
+        const targetPage = pages[pages.length - 1];
+        if (targetPage && targetPage.startGuideFromFlow) {
+          targetPage.startGuideFromFlow();
+        }
+      }
+    });
+  },
+  
+  // 引导跳过
+  onGuideSkip() {
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
   },
   
   // 引导完成
   onGuideComplete() {
-    this.setData({ showGuide: false });
+    setGuideActive(false);
+    this.setData({ showGuide: false, fullGuideMode: false });
   },
 
   autoLocate() {

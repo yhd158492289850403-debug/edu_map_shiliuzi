@@ -72,4 +72,14 @@
     </view>
   </scroll-view>
 
+  <!-- 新手引导 -->
+  <guide-overlay
+    show="{{showGuide}}"
+    pagePath="pages/recommend/recommend"
+    fullGuide="{{fullGuideMode}}"
+    bind:complete="onGuideComplete"
+    bind:skip="onGuideSkip"
+    bind:navigate="onGuideNavigate"
+  ></guide-overlay>
+
 </view>
