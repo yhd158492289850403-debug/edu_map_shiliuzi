@@ -41,14 +41,21 @@ Component({
     // 开始引导
     startGuide() {
       this.setData({ currentStep: 0 });
-      this.showStep(0);
+      this.showStep(0, 0);
     },
 
-    // 显示指定步骤
-    showStep(index) {
+    // 显示指定步骤（带重试）
+    showStep(index, retryCount) {
       const steps = this.data.steps;
       if (index >= steps.length) {
         this.completeGuide();
+        return;
+      }
+
+      // 最多重试 10 次（每次间隔 200ms，共 2 秒）
+      if (retryCount > 10) {
+        console.warn('引导步骤 ' + index + ' 目标元素未找到，跳过');
+        this.showStep(index + 1, 0);
         return;
       }
 
@@ -58,9 +65,11 @@ Component({
       // 获取目标元素位置
       const query = this.createSelectorQuery();
       query.select(step.target).boundingClientRect(rect => {
-        if (!rect) {
-          // 目标元素不存在，跳过这一步
-          this.showStep(index + 1);
+        if (!rect || rect.width === 0) {
+          // 目标元素不存在或未渲染，延迟重试
+          setTimeout(() => {
+            this.showStep(index, retryCount + 1);
+          }, 200);
           return;
         }
 
@@ -154,7 +163,7 @@ Component({
       if (nextStep >= this.data.steps.length) {
         this.completeGuide();
       } else {
-        this.showStep(nextStep);
+        this.showStep(nextStep, 0);
       }
     },
 
