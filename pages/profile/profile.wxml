@@ -143,6 +143,10 @@
       <text class="action-icon">📝</text>
       <text class="action-text">立即打卡</text>
     </view>
+    <view class="action-btn secondary" bindtap="onReplayGuide">
+      <text class="action-icon">🎯</text>
+      <text class="action-text">新手引导</text>
+    </view>
   </view>
 
   <!-- 打卡历史 -->
@@ -182,5 +186,12 @@
       </view>
     </view>
   </view>
+
+  <!-- 新手引导 -->
+  <guide-overlay
+    show="{{showGuide}}"
+    steps="{{guideSteps}}"
+    bind:complete="onGuideComplete"
+  ></guide-overlay>
 
 </view>

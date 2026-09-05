@@ -172,4 +172,11 @@
     </view>
   </view>
 
+  <!-- 新手引导 -->
+  <guide-overlay
+    show="{{showGuide}}"
+    steps="{{guideSteps}}"
+    bind:complete="onGuideComplete"
+  ></guide-overlay>
+
 </view>

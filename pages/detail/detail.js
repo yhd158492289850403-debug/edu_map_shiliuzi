@@ -5,6 +5,7 @@ const { LOCATIONS } = require('../../data/locations');
 const { DIMENSIONS, DIM_LABELS, DIM_ORDER } = require('../../data/dimensions');
 const { getDimColor, getDimLabel } = require('../../utils/util');
 const tracker = require('../../utils/tracker');
+const { getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -13,7 +14,10 @@ Page({
     barColors: [],
     sliceGroups: [],
     expandedSlice: null,
-    statusBarHeight: 44
+    statusBarHeight: 44,
+    // 新手引导
+    showGuide: false,
+    guideSteps: []
   },
 
   onLoad(options) {
@@ -104,6 +108,30 @@ Page({
       locationId: loc.id,
       viewedSlices
     });
+    
+    // 检查是否需要显示新手引导
+    this.checkGuide();
+  },
+  
+  // 检查新手引导
+  checkGuide() {
+    if (shouldShowGuide()) {
+      const steps = getGuideSteps('pages/detail/detail');
+      if (steps.length > 0) {
+        // 延迟显示引导，等待页面渲染完成
+        setTimeout(() => {
+          this.setData({
+            showGuide: true,
+            guideSteps: steps
+          });
+        }, 500);
+      }
+    }
+  },
+  
+  // 引导完成
+  onGuideComplete() {
+    this.setData({ showGuide: false });
   },
 
   onSliceTap(e) {

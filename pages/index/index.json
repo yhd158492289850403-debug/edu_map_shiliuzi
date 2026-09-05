@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "filter-sheet": "/components/filter-sheet/filter-sheet",
-    "feedback-popup": "/components/feedback-popup/feedback-popup"
+    "feedback-popup": "/components/feedback-popup/feedback-popup",
+    "guide-overlay": "/components/guide-overlay/guide-overlay"
   },
   "navigationBarTitleText": "石榴籽成长快乐导引地图",
   "navigationBarBackgroundColor": "#667eea",

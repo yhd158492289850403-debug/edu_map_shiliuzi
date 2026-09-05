@@ -1,4 +1,6 @@
 {
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "guide-overlay": "/components/guide-overlay/guide-overlay"
+  }
 }

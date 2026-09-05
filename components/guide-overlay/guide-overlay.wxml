@@ -1,0 +1,37 @@
+<view class="guide-overlay" wx:if="{{show && steps.length > 0}}">
+  <!-- 遮罩层 -->
+  <view class="guide-mask" bindtap="onSkip"></view>
+  
+  <!-- 高亮区域 -->
+  <view 
+    class="guide-highlight" 
+    wx:if="{{highlightRect}}"
+    style="left:{{highlightRect.left}}px;top:{{highlightRect.top}}px;width:{{highlightRect.width}}px;height:{{highlightRect.height}}px;"
+  ></view>
+  
+  <!-- 手指动画 -->
+  <view 
+    class="guide-finger {{fingerClass}}" 
+    wx:if="{{highlightRect && !isAnimating}}"
+    style="{{fingerStyle}}"
+  >
+    <view class="finger-hand">👆</view>
+  </view>
+  
+  <!-- 气泡说明 -->
+  <view 
+    class="guide-bubble" 
+    wx:if="{{highlightRect && !isAnimating}}"
+    style="{{bubbleStyle}}"
+  >
+    <view class="bubble-title">{{steps[currentStep].title}}</view>
+    <view class="bubble-desc">{{steps[currentStep].desc}}</view>
+    <view class="bubble-footer">
+      <view class="bubble-skip" bindtap="onSkip">跳过</view>
+      <view class="bubble-step">{{currentStep + 1}}/{{steps.length}}</view>
+      <view class="bubble-next" bindtap="onNext">
+        {{currentStep === steps.length - 1 ? '完成' : '下一步'}}
+      </view>
+    </view>
+  </view>
+</view>

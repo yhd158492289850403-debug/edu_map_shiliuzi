@@ -10,6 +10,7 @@ const { recommend } = require('../../utils/behavior');
 const { DIMENSION_SUBS, SUB_LITERACIES } = require('../../data/sub_literacies');
 const { BEHAVIORS } = require('../../data/behaviors');
 const tracker = require('../../utils/tracker');
+const { getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
 
 // 从地点数据中提取唯一分类
 const ALL_CATEGORIES = [...new Set(LOCATIONS.map(l => l.c).filter(Boolean))].sort();
@@ -53,6 +54,10 @@ Page({
 
     showFilterSheet: false,
     showFeedback: false,
+    
+    // 新手引导
+    showGuide: false,
+    guideSteps: [],
 
     // 层级折叠数据（传入 filter-sheet 组件）
     subLiteraciesByDim,
@@ -68,6 +73,30 @@ Page({
     // 预计算每点的可搜索文本（含教育切片内容），供搜索评分使用
     this.allLocations = LOCATIONS.map(withSearchText);
     this.refreshAll();
+    
+    // 检查是否需要显示新手引导
+    this.checkGuide();
+  },
+  
+  // 检查新手引导
+  checkGuide() {
+    if (shouldShowGuide()) {
+      const steps = getGuideSteps('pages/index/index');
+      if (steps.length > 0) {
+        // 延迟显示引导，等待页面渲染完成
+        setTimeout(() => {
+          this.setData({
+            showGuide: true,
+            guideSteps: steps
+          });
+        }, 500);
+      }
+    }
+  },
+  
+  // 引导完成
+  onGuideComplete() {
+    this.setData({ showGuide: false });
   },
 
   onReady() {

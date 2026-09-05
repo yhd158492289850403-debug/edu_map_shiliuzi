@@ -66,4 +66,11 @@
     <view class="list-footer">操作提示：点卡片看详情，点「导航」跳到地图导航</view>
   </scroll-view>
 
+  <!-- 新手引导 -->
+  <guide-overlay
+    show="{{showGuide}}"
+    steps="{{guideSteps}}"
+    bind:complete="onGuideComplete"
+  ></guide-overlay>
+
 </view>

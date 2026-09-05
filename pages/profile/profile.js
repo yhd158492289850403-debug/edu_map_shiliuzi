@@ -3,6 +3,7 @@
  */
 const app = getApp();
 const { ROLE_TYPES, ROLE_CONFIGS } = require('../../data/user-roles');
+const { resetGuide, getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -20,6 +21,9 @@ Page({
     students: [],
     showRolePicker: false,
     roleOptions: [],
+    // 新手引导
+    showGuide: false,
+    guideSteps: [],
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -256,6 +260,24 @@ Page({
     wx.navigateTo({
       url: `/pages/student-detail/student-detail?openid=${openid}`
     });
+  },
+  
+  // 重播新手引导
+  onReplayGuide() {
+    resetGuide();
+    const steps = getGuideSteps('pages/profile/profile');
+    if (steps.length > 0) {
+      this.setData({
+        showGuide: true,
+        guideSteps: steps
+      });
+    }
+  },
+  
+  // 引导完成
+  onGuideComplete() {
+    this.setData({ showGuide: false });
+    wx.showToast({ title: '引导完成', icon: 'success' });
   },
 
   onShareAppMessage() {

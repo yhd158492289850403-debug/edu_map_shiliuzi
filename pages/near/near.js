@@ -5,6 +5,7 @@ const { LOCATIONS } = require('../../data/locations');
 const { DIM_ORDER, DIM_LABELS } = require('../../data/dimensions');
 const { getDimColor, getDimLabel } = require('../../utils/util');
 const { distKm, fmtKm } = require('../../utils/geo');
+const { getGuideSteps, shouldShowGuide } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -19,7 +20,10 @@ Page({
     dims: DIM_ORDER.map(d => ({ key: d, label: DIM_LABELS[d] || d, color: getDimColor(d), active: false })),
     list: [],
     total: 0,
-    kw: ''
+    kw: '',
+    // 新手引导
+    showGuide: false,
+    guideSteps: []
   },
 
   onLoad() {
@@ -31,6 +35,30 @@ Page({
       ld: loc.ld, md: loc.md, ad: loc.ad, stars: loc.stars
     }));
     this.autoLocate();
+    
+    // 检查是否需要显示新手引导
+    this.checkGuide();
+  },
+  
+  // 检查新手引导
+  checkGuide() {
+    if (shouldShowGuide()) {
+      const steps = getGuideSteps('pages/near/near');
+      if (steps.length > 0) {
+        // 延迟显示引导，等待页面渲染完成
+        setTimeout(() => {
+          this.setData({
+            showGuide: true,
+            guideSteps: steps
+          });
+        }, 500);
+      }
+    }
+  },
+  
+  // 引导完成
+  onGuideComplete() {
+    this.setData({ showGuide: false });
   },
 
   autoLocate() {

@@ -1,7 +1,7 @@
 /* 个人档案页样式 */
 .profile-container {
   min-height: 100vh;
-  background: #f8f9fb;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
 }
@@ -11,11 +11,12 @@
   display: flex;
   align-items: center;
   padding: 16rpx 24rpx;
-  background: #fff;
-  border-bottom: 1rpx solid #e2e8f0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1rpx solid rgba(0,0,0,0.04);
 }
-.btn-back { font-size: 26rpx; color: #3B82F6; padding: 8rpx 0; flex-shrink: 0; }
-.top-title { flex: 1; text-align: center; font-size: 30rpx; font-weight: 700; color: #1e293b; }
+.btn-back { font-size: 26rpx; color: #007AFF; padding: 8rpx 0; flex-shrink: 0; }
+.top-title { flex: 1; text-align: center; font-size: 30rpx; font-weight: 600; color: #1a1a1a; }
 .top-right { width: 100rpx; }
 
 /* 用户信息 */
@@ -23,7 +24,7 @@
   display: flex;
   align-items: center;
   padding: 30rpx 24rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
   color: #fff;
 }
 .user-avatar {
@@ -39,7 +40,7 @@
 }
 .avatar-img, .avatar-placeholder { font-size: 60rpx; }
 .user-info { flex: 1; }
-.user-name { font-size: 36rpx; font-weight: 700; display: block; }
+.user-name { font-size: 36rpx; font-weight: 600; display: block; }
 .user-join { font-size: 24rpx; opacity: 0.8; display: block; margin-top: 8rpx; }
 
 /* 统计卡片 */
@@ -50,8 +51,8 @@
   padding: 24rpx;
   background: #fff;
   margin: 24rpx;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .stat-card {
   text-align: center;
@@ -59,13 +60,13 @@
 }
 .stat-num {
   font-size: 48rpx;
-  font-weight: 700;
-  color: #3B82F6;
+  font-weight: 600;
+  color: #007AFF;
   display: block;
 }
 .stat-label {
   font-size: 22rpx;
-  color: #64748b;
+  color: #999;
   display: block;
   margin-top: 8rpx;
 }
@@ -75,12 +76,12 @@
   padding: 24rpx;
   margin: 0 24rpx 24rpx;
   background: #fff;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 .stage-hint {
   font-size: 22rpx;
-  color: #94a3b8;
+  color: #999;
   display: block;
   margin-bottom: 16rpx;
 }
@@ -92,15 +93,15 @@
   flex: 1;
   text-align: center;
   padding: 16rpx 0;
-  border-radius: 24rpx;
+  border-radius: 12px;
   font-size: 26rpx;
   font-weight: 500;
-  color: #64748b;
-  background: #f1f5f9;
+  color: #666;
+  background: #f0f0f0;
   transition: all 0.2s;
 }
 .stage-chip.stage-active {
-  background: #3B82F6;
+  background: #007AFF;
   color: #ffffff;
   font-weight: 600;
 }
@@ -115,13 +116,18 @@
   justify-content: center;
   gap: 12rpx;
   padding: 24rpx;
-  border-radius: 16rpx;
+  border-radius: 16px;
   font-size: 28rpx;
   font-weight: 600;
 }
 .action-btn.primary {
-  background: #3B82F6;
+  background: #007AFF;
   color: #fff;
+}
+.action-btn.secondary {
+  background: #f0f0f0;
+  color: #666;
+  margin-top: 16rpx;
 }
 .action-icon { font-size: 32rpx; }
 
@@ -132,23 +138,23 @@
 }
 .section-title {
   font-size: 28rpx;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: #1a1a1a;
   display: block;
   margin-bottom: 24rpx;
 }
 
-.loading { text-align: center; padding: 60rpx 0; color: #94a3b8; font-size: 26rpx; }
+.loading { text-align: center; padding: 60rpx 0; color: #999; font-size: 26rpx; }
 
 .empty-state {
   text-align: center;
   padding: 60rpx 24rpx;
   background: #fff;
-  border-radius: 16rpx;
+  border-radius: 16px;
 }
 .empty-icon { font-size: 64rpx; display: block; margin-bottom: 16rpx; }
-.empty-text { font-size: 28rpx; font-weight: 600; color: #1e293b; display: block; }
-.empty-hint { font-size: 24rpx; color: #94a3b8; display: block; margin-top: 12rpx; }
+.empty-text { font-size: 28rpx; font-weight: 600; color: #1a1a1a; display: block; }
+.empty-hint { font-size: 24rpx; color: #999; display: block; margin-top: 12rpx; }
 
 .checkin-list {
   display: flex;
@@ -157,9 +163,9 @@
 }
 .checkin-item {
   background: #fff;
-  border-radius: 12rpx;
+  border-radius: 12px;
   padding: 20rpx;
-  border-left: 6rpx solid #3B82F6;
+  border-left: 6rpx solid #007AFF;
 }
 .checkin-header {
   display: flex;
@@ -170,36 +176,36 @@
 .checkin-point {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1e293b;
+  color: #1a1a1a;
 }
 .checkin-date {
   font-size: 22rpx;
-  color: #94a3b8;
+  color: #999;
 }
 .checkin-behavior {
   font-size: 24rpx;
-  color: #64748b;
+  color: #666;
   margin-bottom: 8rpx;
 }
 .behavior-tag {
   display: inline-block;
-  background: #eef2ff;
-  color: #3B82F6;
+  background: #f0f0f0;
+  color: #007AFF;
   padding: 4rpx 12rpx;
   border-radius: 20rpx;
   font-size: 22rpx;
 }
 .checkin-rating {
   font-size: 24rpx;
-  color: #64748b;
+  color: #666;
   margin-bottom: 8rpx;
 }
 .checkin-notes {
   font-size: 24rpx;
-  color: #1e293b;
-  background: #f8f9fb;
+  color: #1a1a1a;
+  background: #fafafa;
   padding: 12rpx;
-  border-radius: 8rpx;
+  border-radius: 12px;
   line-height: 1.5;
 }
 
@@ -208,14 +214,14 @@
   margin: 24rpx;
   padding: 30rpx;
   background: white;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .teacher-title {
   font-size: 32rpx;
-  font-weight: bold;
-  color: #1e293b;
+  font-weight: 600;
+  color: #1a1a1a;
   margin-bottom: 30rpx;
 }
 
@@ -224,7 +230,7 @@
   justify-content: space-around;
   margin-bottom: 30rpx;
   padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid rgba(0,0,0,0.04);
 }
 
 .class-stat-item {
@@ -233,14 +239,14 @@
 
 .class-stat-value {
   font-size: 36rpx;
-  font-weight: bold;
-  color: #4ECDC4;
+  font-weight: 600;
+  color: #007AFF;
   display: block;
 }
 
 .class-stat-label {
   font-size: 24rpx;
-  color: #64748b;
+  color: #999;
 }
 
 .student-list {
@@ -253,27 +259,27 @@
   align-items: center;
   padding: 20rpx;
   margin-bottom: 10rpx;
-  background: #f9f9f9;
-  border-radius: 10rpx;
+  background: #fafafa;
+  border-radius: 12px;
 }
 
 .student-name {
   font-size: 28rpx;
-  color: #1e293b;
+  color: #1a1a1a;
 }
 
 .student-checkins {
   font-size: 24rpx;
-  color: #64748b;
+  color: #999;
 }
 
 .export-class-btn {
-  background: #667eea;
+  background: #1a1a1a;
   color: white;
-  border-radius: 50rpx;
+  border-radius: 16px;
   padding: 20rpx;
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
 }
 
@@ -287,7 +293,7 @@
   font-size: 24rpx;
   background: rgba(255,255,255,0.3);
   padding: 6rpx 16rpx;
-  border-radius: 20rpx;
+  border-radius: 12px;
   margin-top: 8rpx;
 }
 
@@ -313,7 +319,7 @@
   left: 0;
   right: 0;
   background: white;
-  border-radius: 20rpx 20rpx 0 0;
+  border-radius: 20px 20px 0 0;
   z-index: 101;
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -323,18 +329,18 @@
   justify-content: space-between;
   align-items: center;
   padding: 30rpx;
-  border-bottom: 1rpx solid #e2e8f0;
+  border-bottom: 1rpx solid rgba(0,0,0,0.04);
 }
 
 .role-picker-title {
   font-size: 32rpx;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 .role-picker-close {
   font-size: 32rpx;
-  color: #64748b;
+  color: #999;
   padding: 10rpx;
 }
 
@@ -347,14 +353,14 @@
   align-items: center;
   padding: 24rpx;
   margin-bottom: 16rpx;
-  background: #f8f9fb;
-  border-radius: 16rpx;
+  background: #fafafa;
+  border-radius: 16px;
   border: 2rpx solid transparent;
 }
 
 .role-picker-item.role-selected {
-  background: #e8f8f5;
-  border-color: #4ECDC4;
+  background: #f0f8ff;
+  border-color: #007AFF;
 }
 
 .role-icon {
@@ -369,13 +375,13 @@
 .role-name {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1e293b;
+  color: #1a1a1a;
   display: block;
 }
 
 .role-desc {
   font-size: 22rpx;
-  color: #64748b;
+  color: #999;
   display: block;
   margin-top: 4rpx;
 }
@@ -383,7 +389,7 @@
 .role-check {
   width: 40rpx;
   height: 40rpx;
-  background: #4ECDC4;
+  background: #007AFF;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -398,8 +404,8 @@
 }
 
 .tip-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20rpx;
+  background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+  border-radius: 16px;
   padding: 30rpx;
   color: white;
   text-align: center;
@@ -413,7 +419,7 @@
 
 .tip-title {
   font-size: 32rpx;
-  font-weight: 700;
+  font-weight: 600;
   display: block;
   margin-bottom: 12rpx;
 }

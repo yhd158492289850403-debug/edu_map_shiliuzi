@@ -100,7 +100,7 @@
             </view>
           </view>
           <view class="card-tags">
-            <view class="tag-cat" wx:if="{{item.c}}" style="color: {{helper.getCatColor(item.c)}};"><text>{{item.c}}</text></view>
+            <view class="tag-cat" wx:if="{{item.c}}" style="background: {{helper.getCatColor(item.c)}};"><text>{{item.c}}</text></view>
             <view class="tag-dim {{tag.colorClass}}" wx:for="{{item.dimTags}}" wx:key="key">{{tag.label}}</view>
           </view>
           <view class="card-district">{{item.d}}<text wx:if="{{item.hoursShort}}"> · {{item.hoursShort}}</text></view>
@@ -180,5 +180,12 @@
     wx:if="{{showFeedback}}"
     bind:close="closeFeedback"
   ></feedback-popup>
+
+  <!-- ===== 新手引导（组件） ===== -->
+  <guide-overlay
+    show="{{showGuide}}"
+    steps="{{guideSteps}}"
+    bind:complete="onGuideComplete"
+  ></guide-overlay>
 
 </view>

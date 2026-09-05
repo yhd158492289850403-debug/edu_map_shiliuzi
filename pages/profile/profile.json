@@ -1,6 +1,7 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "observation-period": "/components/observation-period/observation-period"
+    "observation-period": "/components/observation-period/observation-period",
+    "guide-overlay": "/components/guide-overlay/guide-overlay"
   }
 }

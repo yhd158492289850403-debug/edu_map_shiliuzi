@@ -51,6 +51,12 @@ Page({
 
       wx.showToast({ title: '设置成功', icon: 'success' });
       
+      // 标记需要显示新手引导
+      if (this.data.isFirstTime) {
+        wx.setStorageSync('needGuide', true);
+        wx.removeStorageSync('guideCompleted');
+      }
+      
       // 返回上一页或跳转首页
       if (this.data.isFirstTime) {
         wx.reLaunch({ url: '/pages/index/index' });
