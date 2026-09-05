@@ -62,8 +62,8 @@ Component({
       const step = steps[index];
       this.setData({ isAnimating: true });
 
-      // 获取目标元素位置
-      const query = this.createSelectorQuery();
+      // 获取目标元素位置（组件内查询页面元素）
+      const query = wx.createSelectorQuery();
       query.select(step.target).boundingClientRect(rect => {
         if (!rect || rect.width === 0) {
           // 目标元素不存在或未渲染，延迟重试
