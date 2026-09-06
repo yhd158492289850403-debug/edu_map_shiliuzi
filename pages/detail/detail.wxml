@@ -1,5 +1,11 @@
 <!-- 详情页 -->
-<view class="detail-container" wx:if="{{location}}">
+<view class="detail-container">
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{!location}}" style="padding-top: {{statusBarHeight + 60}}px;">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{location}}">
 
   <!-- 顶部返回栏 -->
   <view class="detail-top-bar" style="padding-top: {{statusBarHeight}}px;">
@@ -171,6 +177,8 @@
       <view class="footer-line"></view>
     </view>
   </view>
+
+  </block>
 
   <!-- 新手引导 -->
   <guide-overlay
