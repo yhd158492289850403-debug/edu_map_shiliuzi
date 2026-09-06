@@ -272,6 +272,17 @@ Page({
     });
   },
   
+  // 从全项目引导流程启动（最后一站）
+  startGuideFromFlow() {
+    setGuideActive(true);
+    setTimeout(() => {
+      this.setData({ 
+        showGuide: true,
+        fullGuideMode: true
+      });
+    }, 600);
+  },
+  
   // 引导导航事件（跨页面跳转）
   onGuideNavigate(e) {
     const { page } = e.detail;
