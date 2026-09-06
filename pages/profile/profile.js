@@ -274,18 +274,18 @@ Page({
   
   // 引导导航事件（跨页面跳转）
   onGuideNavigate(e) {
-    const { page, stationName } = e.detail;
-    // 隐藏当前引导，跳转到目标页面
+    const { page } = e.detail;
     this.setData({ showGuide: false });
-    wx.navigateTo({
+    wx.redirectTo({
       url: `/${page}`,
       success: () => {
-        // 跳转成功后，通知目标页面启动引导
-        const pages = getCurrentPages();
-        const targetPage = pages[pages.length - 1];
-        if (targetPage && targetPage.startGuideFromFlow) {
-          targetPage.startGuideFromFlow();
-        }
+        setTimeout(() => {
+          const pages = getCurrentPages();
+          const targetPage = pages[pages.length - 1];
+          if (targetPage && targetPage.startGuideFromFlow) {
+            targetPage.startGuideFromFlow();
+          }
+        }, 800);
       }
     });
   },

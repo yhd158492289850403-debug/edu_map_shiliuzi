@@ -135,14 +135,16 @@ Page({
   onGuideNavigate(e) {
     const { page } = e.detail;
     this.setData({ showGuide: false });
-    wx.navigateTo({
+    wx.redirectTo({
       url: `/${page}`,
       success: () => {
-        const pages = getCurrentPages();
-        const targetPage = pages[pages.length - 1];
-        if (targetPage && targetPage.startGuideFromFlow) {
-          targetPage.startGuideFromFlow();
-        }
+        setTimeout(() => {
+          const pages = getCurrentPages();
+          const targetPage = pages[pages.length - 1];
+          if (targetPage && targetPage.startGuideFromFlow) {
+            targetPage.startGuideFromFlow();
+          }
+        }, 800);
       }
     });
   },
