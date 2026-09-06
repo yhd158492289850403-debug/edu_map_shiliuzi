@@ -36,14 +36,12 @@ App({
 
   initRole() {
     const role = wx.getStorageSync('userRole');
-    console.log('initRole - storage中的角色:', role, '类型:', typeof role);
     
-    if (role && role !== '') {
+    // 检查角色是否有效（非空字符串）
+    if (role && typeof role === 'string' && role.trim() !== '') {
       this.globalData.userRole = role;
-      console.log('initRole - 使用已保存的角色:', role);
     } else {
-      console.log('initRole - 未找到角色，跳转选择页');
-      // 延迟跳转，等待页面加载完成
+      // 首次使用或角色无效，跳转选择页
       setTimeout(() => {
         wx.reLaunch({ 
           url: '/pages/role-select/role-select?first=true' 
