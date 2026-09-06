@@ -3,7 +3,7 @@
  */
 const app = getApp();
 const { ROLE_TYPES, ROLE_CONFIGS } = require('../../data/user-roles');
-const { resetGuide, shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
+const { resetGuide } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -21,9 +21,6 @@ Page({
     students: [],
     showRolePicker: false,
     roleOptions: [],
-    // 新手引导
-    showGuide: false,
-    fullGuideMode: false, // 是否全项目引导模式
     stats: {
       totalCheckins: 0,
       totalPoints: 0,
@@ -262,42 +259,12 @@ Page({
     });
   },
   
-  // 重播新手引导（全项目引导）- 先跳转到首页再开始
+  // 重播新手引导 - 跳转到首页启动引导
   onReplayGuide() {
     resetGuide();
     setGuideActive(true);
-    // 先跳转到首页，在首页启动引导
     wx.reLaunch({
       url: '/pages/index/index?startGuide=true'
-    });
-  },
-  
-  // 从全项目引导流程启动（最后一站）
-  startGuideFromFlow() {
-    setGuideActive(true);
-    setTimeout(() => {
-      this.setData({ 
-        showGuide: true,
-        fullGuideMode: true
-      });
-    }, 600);
-  },
-  
-  // 引导导航事件（跨页面跳转）
-  onGuideNavigate(e) {
-    const { page } = e.detail;
-    this.setData({ showGuide: false });
-    wx.redirectTo({
-      url: `/${page}`,
-      success: () => {
-        setTimeout(() => {
-          const pages = getCurrentPages();
-          const targetPage = pages[pages.length - 1];
-          if (targetPage && targetPage.startGuideFromFlow) {
-            targetPage.startGuideFromFlow();
-          }
-        }, 800);
-      }
     });
   },
   

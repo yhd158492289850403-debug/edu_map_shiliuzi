@@ -5,7 +5,6 @@ const { LOCATIONS } = require('../../data/locations');
 const { DIMENSIONS, DIM_LABELS, DIM_ORDER } = require('../../data/dimensions');
 const { getDimColor, getDimLabel } = require('../../utils/util');
 const tracker = require('../../utils/tracker');
-const { shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -14,10 +13,7 @@ Page({
     barColors: [],
     sliceGroups: [],
     expandedSlice: null,
-    statusBarHeight: 44,
-    // 新手引导
-    showGuide: false,
-    fullGuideMode: false
+    statusBarHeight: 44
   },
 
   onLoad(options) {
@@ -108,59 +104,7 @@ Page({
       locationId: loc.id,
       viewedSlices
     });
-    
-    // 检查是否需要显示新手引导
-    this.checkGuide();
-  },
-  
-  // 检查新手引导
-  checkGuide() {
-    if (shouldShowGuide() && !isGuideActiveState()) {
-      setTimeout(() => {
-        this.setData({ showGuide: true });
-      }, 500);
-    }
-  },
-  
-  // 从全项目引导流程启动
-  startGuideFromFlow() {
-    setGuideActive(true);
-    setTimeout(() => {
-      this.setData({ 
-        showGuide: true,
-        fullGuideMode: true
-      });
-    }, 600);
-  },
-  
-  // 引导导航事件
-  onGuideNavigate(e) {
-    const { page } = e.detail;
-    this.setData({ showGuide: false });
-    wx.redirectTo({
-      url: `/${page}`,
-      success: () => {
-        setTimeout(() => {
-          const pages = getCurrentPages();
-          const targetPage = pages[pages.length - 1];
-          if (targetPage && targetPage.startGuideFromFlow) {
-            targetPage.startGuideFromFlow();
-          }
-        }, 800);
-      }
-    });
-  },
-  
-  // 引导跳过
-  onGuideSkip() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
-  },
-  
-  // 引导完成
-  onGuideComplete() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
+
   },
 
   onSliceTap(e) {

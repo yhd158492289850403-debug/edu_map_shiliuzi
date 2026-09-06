@@ -184,11 +184,8 @@
   <!-- ===== 新手引导（组件） ===== -->
   <guide-overlay
     show="{{showGuide}}"
-    pagePath="pages/index/index"
-    fullGuide="{{fullGuideMode}}"
     bind:complete="onGuideComplete"
     bind:skip="onGuideSkip"
-    bind:navigate="onGuideNavigate"
   ></guide-overlay>
 
 </view>

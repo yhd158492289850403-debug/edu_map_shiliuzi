@@ -4,7 +4,6 @@
 const { recommend, matchBehaviors } = require('../../utils/behavior');
 const { getDimColor } = require('../../utils/util');
 const tracker = require('../../utils/tracker');
-const { shouldShowGuide, isGuideActiveState, setGuideActive } = require('../../utils/guide-steps');
 
 Page({
   data: {
@@ -15,10 +14,7 @@ Page({
     recs: [],           // [{behavior, subs, guide, scene, matchedSlices:[...]}]
     activeRec: 0,       // 当前展开的教案切片 index（全局）
     activeSlice: null,  // 当前展开展示的切片教案
-    hotBehaviors: ['顶嘴', '磨蹭', '怕黑', '挑食', '不爱运动', '沉迷手机', '逆反', '害羞', '撒谎', '不专注'],
-    // 新手引导
-    showGuide: false,
-    fullGuideMode: false
+    hotBehaviors: ['顶嘴', '磨蹭', '怕黑', '挑食', '不爱运动', '沉迷手机', '逆反', '害羞', '撒谎', '不专注']
   },
 
   onLoad(options) {
@@ -47,59 +43,6 @@ Page({
       withShareTicket: true,
       menus: ['shareAppMessage', 'shareTimeline']
     });
-    
-    // 检查是否需要显示新手引导
-    this.checkGuide();
-  },
-  
-  // 检查新手引导
-  checkGuide() {
-    if (shouldShowGuide() && !isGuideActiveState()) {
-      setTimeout(() => {
-        this.setData({ showGuide: true });
-      }, 500);
-    }
-  },
-  
-  // 从全项目引导流程启动
-  startGuideFromFlow() {
-    setGuideActive(true);
-    setTimeout(() => {
-      this.setData({ 
-        showGuide: true,
-        fullGuideMode: true
-      });
-    }, 600);
-  },
-  
-  // 引导导航事件
-  onGuideNavigate(e) {
-    const { page } = e.detail;
-    this.setData({ showGuide: false });
-    wx.redirectTo({
-      url: `/${page}`,
-      success: () => {
-        setTimeout(() => {
-          const pages = getCurrentPages();
-          const targetPage = pages[pages.length - 1];
-          if (targetPage && targetPage.startGuideFromFlow) {
-            targetPage.startGuideFromFlow();
-          }
-        }, 800);
-      }
-    });
-  },
-  
-  // 引导跳过
-  onGuideSkip() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
-  },
-  
-  // 引导完成
-  onGuideComplete() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
   },
 
   onKw(e) { this.setData({ kw: e.detail.value }); },

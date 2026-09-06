@@ -1,7 +1,5 @@
 {
-  "usingComponents": {
-    "guide-overlay": "/components/guide-overlay/guide-overlay"
-  },
+  "usingComponents": {},
   "navigationBarTitleText": "点位详情",
   "navigationBarBackgroundColor": "#667eea",
   "navigationBarTextStyle": "white"

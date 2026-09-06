@@ -70,67 +70,29 @@ Page({
     const windowInfo = wx.getWindowInfo();
     const sb = windowInfo.statusBarHeight || 44;
     this.setData({ statusBarHeight: sb, searchTop: sb + 50 });
-    // 预计算每点的可搜索文本（含教育切片内容），供搜索评分使用
     this.allLocations = LOCATIONS.map(withSearchText);
     this.refreshAll();
     
-    // 检查是否需要启动全项目引导
+    // 检查是否需要启动引导
     if (options.startGuide === 'true' || shouldShowGuide()) {
-      this.startGuideFromFlow();
-    }
-  },
-  
-  // 检查新手引导
-  checkGuide() {
-    if (shouldShowGuide() && !isGuideActiveState()) {
-      // 延迟显示引导，等待页面渲染完成
       setTimeout(() => {
+        setGuideActive(true);
         this.setData({ showGuide: true });
-      }, 500);
+      }, 600);
     }
-  },
-  
-  // 从全项目引导流程启动（被其他页面跳转调用）
-  startGuideFromFlow() {
-    setGuideActive(true);
-    // 延迟启动引导，等待页面渲染完成
-    setTimeout(() => {
-      this.setData({ 
-        showGuide: true,
-        fullGuideMode: true
-      });
-    }, 600);
-  },
-  
-  // 引导导航事件（跨页面跳转）
-  onGuideNavigate(e) {
-    const { page } = e.detail;
-    this.setData({ showGuide: false });
-    wx.redirectTo({
-      url: `/${page}`,
-      success: () => {
-        // 延迟启动引导，等待页面渲染完成
-        setTimeout(() => {
-          const pages = getCurrentPages();
-          const targetPage = pages[pages.length - 1];
-          if (targetPage && targetPage.startGuideFromFlow) {
-            targetPage.startGuideFromFlow();
-          }
-        }, 800);
-      }
-    });
   },
   
   // 引导跳过
   onGuideSkip() {
     setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
+    this.setData({ showGuide: false });
   },
   
   // 引导完成
   onGuideComplete() {
     setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
+    this.setData({ showGuide: false });
+    wx.showToast({ title: '🎉 引导完成！开始探索吧', icon: 'none', duration: 2000 });
   },
 
   onReady() {

@@ -27,15 +27,9 @@
     <!-- 进度条 -->
     <view class="bubble-progress">
       <view class="progress-bar">
-        <view class="progress-fill" style="width: {{globalStep / globalTotal * 100}}%"></view>
+        <view class="progress-fill" style="width: {{stepIndex / totalSteps * 100}}%"></view>
       </view>
-      <text class="progress-text">{{globalStep}}/{{globalTotal}}</text>
-    </view>
-    
-    <!-- 站点信息 -->
-    <view class="bubble-station">
-      <text class="station-label">{{stationName}}</text>
-      <text class="station-count">({{stepInStation}}/{{stepTotal}})</text>
+      <text class="progress-text">{{stepIndex}}/{{totalSteps}}</text>
     </view>
     
     <!-- 标题 -->
@@ -54,8 +48,8 @@
     <view class="bubble-footer">
       <view class="bubble-skip" bindtap="onSkip">跳过引导</view>
       <view class="bubble-next" bindtap="onNext">
-        <text>{{globalStep === globalTotal ? '完成' : '下一步'}}</text>
-        <text class="next-arrow" wx:if="{{globalStep < globalTotal}}"> →</text>
+        <text>{{stepIndex === totalSteps ? '完成' : '下一步'}}</text>
+        <text class="next-arrow" wx:if="{{stepIndex < totalSteps}}"> →</text>
       </view>
     </view>
   </view>
