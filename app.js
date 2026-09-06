@@ -39,10 +39,12 @@ App({
     if (role) {
       this.globalData.userRole = role;
     } else {
-      // 首次使用，跳转角色选择页
-      wx.navigateTo({ 
-        url: '/pages/role-select/role-select?first=true' 
-      });
+      // 延迟跳转，等待页面加载完成
+      setTimeout(() => {
+        wx.reLaunch({ 
+          url: '/pages/role-select/role-select?first=true' 
+        });
+      }, 100);
     }
   },
 
