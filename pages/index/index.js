@@ -66,7 +66,7 @@ Page({
     statusBarHeight: 44,
   },
 
-  onLoad() {
+  onLoad(options) {
     const windowInfo = wx.getWindowInfo();
     const sb = windowInfo.statusBarHeight || 44;
     this.setData({ statusBarHeight: sb, searchTop: sb + 50 });
@@ -74,8 +74,10 @@ Page({
     this.allLocations = LOCATIONS.map(withSearchText);
     this.refreshAll();
     
-    // 检查是否需要显示新手引导（仅首次使用自动触发）
-    this.checkGuide();
+    // 检查是否需要启动全项目引导
+    if (options.startGuide === 'true' || shouldShowGuide()) {
+      this.startGuideFromFlow();
+    }
   },
   
   // 检查新手引导

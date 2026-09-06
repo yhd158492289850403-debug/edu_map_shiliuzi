@@ -262,13 +262,13 @@ Page({
     });
   },
   
-  // 重播新手引导（全项目引导）
+  // 重播新手引导（全项目引导）- 先跳转到首页再开始
   onReplayGuide() {
     resetGuide();
     setGuideActive(true);
-    this.setData({
-      showGuide: true,
-      fullGuideMode: true
+    // 先跳转到首页，在首页启动引导
+    wx.reLaunch({
+      url: '/pages/index/index?startGuide=true'
     });
   },
   
