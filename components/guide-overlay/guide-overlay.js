@@ -65,14 +65,21 @@ Component({
     initGuide() {
       if (this.data.fullGuide) {
         // 全项目引导模式
-        this.startFullGuide();
+        if (guideSteps.isGuideActiveState()) {
+          // 引导已在进行中（跨页面跳转），继续当前步骤
+          this.updateProgress();
+          this.showCurrentStep(0);
+        } else {
+          // 首次启动全项目引导
+          this.startFullGuide();
+        }
       } else {
         // 单页面引导模式
         this.startPageGuide();
       }
     },
 
-    // 开始全项目引导
+    // 开始全项目引导（仅首次启动时调用）
     startFullGuide() {
       const result = guideSteps.startGuide();
       this.updateProgress();
