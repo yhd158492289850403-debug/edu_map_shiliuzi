@@ -266,20 +266,6 @@ Page({
       url: '/pages/index/index?startGuide=true'
     });
   },
-  
-  // 引导跳过
-  onGuideSkip() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
-    wx.showToast({ title: '已跳过引导', icon: 'none' });
-  },
-  
-  // 引导完成
-  onGuideComplete() {
-    setGuideActive(false);
-    this.setData({ showGuide: false, fullGuideMode: false });
-    wx.showToast({ title: '🎉 引导完成！开始探索吧', icon: 'none', duration: 2000 });
-  },
 
   onShareAppMessage() {
     return {

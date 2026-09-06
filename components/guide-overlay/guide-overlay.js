@@ -133,7 +133,7 @@ Component({
     },
 
     calcBubblePosition(rect, position) {
-      const sysInfo = wx.getSystemInfoSync();
+      const sysInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
       const screenWidth = sysInfo.windowWidth;
       const screenHeight = sysInfo.windowHeight;
       const bubbleWidth = 280;

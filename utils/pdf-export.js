@@ -20,7 +20,7 @@ function generateRadarChartImage(scores) {
         const canvas = res[0].node;
         const ctx = canvas.getContext('2d');
         
-        const dpr = wx.getSystemInfoSync().pixelRatio;
+        const dpr = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()).pixelRatio;
         canvas.width = 300 * dpr;
         canvas.height = 300 * dpr;
         ctx.scale(dpr, dpr);
