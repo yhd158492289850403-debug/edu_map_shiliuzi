@@ -29,15 +29,7 @@ const INDEX_GUIDE_STEPS = [
     demo: '试试切换到列表模式'
   },
   {
-    target: '.bottom-btn-plain',
-    title: '📍 附近点位',
-    desc: '查看附近的教育基地，支持距离筛选和一键导航',
-    position: 'top',
-    finger: 'tap',
-    demo: '点击进入附近页'
-  },
-  {
-    target: '.bottom-btn-plain',
+    target: '#btn-recommend',
     title: '🔍 行为寻课',
     desc: '输入孩子行为，系统推荐对症的教育教案',
     position: 'top',
@@ -45,7 +37,15 @@ const INDEX_GUIDE_STEPS = [
     demo: '点击进入行为寻课'
   },
   {
-    target: '.bottom-btn-plain',
+    target: '#btn-near',
+    title: '📍 附近点位',
+    desc: '查看附近的教育基地，支持距离筛选和一键导航',
+    position: 'top',
+    finger: 'tap',
+    demo: '点击进入附近页'
+  },
+  {
+    target: '#btn-profile',
     title: '👤 我的档案',
     desc: '查看成长统计、切换身份、重播引导、查看报告',
     position: 'top',

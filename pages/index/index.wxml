@@ -150,13 +150,13 @@
         <text class="bottom-btn-text">筛选</text>
         <view class="badge" wx:if="{{filterBadge > 0}}">{{filterBadge}}</view>
       </view>
-      <view class="bottom-btn bottom-btn-plain" bindtap="goRecommend">
+      <view id="btn-recommend" class="bottom-btn bottom-btn-plain" bindtap="goRecommend">
         <text class="bottom-btn-text">行为寻课</text>
       </view>
-      <view class="bottom-btn bottom-btn-plain" bindtap="goNear">
+      <view id="btn-near" class="bottom-btn bottom-btn-plain" bindtap="goNear">
         <text class="bottom-btn-text">附近</text>
       </view>
-      <view class="bottom-btn bottom-btn-plain" bindtap="goProfile">
+      <view id="btn-profile" class="bottom-btn bottom-btn-plain" bindtap="goProfile">
         <text class="bottom-btn-text">我的</text>
       </view>
     </view>
