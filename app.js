@@ -36,9 +36,13 @@ App({
 
   initRole() {
     const role = wx.getStorageSync('userRole');
-    if (role) {
+    console.log('initRole - storage中的角色:', role, '类型:', typeof role);
+    
+    if (role && role !== '') {
       this.globalData.userRole = role;
+      console.log('initRole - 使用已保存的角色:', role);
     } else {
+      console.log('initRole - 未找到角色，跳转选择页');
       // 延迟跳转，等待页面加载完成
       setTimeout(() => {
         wx.reLaunch({ 

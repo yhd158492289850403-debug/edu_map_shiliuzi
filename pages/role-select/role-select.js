@@ -37,6 +37,7 @@ Page({
       // 保存到本地
       wx.setStorageSync('userRole', this.data.selectedRole);
       app.globalData.userRole = this.data.selectedRole;
+      console.log('角色已保存到storage:', this.data.selectedRole);
 
       // 保存到云端
       const db = wx.cloud.database();
