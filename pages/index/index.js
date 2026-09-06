@@ -100,15 +100,22 @@ Page({
   // 引导导航事件（跨页面跳转）
   onGuideNavigate(e) {
     const { page } = e.detail;
+    console.log('收到引导导航事件，目标页面:', page);
     this.setData({ showGuide: false });
     wx.navigateTo({
       url: `/${page}`,
       success: () => {
+        console.log('导航成功，启动目标页面引导');
         const pages = getCurrentPages();
         const targetPage = pages[pages.length - 1];
         if (targetPage && targetPage.startGuideFromFlow) {
           targetPage.startGuideFromFlow();
+        } else {
+          console.warn('目标页面没有 startGuideFromFlow 方法');
         }
+      },
+      fail: (err) => {
+        console.error('导航失败:', err);
       }
     });
   },

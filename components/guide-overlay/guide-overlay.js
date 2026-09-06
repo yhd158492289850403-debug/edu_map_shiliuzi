@@ -213,12 +213,15 @@ Component({
       if (this.data.fullGuide) {
         // 全项目模式
         const result = guideSteps.nextStep();
+        console.log('引导下一步结果:', JSON.stringify(result));
         this.updateProgress();
         
         if (result.done) {
           this.completeGuide();
         } else if (result.navigateTo) {
-          // 需要跳转
+          // 需要跳转 - 先隐藏当前引导
+          console.log('触发导航事件:', result.navigateTo);
+          this.setData({ show: false, isReady: false });
           this.triggerEvent('navigate', { 
             page: result.navigateTo,
             stationName: result.stationName
