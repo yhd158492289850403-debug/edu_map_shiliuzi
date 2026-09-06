@@ -239,6 +239,11 @@ Component({
       }
     },
 
+    // 遮罩层点击（禁止穿透）
+    onMaskTap() {
+      // 不做任何事，阻止点击穿透
+    },
+
     // 跳过引导
     onSkip() {
       guideSteps.skipGuide();
