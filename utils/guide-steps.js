@@ -38,7 +38,7 @@ const FULL_GUIDE_FLOW = [
   },
   // ===== 第2站：详情页 - 点位详情 =====
   {
-    page: 'pages/detail/detail',
+    page: 'pages/detail/detail?id=1',  // 默认展示包头博物馆
     stationName: '点位详情',
     steps: [
       {
