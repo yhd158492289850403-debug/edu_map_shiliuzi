@@ -35,10 +35,15 @@ App({
   },
 
   initRole() {
-    const role = wx.getStorageSync('userRole');
+    let role = wx.getStorageSync('userRole');
     
-    // 检查角色是否有效（非空字符串）
-    if (role && typeof role === 'string' && role.trim() !== '') {
+    // 自动清理无效值（空字符串、null、undefined）
+    if (!role || typeof role !== 'string' || role.trim() === '') {
+      wx.removeStorageSync('userRole');
+      role = null;
+    }
+    
+    if (role) {
       this.globalData.userRole = role;
     } else {
       // 首次使用或角色无效，跳转选择页
