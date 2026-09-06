@@ -93,10 +93,13 @@ Page({
   // 从全项目引导流程启动（被其他页面跳转调用）
   startGuideFromFlow() {
     setGuideActive(true);
-    this.setData({ 
-      showGuide: true,
-      fullGuideMode: true
-    });
+    // 延迟启动引导，等待页面渲染完成
+    setTimeout(() => {
+      this.setData({ 
+        showGuide: true,
+        fullGuideMode: true
+      });
+    }, 600);
   },
   
   // 引导导航事件（跨页面跳转）

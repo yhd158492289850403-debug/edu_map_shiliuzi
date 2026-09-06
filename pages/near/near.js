@@ -52,10 +52,12 @@ Page({
   // 从全项目引导流程启动
   startGuideFromFlow() {
     setGuideActive(true);
-    this.setData({ 
-      showGuide: true,
-      fullGuideMode: true
-    });
+    setTimeout(() => {
+      this.setData({ 
+        showGuide: true,
+        fullGuideMode: true
+      });
+    }, 600);
   },
   
   // 引导导航事件
