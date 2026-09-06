@@ -262,7 +262,6 @@ Page({
   // 重播新手引导 - 跳转到首页启动引导
   onReplayGuide() {
     resetGuide();
-    setGuideActive(true);
     wx.reLaunch({
       url: '/pages/index/index?startGuide=true'
     });
