@@ -135,34 +135,55 @@ Component({
     calcBubblePosition(rect, position) {
       const sysInfo = wx.getSystemInfoSync();
       const screenWidth = sysInfo.windowWidth;
+      const screenHeight = sysInfo.windowHeight;
       const bubbleWidth = 280;
+      const bubbleHeight = 200; // 预估气泡高度
+      const gap = 30; // 气泡与高亮区域的间距
       let x, y;
 
       switch (position) {
         case 'top':
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
-          y = rect.top - 140;
+          y = rect.top - bubbleHeight - gap;
+          // 如果上方空间不足，放到下方
+          if (y < 10) {
+            y = rect.bottom + gap;
+          }
           break;
         case 'bottom':
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
-          y = rect.bottom + 20;
+          y = rect.bottom + gap;
+          // 如果下方空间不足，放到上方
+          if (y + bubbleHeight > screenHeight - 10) {
+            y = rect.top - bubbleHeight - gap;
+          }
           break;
         case 'left':
-          x = rect.left - bubbleWidth - 20;
-          y = rect.top + rect.height / 2 - 60;
+          x = rect.left - bubbleWidth - gap;
+          y = rect.top + rect.height / 2 - bubbleHeight / 2;
+          // 如果左侧空间不足，放到右侧
+          if (x < 10) {
+            x = rect.right + gap;
+          }
           break;
         case 'right':
-          x = rect.right + 20;
-          y = rect.top + rect.height / 2 - 60;
+          x = rect.right + gap;
+          y = rect.top + rect.height / 2 - bubbleHeight / 2;
+          // 如果右侧空间不足，放到左侧
+          if (x + bubbleWidth > screenWidth - 10) {
+            x = rect.left - bubbleWidth - gap;
+          }
           break;
         default:
           x = rect.left + rect.width / 2 - bubbleWidth / 2;
-          y = rect.bottom + 20;
+          y = rect.bottom + gap;
       }
 
+      // 边界检测
       if (x < 10) x = 10;
       if (x + bubbleWidth > screenWidth - 10) x = screenWidth - bubbleWidth - 10;
-      if (y < 10) y = rect.bottom + 20;
+      if (y < 10) y = 10;
+      if (y + bubbleHeight > screenHeight - 10) y = screenHeight - bubbleHeight - 10;
 
       return { x, y };
     },

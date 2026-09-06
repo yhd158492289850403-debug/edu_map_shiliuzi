@@ -88,10 +88,12 @@ function startGuide() {
   isGuideActive = true;
 }
 
-// 跳过引导
+// 跳过引导（也算完成，不再自动弹出）
 function skipGuide() {
   isGuideActive = false;
   currentStepIndex = 0;
+  wx.setStorageSync('guideCompleted', true);
+  wx.removeStorageSync('needGuide');
 }
 
 // 完成引导
