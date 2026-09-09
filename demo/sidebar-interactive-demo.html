@@ -129,7 +129,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     <!-- mode switcher -->
     <div class="mode-bar">
       <button class="mode-badge mode-a active" id="modeA" onclick="setMode('A')">方案A：卡片内展示</button>
-      <button class="mode-badge mode-b" id="modeB" onclick="setMode('B')" style="margin-top:6px">方案B：跳转寻课页</button>
+      <button class="mode-badge mode-b" id="modeB" onclick="setMode('B')" style="margin-top:6px">方案B：跳转导引页</button>
     </div>
     <!-- map placeholder -->
     <div class="map" id="mapArea">🗺 地图区域（筛选后卡片会覆盖此处）</div>
@@ -268,7 +268,7 @@ function renderSubList() {
           <div class="a-name">${a}</div>
         </div>`
       ).join('');
-      hint.innerHTML = '点击行为 → ' + (mode==='A'?'在卡片视图内展示对应点位 & 切片':'跳转寻课页查看四段攻略');
+      hint.innerHTML = '点击行为 → ' + (mode==='A'?'在卡片视图内展示对应点位 & 切片':'跳转导引页查看四段攻略');
     }
   } else {
     al.innerHTML = ''; hint.innerHTML = '';
@@ -311,7 +311,7 @@ function showChoicePanel(action, dim, sub) {
   pendingAction=action; pendingDim=dim; pendingSub=sub;
   const p = document.getElementById('choicePanel');
   document.getElementById('choiceTitle').innerHTML = `点击「${action}」后`;
-  document.getElementById('choiceDesc').innerHTML = `维度: <b>${DIM_LABEL[dim]}</b> → 子素养: <b>${sub}</b> → 行为: <b>${action}</b><br><br>您选择过哪种交互方式：在首页卡片视图内展示，还是跳转寻课页？`;
+  document.getElementById('choiceDesc').innerHTML = `维度: <b>${DIM_LABEL[dim]}</b> → 子素养: <b>${sub}</b> → 行为: <b>${action}</b><br><br>您选择过哪种交互方式：在首页卡片视图内展示，还是跳转导引页？`;
   p.classList.add('open');
 }
 

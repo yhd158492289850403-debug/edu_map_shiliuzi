@@ -1,5 +1,5 @@
 /**
- * 功能回归测试：behavior 寻课 + geo 距离 + fee/星级数据完整性
+ * 功能回归测试：behavior 导引 + geo 距离 + fee/星级数据完整性
  * 用法: node scripts/verify_features.js
  */
 const { LOCATIONS } = require('../data/locations');
@@ -29,7 +29,7 @@ assert('fee覆盖≥110', feeCnt >= 110, `实际 ${feeCnt}`);
 const noStar = LOCATIONS.filter(l => !l.stars || Object.keys(l.stars).length === 0);
 assert('全部点位有星级', noStar.length === 0);
 
-// 4. behavior 寻课
+// 4. behavior 导引
 const r1 = behavior.recommend('顶嘴');
 assert('顶嘴→1条行为', r1.length === 1);
 assert('顶嘴→含对症切片', r1[0] && r1[0].matchedSlices.length > 0);

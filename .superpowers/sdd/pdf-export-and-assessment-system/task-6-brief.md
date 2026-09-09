@@ -61,7 +61,7 @@ function generateParentReport(scores, behaviors, options) {
  * 成员报告（活泼游戏型）
  */
 function generateStudentReport(scores, behaviors, options) {
-  const { nickname = '同学', checkinCount = 0 } = options;
+  const { nickname = '伙伴', checkinCount = 0 } = options;
   
   return {
     title: `${nickname}的成长勋章墙`,

@@ -146,7 +146,7 @@ Component({
       });
     },
 
-    // 确定：有行为则跳转寻课，否则仅关闭面板（专题筛选已通过filterchange实时生效）
+    // 确定：有行为则跳转导引，否则仅关闭面板（专题筛选已通过filterchange实时生效）
     onApply() {
       const behaviors = this.data.selectedBehaviors;
       const topics = this.properties.topics || [];
