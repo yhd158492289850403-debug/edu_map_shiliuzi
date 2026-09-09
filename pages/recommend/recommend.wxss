@@ -1,4 +1,4 @@
-/* 行为寻课页样式 */
+/* 行为导引页样式 */
 .rec-container {
   min-height: 100vh;
   background: #f8f9fb;

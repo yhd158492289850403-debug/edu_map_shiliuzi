@@ -51,7 +51,7 @@ Page({
       inAd: (loc.ad || []).includes(d)
     }));
 
-    // 教育切片：按六维顺序分组，预处理子素养与星级
+    // 出行攻略：按六维顺序分组，预处理子素养与星级
     // 学段优先：选了学段后，对应学段切片排前面并标"推荐"，其余标"进阶"
     const sliceGroups = DIM_ORDER.map(dim => {
       let slices = (loc.slices || [])
@@ -179,7 +179,7 @@ Page({
     const loc = this.data.location;
     if (!loc) return {};
     return {
-      title: `${loc.n} - 石榴籽成长快乐导引地图`,
+      title: `${loc.n} - 石榴籽文化探索导引地图`,
       path: `/pages/detail/detail?id=${loc.id}`
     };
   }

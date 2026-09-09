@@ -1,5 +1,5 @@
 /**
- * 首页 - 石榴籽成长快乐导引地图
+ * 首页 - 石榴籽文化探索导引地图
  */
 const { LOCATIONS } = require('../../data/locations');
 const { DIMENSIONS, DIM_ORDER, DIM_LABELS } = require('../../data/dimensions');
@@ -118,7 +118,7 @@ Page({
   onBehaviorSelect(e) {
     const { behaviors } = e.detail || {};
     if (!behaviors || behaviors.length === 0) return;
-    // 关闭筛选面板，跳转到行为寻课页，传递所有已选行为（逗号分隔）
+    // 关闭筛选面板，跳转到行为导引页，传递所有已选行为（逗号分隔）
     this.setData({ showFilterSheet: false });
     const query = behaviors.map(b => encodeURIComponent(b)).join(',');
     wx.navigateTo({ url: `/pages/recommend/recommend?behaviors=${query}` });
@@ -335,7 +335,7 @@ Page({
   },
 
   onSearchConfirm(e) {
-    // 确认搜索：行为/子素养类关键词，跳转行为寻课页获得教案推荐
+    // 确认搜索：行为/子素养类关键词，跳转行为导引页获得教案推荐
     wx.navigateTo({ url: '/pages/recommend/recommend' });
   },
 
@@ -354,7 +354,7 @@ Page({
   // ===== 转发 =====
   onShareAppMessage() {
     return {
-      title: '石榴籽成长快乐导引地图 - 让每一个孩子找到属于自己的成长快乐',
+      title: '石榴籽文化探索导引地图 - 让每一个人找到属于自己的探索快乐',
       path: '/pages/index/index'
     };
   },

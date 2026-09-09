@@ -41,7 +41,7 @@ function filtered(over = {}) {
   // 切片总数 480（459 基础 + 21 包头博物馆精细切片库并入）
   assert('切片总数 480', LOCATIONS.reduce((s, l) => s + (l.slices || []).length, 0), 480);
   // 6 个新点位存在且含切片
-  const NEW = ['王老太太故居', '包头市中小学综合实践教育中心', '秦长城国家文化公园', '战国赵北长城遗址公园', '敕勒川现代农业产业园', '赵长城遗址胡服骑射广场'];
+  const NEW = ['王老太太故居', '包头市中小学综合实践旅游中心', '秦长城国家文化公园', '战国赵北长城遗址公园', '敕勒川现代农业产业园', '赵长城遗址胡服骑射广场'];
   for (const n of NEW) {
     const l = LOCATIONS.find(x => x.n === n);
     assert(`新点位存在: ${n}`, !!l && !!l.slices && l.slices.length > 0, true);

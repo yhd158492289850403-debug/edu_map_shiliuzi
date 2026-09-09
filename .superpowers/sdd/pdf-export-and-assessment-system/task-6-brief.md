@@ -1,4 +1,4 @@
-# Task 6: 报告生成系统（三种角色）
+﻿# Task 6: 报告生成系统（三种角色）
 
 ## 任务概述
 
@@ -41,7 +41,7 @@ function generateParentReport(scores, behaviors, options) {
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个教育教案的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的学习，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     

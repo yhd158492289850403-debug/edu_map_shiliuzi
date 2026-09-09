@@ -1,4 +1,4 @@
-# PDF导出与六维素养评估系统实施计划
+﻿# PDF导出与六维素养评估系统实施计划
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -1548,7 +1548,7 @@ function generateParentReport(scores, behaviors, options) {
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个教育教案的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的学习，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     

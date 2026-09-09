@@ -1,4 +1,4 @@
-# 数据融合 + 功能整合 实施计划
+﻿# 数据融合 + 功能整合 实施计划
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -11,7 +11,7 @@
 ## 事实基线（已核实）
 
 ### 工作区（主体）
-- `data/locations.js` = **111 点位 + 459 教育切片**，结构 `id,n,d,a,c,v,ld,md,ad,g,ac,is,co,h,p,lat,lng,stars,ver,type,sliceCount,slices`。
+- `data/locations.js` = **111 点位 + 459 旅游攻略**，结构 `id,n,d,a,c,v,ld,md,ad,g,ac,is,co,h,p,lat,lng,stars,ver,type,sliceCount,slices`。
 - 六维：体素/心素/灵素/智素/行素/交素；`data/issues.js`（问题→维度）。
 - UI 已具备：地图+卡片、多维筛选、详情页切片点读。
 - 子素养名（切片内 `subs`）：**67 个**。

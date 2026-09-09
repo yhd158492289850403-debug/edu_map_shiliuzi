@@ -1,5 +1,5 @@
 /**
- * 行为寻课页 - 行为 → 子素养 → 对症教案 完整链路
+ * 行为导引页 - 行为 → 子素养 → 对症教案 完整链路
  */
 const { recommend, matchBehaviors } = require('../../utils/behavior');
 const { getDimColor } = require('../../utils/util');
@@ -158,14 +158,14 @@ Page({
     const d = this._shareData;
     if (!d) {
       return {
-        title: '行为寻课 - 输入孩子行为，找到对症教育教案',
+        title: '行为导引 - 输入行为特征，找到对症出行攻略',
         path: '/pages/recommend/recommend'
       };
     }
     const top3 = d.slices.slice(0, 3).map(s => s.title).join('、');
     const suffix = d.slices.length > 3 ? `等${d.slices.length}个教案` : '';
     return {
-      title: `「${d.behavior}」的教育方案：${d.subs.join('、')}`,
+      title: `「${d.behavior}」的出行方案：${d.subs.join('、')}`,
       path: `/pages/recommend/recommend?behavior=${encodeURIComponent(d.behavior)}`,
       // 小程序卡片描述（最多两行）
       desc: `${top3}${suffix}`
@@ -177,12 +177,12 @@ Page({
     const d = this._shareData;
     if (!d) {
       return {
-        title: '行为寻课 - 孩子行为对症教育教案',
+        title: '行为导引 - 行为特征对症出行攻略',
         query: ''
       };
     }
     return {
-      title: `孩子「${d.behavior}」怎么办？${d.subs.join('、')}对症教案`,
+      title: `「${d.behavior}」怎么办？${d.subs.join('、')}对症教案`,
       query: `behavior=${encodeURIComponent(d.behavior)}`
     };
   }

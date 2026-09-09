@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -137,7 +137,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     <div class="bottom-bar">
       <button class="btm-btn primary" onclick="toggleSheet()">📋 筛选</button>
       <button class="btm-btn outline">🧭 附近</button>
-      <button class="btm-btn outline">🔍 行为寻课</button>
+      <button class="btm-btn outline">🔍 行为导引</button>
     </div>
 
     <!-- overlay -->
@@ -188,7 +188,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
         <h2 id="choiceTitle">点击行为后…</h2>
         <p id="choiceDesc"></p>
         <button class="choice-btn b1" id="choiceA" onclick="doChoice('A')">✅ 方案A：在卡片视图内直接展示该行为对应的切片教案（原地展开）</button>
-        <button class="choice-btn b2" id="choiceB" onclick="doChoice('B')">🚀 方案B：跳转到「行为寻课页」看完整四段教案（离开首页）</button>
+        <button class="choice-btn b2" id="choiceB" onclick="doChoice('B')">🚀 方案B：跳转到「行为导引页」看完整四段教案（离开首页）</button>
       </div>
     </div>
   </div>
@@ -321,7 +321,7 @@ function doChoice(choice) {
   if(choice==='A') {
     showToast(`<strong>方案A 预览</strong><br>卡片视图会插入「<b>${pendingSub}</b> · <b>${pendingAction?.slice(0,12)}</b>」的推荐切片，可在首页直接看到教案摘要`);
   } else {
-    showToast(`<strong>方案B 预览</strong><br>页面跳转到「行为寻课页」，输入「${pendingSub}」展示完整四段教案（行前/路上/到馆/返程）`);
+    showToast(`<strong>方案B 预览</strong><br>页面跳转到「行为导引页」，输入「${pendingSub}」展示完整四段教案（行前/路上/到馆/返程）`);
   }
 }
 

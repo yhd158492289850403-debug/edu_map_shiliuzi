@@ -7,7 +7,7 @@ const INDEX_GUIDE_STEPS = [
   {
     target: '.gs-box',
     title: '🔍 搜索功能',
-    desc: '输入孩子行为（如"顶嘴"）或地点名称，快速找到对症教案',
+    desc: '输入行为特征（如"顶嘴"）或地点名称，快速找到对症教案',
     position: 'bottom',
     finger: 'point',
     demo: '试试输入"顶嘴"'
@@ -15,7 +15,7 @@ const INDEX_GUIDE_STEPS = [
   {
     target: '.bottom-btn-accent',
     title: '🎯 筛选功能',
-    desc: '按素养维度、地点分类、孩子问题精准筛选',
+    desc: '按素养维度、地点分类、行为特征精准筛选',
     position: 'top',
     finger: 'tap',
     demo: '点击打开筛选面板'
@@ -30,16 +30,16 @@ const INDEX_GUIDE_STEPS = [
   },
   {
     target: '#btn-recommend',
-    title: '🔍 行为寻课',
-    desc: '输入孩子行为，系统推荐对症的教育教案',
+    title: '🔍 行为导引',
+    desc: '输入行为特征，系统推荐对症的出行攻略',
     position: 'top',
     finger: 'tap',
-    demo: '点击进入行为寻课'
+    demo: '点击进入行为导引'
   },
   {
     target: '#btn-near',
     title: '📍 附近点位',
-    desc: '查看附近的教育基地，支持距离筛选和一键导航',
+    desc: '查看附近的景点，支持距离筛选和一键导航',
     position: 'top',
     finger: 'tap',
     demo: '点击进入附近页'
@@ -47,7 +47,7 @@ const INDEX_GUIDE_STEPS = [
   {
     target: '#btn-profile',
     title: '👤 我的档案',
-    desc: '查看成长统计、切换身份、重播引导、查看报告',
+    desc: '查看探索统计、切换入口、重播引导、查看报告',
     position: 'top',
     finger: 'tap',
     demo: '点击查看个人档案'

@@ -1,5 +1,5 @@
 /**
- * 个人档案页 - 展示用户信息、打卡记录、成长轨迹
+ * 个人档案页 - 展示用户信息、打卡记录、探索轨迹
  */
 const app = getApp();
 const { ROLE_TYPES, ROLE_CONFIGS } = require('../../data/user-roles');
@@ -13,10 +13,10 @@ Page({
     loading: true,
     stage: '全部',
     isObserving: true,
-    isTeacher: false,
-    isStudent: false,
-    isParent: true,
-    userRole: 'parent',
+    isTeam: false,
+    isGuest: false,
+    isFamily: true,
+    userEntry: 'guest',
     classData: null,
     students: [],
     showRolePicker: false,
@@ -32,27 +32,27 @@ Page({
   onLoad() {
     const windowInfo = wx.getWindowInfo();
     const stage = (app && app.globalData.stage) || '全部';
-    const userRole = (app && app.globalData.userRole) || 'parent';
+    const userEntry = (app && app.globalData.userEntry) || 'guest';
     
-    // 构建角色选项
+    // 构建入口选项
     const roleOptions = Object.entries(ROLE_CONFIGS).map(([key, config]) => ({
       key,
       ...config,
-      selected: key === userRole
+      selected: key === userEntry
     }));
     
     this.setData({ 
       statusBarHeight: windowInfo.statusBarHeight || 44, 
       stage,
-      userRole,
-      isParent: userRole === 'parent',
-      isStudent: userRole === 'student',
-      isTeacher: userRole === 'teacher',
+      userEntry,
+      isFamily: userEntry === 'family',
+      isGuest: userEntry === 'guest',
+      isTeam: userEntry === 'team',
       roleOptions
     });
     this.loadUserInfo();
     this.loadCheckins();
-    if (this.data.isTeacher) {
+    if (this.data.isTeam) {
       this.loadClassData();
     }
   },
@@ -178,16 +178,16 @@ Page({
   },
 
   async onRoleSelect(e) {
-    const role = e.currentTarget.dataset.role;
-    if (role === this.data.userRole) {
+    const entry = e.currentTarget.dataset.role;
+    if (entry === this.data.userEntry) {
       this.setData({ showRolePicker: false });
       return;
     }
 
     try {
       // 保存到本地
-      wx.setStorageSync('userRole', role);
-      app.globalData.userRole = role;
+      wx.setStorageSync('userEntry', entry);
+      app.globalData.userEntry = entry;
 
       // 保存到云端
       const db = wx.cloud.database();
@@ -195,7 +195,7 @@ Page({
         _openid: '{openid}'
       }).update({
         data: {
-          role: role,
+          entry_type: entry,
           updated_at: new Date()
         }
       });
@@ -203,21 +203,21 @@ Page({
       // 更新界面
       const roleOptions = this.data.roleOptions.map(opt => ({
         ...opt,
-        selected: opt.key === role
+        selected: opt.key === entry
       }));
 
       this.setData({
-        userRole: role,
-        isParent: role === 'parent',
-        isStudent: role === 'student',
-        isTeacher: role === 'teacher',
+        userEntry: entry,
+        isFamily: entry === 'family',
+        isGuest: entry === 'guest',
+        isTeam: entry === 'team',
         showRolePicker: false,
         roleOptions
       });
 
-      wx.showToast({ title: '已切换身份', icon: 'success' });
+      wx.showToast({ title: '已切换入口', icon: 'success' });
     } catch (err) {
-      console.error('切换身份失败:', err);
+      console.error('切换入口失败:', err);
       wx.showToast({ title: '切换失败，请重试', icon: 'none' });
     }
   },
@@ -269,7 +269,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '我的成长档案 - 石榴籽成长快乐导引地图',
+      title: '我的探索档案 - 石榴籽文化探索导引地图',
       path: '/pages/profile/profile'
     };
   }

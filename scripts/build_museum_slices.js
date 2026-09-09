@@ -111,7 +111,7 @@ function normHuangheyao() {
       loc: s.exhibit || '',
       title: s.title || '',
       dim: '', dimKey: '', subs: [], age: '', stars: {},
-      edu: s.note || '',          // desc 仅"注"，非教育功能
+      edu: s.note || '',          // desc 仅"注"，非旅游特色
       pre: s.hook || '',
       talk: s.road || '',
       act: s.do || '',

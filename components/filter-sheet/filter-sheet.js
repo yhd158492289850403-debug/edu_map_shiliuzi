@@ -152,7 +152,7 @@ Component({
       const topics = this.properties.topics || [];
 
       if (behaviors.length > 0) {
-        // 选了行为 → 跳转行为寻课页
+        // 选了行为 → 跳转行为导引页
         this.triggerEvent('behaviorselect', { behaviors });
       }
 

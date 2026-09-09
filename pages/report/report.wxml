@@ -1,10 +1,17 @@
 <view class="report-page">
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
+    <text class="top-title">探索报告</text>
+    <view class="top-right"></view>
+  </view>
+
   <view class="loading" wx:if="{{isLoading}}">加载中...</view>
   
   <view class="report-content" wx:else>
     <!-- 报告头部 -->
     <view class="report-header">
-      <text class="report-title">{{report.title}}</text>
+      <text class="report-title">探索报告</text>
       <text class="report-subtitle">{{report.subtitle}}</text>
     </view>
     
@@ -29,7 +36,7 @@
     
     <!-- 亮点和建议 -->
     <view class="highlights-section" wx:if="{{report.highlights}}">
-      <view class="section-title">🌟 成长亮点</view>
+      <view class="section-title">🌟 探索亮点</view>
       <view class="highlight-item" wx:for="{{report.highlights}}" wx:key="*this">
         {{item}}
       </view>

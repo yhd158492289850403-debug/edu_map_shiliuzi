@@ -5,7 +5,7 @@ App({
   globalData: {
     userInfo: null,
     openid: null,
-    userRole: 'parent',  // 默认角色
+    userEntry: 'guest',  // 默认入口
     filter: { search: '', dims: [], issues: [], unity: false, topics: [] },
     view: 'map',
     stage: '全部'
@@ -22,8 +22,8 @@ App({
       this.getOpenid();
     }
     
-    // 初始化角色
-    this.initRole();
+    // 初始化入口
+    this.initEntry();
     
     // 初始化行为采集
     tracker.init();
@@ -34,19 +34,19 @@ App({
     tracker.flush();
   },
 
-  initRole() {
-    let role = wx.getStorageSync('userRole');
+  initEntry() {
+    let entry = wx.getStorageSync('userEntry');
     
     // 自动清理无效值（空字符串、null、undefined）
-    if (!role || typeof role !== 'string' || role.trim() === '') {
-      wx.removeStorageSync('userRole');
-      role = null;
+    if (!entry || typeof entry !== 'string' || entry.trim() === '') {
+      wx.removeStorageSync('userEntry');
+      entry = null;
     }
     
-    if (role) {
-      this.globalData.userRole = role;
+    if (entry) {
+      this.globalData.userEntry = entry;
     } else {
-      // 首次使用或角色无效，跳转选择页
+      // 首次使用或入口无效，跳转选择页
       setTimeout(() => {
         wx.reLaunch({ 
           url: '/pages/role-select/role-select?first=true' 

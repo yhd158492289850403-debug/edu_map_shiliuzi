@@ -198,7 +198,7 @@
   color: #ccc;
 }
 
-/* ===== 教育切片 ===== */
+/* ===== 旅游攻略 ===== */
 .slice-group {
   margin-bottom: 22rpx;
 }

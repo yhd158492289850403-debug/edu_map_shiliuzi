@@ -1,7 +1,19 @@
 {
-  "description": "石榴籽成长快乐导引地图 - 包头市中小学生德育心理建设路径",
+  "description": "石榴籽文化探索导引地图 - 包头市文化探索路径",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "value": "data/red-slices.js", "type": "glob" },
+      { "value": "data/museum_slices.js", "type": "glob" },
+      { "value": "data/red-sites.js", "type": "glob" },
+      { "value": "data/red-mapping.js", "type": "glob" },
+      { "value": "scripts/**", "type": "glob" },
+      { "value": "docs/**", "type": "glob" },
+      { "value": "demo/**", "type": "glob" },
+      { "value": "**/*.md", "type": "glob" },
+      { "value": ".reasonix/**", "type": "glob" },
+      { "value": ".freebuff/**", "type": "glob" },
+      { "value": "debug.log", "type": "glob" }
+    ],
     "include": []
   },
   "setting": {
@@ -49,7 +61,7 @@
   "compileType": "miniprogram",
   "libVersion": "3.16.2",
   "appid": "wx20f82f75dc26f148",
-  "projectname": "石榴籽成长快乐导引地图",
+  "projectname": "石榴籽文化探索导引地图",
   "cloudfunctionRoot": "cloudfunctions/",
   "condition": {},
   "editorSetting": {

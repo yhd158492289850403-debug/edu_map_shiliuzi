@@ -50,7 +50,7 @@ for (const l of locs) {
 if (!dry) {
   const header = `/**
  * 地点数据 - 包头市德育心理建设路径
- * 共 ${locs.length} 个点位，${locs.reduce((a,l)=>a+(l.slices||[]).length,0)} 个教育切片
+ * 共 ${locs.length} 个点位，${locs.reduce((a,l)=>a+(l.slices||[]).length,0)} 个旅游攻略
  * fee（收费/免费）来自归档 sites_raw + 外部核实
  */
 const LOCATIONS = ${JSON.stringify(locs)};\n\nmodule.exports = { LOCATIONS };\n`;

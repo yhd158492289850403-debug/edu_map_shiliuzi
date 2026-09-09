@@ -46,8 +46,8 @@ Page({
       const scores = calculateSixDimScores(behaviorStats);
 
       // Generate report
-      const report = generateReport('teacher', scores, behaviorStats, {
-        studentName: users[0]?.nickname || '学生',
+      const report = generateReport('team', scores, behaviorStats, {
+        memberName: users[0]?.nickname || '成员',
         checkinCount: checkins.length
       });
 
@@ -108,7 +108,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: `${this.data.studentInfo?.nickname || '学生'}的成长报告`,
+      title: `${this.data.studentInfo?.nickname || '成员'}的探索报告`,
       path: `/pages/student-detail/student-detail?openid=${this.data.openid}`
     };
   }

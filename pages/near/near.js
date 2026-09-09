@@ -121,6 +121,6 @@ Page({
   },
 
   onShareAppMessage() {
-    return { title: '附近素养教育基地 - 石榴籽成长快乐导引地图', path: '/pages/near/near' };
+    return { title: '附近素养景点 - 石榴籽文化探索导引地图', path: '/pages/near/near' };
   }
 });

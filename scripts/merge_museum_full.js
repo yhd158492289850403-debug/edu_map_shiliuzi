@@ -44,7 +44,7 @@ let totalSlices = locs.reduce((a, l) => a + (l.slices || []).length, 0);
 if (!dry) {
   const header = `/**
  * 地点数据 - 包头市德育心理建设路径
- * 共 ${locs.length} 个点位，${totalSlices} 个教育切片
+ * 共 ${locs.length} 个点位，${totalSlices} 个旅游攻略
  * 已并入包头博物馆精细切片库（深度探索版）
  */
 const LOCATIONS = ${JSON.stringify(locs)};\n\nmodule.exports = { LOCATIONS };\n`;

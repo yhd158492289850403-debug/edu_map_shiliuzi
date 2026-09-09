@@ -37,7 +37,7 @@ function detectBehaviorKeywords(searchText) {
 }
 
 /**
- * 预计算地点可搜索文本（含教育切片内容）
+ * 预计算地点可搜索文本（含出行攻略内容）
  * @param {object} loc
  * @returns {object} scene 上挂 _searchText
  */

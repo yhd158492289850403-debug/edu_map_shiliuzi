@@ -4,7 +4,7 @@
     "feedback-popup": "/components/feedback-popup/feedback-popup",
     "guide-overlay": "/components/guide-overlay/guide-overlay"
   },
-  "navigationBarTitleText": "石榴籽成长快乐导引地图",
+  "navigationBarTitleText": "石榴籽文化探索导引地图",
   "navigationBarBackgroundColor": "#667eea",
   "navigationBarTextStyle": "white"
 }

@@ -32,7 +32,7 @@
 
   <!-- 亮点 -->
   <view class="highlights" wx:if="{{highlights.length > 0}}">
-    <text class="section-label">成长亮点</text>
+    <text class="section-label">探索亮点</text>
     <view class="list-item" wx:for="{{highlights}}" wx:key="*this">
       <text class="item-dot">•</text>
       <text class="item-text">{{item}}</text>

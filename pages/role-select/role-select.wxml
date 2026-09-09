@@ -1,7 +1,7 @@
 <view class="container">
   <view class="header">
-    <text class="title">欢迎使用石榴籽成长快乐导引地图！</text>
-    <text class="subtitle">请选择您的身份</text>
+    <text class="title">欢迎使用石榴籽文化探索导引地图！</text>
+    <text class="subtitle">请选择您的入口</text>
   </view>
   
   <view class="role-list">
@@ -22,7 +22,7 @@
   </view>
   
   <view class="footer">
-    <button class="confirm-btn" bindtap="onConfirm">确认选择</button>
+    <button class="confirm-btn" bindtap="onConfirm">确认入口</button>
     <text class="hint" wx:if="{{!isFirstTime}}">之后可以在"设置"中更改</text>
   </view>
 </view>

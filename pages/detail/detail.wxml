@@ -76,9 +76,9 @@
       <view class="nav-action" bindtap="onNav"><text class="nav-action-text">🗺 导航到此处</text></view>
     </view>
 
-    <!-- 核心育人价值 -->
+    <!-- 核心探索价值 -->
     <view class="info-section">
-      <view class="section-title">核心育人价值</view>
+      <view class="section-title">核心探索价值</view>
       <view class="section-body">{{location.v}}</view>
     </view>
 
@@ -109,9 +109,9 @@
       <view class="section-body">{{location.co}}</view>
     </view>
 
-    <!-- 教育切片 -->
+    <!-- 出行攻略 -->
     <view class="info-section" wx:if="{{sliceGroups.length > 0}}">
-      <view class="section-title">教育切片（{{location.sliceCount}}）</view>
+      <view class="section-title">出行攻略（{{location.sliceCount}}）</view>
       <view
         class="slice-group"
         wx:for="{{sliceGroups}}"
@@ -142,7 +142,7 @@
               </view>
             </view>
             <view class="slice-seg" wx:if="{{expandedSlice.edu}}">
-              <text class="slice-seg-label">教育价值</text>
+              <text class="slice-seg-label">出行价值</text>
               <text class="slice-seg-text">{{expandedSlice.edu}}</text>
             </view>
             <view class="slice-seg" wx:if="{{expandedSlice.pre}}">
@@ -173,7 +173,7 @@
     <!-- 底部标语 -->
     <view class="detail-footer">
       <view class="footer-icon">🏠</view>
-      <view class="footer-text">这里是多民族家庭共同成长的地方</view>
+      <view class="footer-text">这里是多民族家庭共同探索的地方</view>
       <view class="footer-line"></view>
     </view>
   </view>

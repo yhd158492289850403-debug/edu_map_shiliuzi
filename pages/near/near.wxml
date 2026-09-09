@@ -4,7 +4,7 @@
   <!-- 顶部栏 -->
   <view class="top-bar">
     <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
-    <text class="top-title">附近教育基地</text>
+    <text class="top-title">附近景点</text>
     <view class="top-right"></view>
   </view>
 

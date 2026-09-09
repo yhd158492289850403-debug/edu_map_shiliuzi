@@ -3,42 +3,42 @@ const { DIM_KEYS, calculateSixDimScores, calculateInitialScores } = require('./a
 
 /**
  * 生成报告
- * @param {string} role - 用户角色
+ * @param {string} entry - 用户入口
  * @param {Object} scores - 六维得分
  * @param {Object} behaviors - 行为数据
  * @param {Object} options - 选项
  */
-function generateReport(role, scores, behaviors, options = {}) {
+function generateReport(entry, scores, behaviors, options = {}) {
   const generators = {
-    [ROLE_TYPES.PARENT]: generateParentReport,
-    [ROLE_TYPES.STUDENT]: generateStudentReport,
-    [ROLE_TYPES.TEACHER]: generateTeacherReport
+    [ROLE_TYPES.FAMILY]: generateFamilyReport,
+    [ROLE_TYPES.GUEST]: generateGuestReport,
+    [ROLE_TYPES.TEAM]: generateTeamReport
   };
   
-  const generator = generators[role] || generateParentReport;
+  const generator = generators[entry] || generateFamilyReport;
   return generator(scores, behaviors, options);
 }
 
 /**
- * 家长报告（温馨鼓励型）
+ * 亲子报告（温馨鼓励型）
  */
-function generateParentReport(scores, behaviors, options) {
+function generateFamilyReport(scores, behaviors, options) {
   const { nickname = '孩子', checkinCount = 0 } = options;
   
   return {
-    title: `${nickname}的成长足迹`,
+    title: `${nickname}的探索足迹`,
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个教育教案的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个出行攻略的学习，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     
-    dimensions: formatDimensions(scores, 'parent'),
+    dimensions: formatDimensions(scores, 'family'),
     
-    highlights: generateHighlights(scores, 'parent'),
+    highlights: generateHighlights(scores, 'family'),
     
-    suggestions: generateSuggestions(scores, 'parent'),
+    suggestions: generateSuggestions(scores, 'family'),
     
     encouragement: getEncouragement(scores),
     
@@ -47,50 +47,50 @@ function generateParentReport(scores, behaviors, options) {
 }
 
 /**
- * 学生报告（活泼游戏型）
+ * 游客报告（探索发现型）
  */
-function generateStudentReport(scores, behaviors, options) {
-  const { nickname = '同学', checkinCount = 0 } = options;
+function generateGuestReport(scores, behaviors, options) {
+  const { nickname = '探索者', checkinCount = 0 } = options;
   
   return {
-    title: `${nickname}的成长勋章墙`,
+    title: `${nickname}的探索勋章墙`,
     subtitle: '🏆',
     
     achievements: generateAchievements(scores, behaviors),
     
-    abilities: formatDimensions(scores, 'student'),
+    abilities: formatDimensions(scores, 'guest'),
     
     tasks: generateTasks(scores),
     
-    encouragement: getStudentEncouragement(scores),
+    encouragement: getGuestEncouragement(scores),
     
     radarData: scores
   };
 }
 
 /**
- * 教师报告（专业数据型）
+ * 团队报告（专业数据型）
  */
-function generateTeacherReport(scores, behaviors, options) {
-  const { studentName = '学生', checkinCount = 0, classData = {} } = options;
+function generateTeamReport(scores, behaviors, options) {
+  const { memberName = '成员', checkinCount = 0, teamData = {} } = options;
   
   return {
-    title: `学生素养发展评估报告 - ${studentName}`,
+    title: `成员素养发展评估报告 - ${memberName}`,
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }),
     
     summary: {
       evaluationPeriod: getEvaluationPeriod(behaviors),
       dataSources: getDataSources(behaviors),
-      keyFindings: getKeyFindings(scores, classData)
+      keyFindings: getKeyFindings(scores, teamData)
     },
     
-    dimensions: formatDimensions(scores, 'teacher'),
+    dimensions: formatDimensions(scores, 'team'),
     
-    analysis: generateAnalysis(scores, classData),
+    analysis: generateAnalysis(scores, teamData),
     
-    recommendations: generateRecommendations(scores, 'teacher'),
+    recommendations: generateRecommendations(scores, 'team'),
     
-    classComparison: classData ? generateClassComparison(scores, classData) : null,
+    teamComparison: teamData ? generateTeamComparison(scores, teamData) : null,
     
     radarData: scores
   };
@@ -228,11 +228,11 @@ function generateSuggestions(scores, style) {
 }
 
 function getEncouragement(scores) {
-  return '每一次探访都是一次成长的种子。请继续陪伴孩子，用耐心和爱心浇灌这些种子！';
+  return '每一次探访都是一次探索的种子。请继续陪伴孩子，用耐心和爱心浇灌这些种子！';
 }
 
-function getStudentEncouragement(scores) {
-  return '你已经很棒了！继续加油，解锁更多成就！';
+function getGuestEncouragement(scores) {
+  return '你已经很棒了！继续探索，解锁更多成就！';
 }
 
 function generateAchievements(scores, behaviors) {
@@ -276,11 +276,11 @@ function generateRecommendations(scores, style) {
   ];
 }
 
-function generateClassComparison(scores, classData) {
+function generateTeamComparison(scores, teamData) {
   return {
-    average: classData.average || {},
+    average: teamData.average || {},
     ranking: '前30%',
-    comparison: '高于班级平均水平'
+    comparison: '高于团队平均水平'
   };
 }
 

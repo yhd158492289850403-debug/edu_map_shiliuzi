@@ -29,7 +29,7 @@ Page({
 
   async onConfirm() {
     if (!this.data.selectedRole) {
-      wx.showToast({ title: '请选择身份', icon: 'none' });
+      wx.showToast({ title: '请选择入口', icon: 'none' });
       return;
     }
 

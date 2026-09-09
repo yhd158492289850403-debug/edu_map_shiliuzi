@@ -1,4 +1,4 @@
-# User Role System Implementation Plan
+﻿# User Role System Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -445,7 +445,7 @@ Read `app.json` to understand current structure.
   "lazyCodeLoading": "requiredComponents",
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于查找附近的教育基地并导航"
+      "desc": "你的位置信息将用于查找附近的旅游景点并导航"
     }
   },
   "requiredPrivateInfos": [

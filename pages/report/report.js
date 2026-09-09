@@ -7,7 +7,7 @@ Page({
   data: {
     isLoading: true,
     report: null,
-    role: 'parent',
+    entry: 'guest',
     scores: {}
   },
   
@@ -19,8 +19,8 @@ Page({
     this.setData({ isLoading: true });
     
     try {
-      // 获取用户角色
-      const role = app.globalData.userRole || 'parent';
+      // 获取用户入口
+      const entry = app.globalData.userEntry || 'guest';
       
       // 获取行为数据
       const behaviors = await getBehaviors();
@@ -75,7 +75,7 @@ Page({
       }
       
       // 生成报告
-      const report = generateReport(role, scores, behaviors.stats, {
+      const report = generateReport(entry, scores, behaviors.stats, {
         nickname: app.globalData.userInfo?.nickname || '用户',
         checkinCount: checkins.length
       });
@@ -83,7 +83,7 @@ Page({
       this.setData({
         isLoading: false,
         report,
-        role,
+        entry,
         scores
       });
     } catch (err) {
@@ -104,5 +104,9 @@ Page({
       withShareTicket: true,
       menus: ['shareAppMessage', 'shareTimeline']
     });
+  },
+  
+  onBack() {
+    wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/profile/profile' }) });
   }
 });

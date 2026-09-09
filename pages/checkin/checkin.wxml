@@ -4,7 +4,7 @@
   <!-- 顶部栏 -->
   <view class="top-bar">
     <view class="btn-back" bindtap="onBack"><text>&lt; 返回</text></view>
-    <text class="top-title">📝 记录成长</text>
+    <text class="top-title">📝 记录探索</text>
     <view class="top-right"></view>
   </view>
 
@@ -51,10 +51,10 @@
       </view>
     </view>
 
-    <!-- 孩子感受 -->
+    <!-- 个人感受 -->
     <view class="form-section">
-      <text class="form-label">💭 孩子的感受</text>
-      <textarea class="notes-input" placeholder="记录孩子的感受、发现、成长…" value="{{notes}}" bindinput="onNotesInput" maxlength="500" />
+      <text class="form-label">💭 个人感受</text>
+      <textarea class="notes-input" placeholder="记录感受、发现、探索…" value="{{notes}}" bindinput="onNotesInput" maxlength="500" />
       <text class="char-count">{{notes.length}}/500</text>
     </view>
 
