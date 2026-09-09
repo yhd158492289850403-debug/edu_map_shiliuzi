@@ -26,10 +26,10 @@ Page({
       return;
     }
 
-    // 获取当前学段
+    // 获取当前难度
     const app = getApp();
     const stage = (app && app.globalData.stage) || '全部';
-    const AGE_STAGE_MAP = { '6-12岁': '小学', '12-15岁': '初中', '15-18岁': '高中' };
+    const AGE_STAGE_MAP = { '6-12岁': '基础', '12-15岁': '进阶', '15-18岁': '高级' };
 
     // 预处理维度标签
     const dimTags = (loc.ad || []).map(d => ({
@@ -52,7 +52,7 @@ Page({
     }));
 
     // 出行攻略：按六维顺序分组，预处理子素养与星级
-    // 学段优先：选了学段后，对应学段切片排前面并标"推荐"，其余标"进阶"
+    // 难度优先：选了难度后，对应难度切片排前面并标"推荐"，其余标"进阶"
     const sliceGroups = DIM_ORDER.map(dim => {
       let slices = (loc.slices || [])
         .filter(s => s.dimKey === dim)

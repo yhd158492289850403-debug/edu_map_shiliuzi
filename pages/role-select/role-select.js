@@ -18,7 +18,7 @@ Page({
     this.setData({
       roles,
       isFirstTime: options.first === 'true',
-      selectedRole: app.globalData.userRole || ''
+      selectedRole: app.globalData.userEntry || ''
     });
   },
 
@@ -36,8 +36,8 @@ Page({
     try {
       // 保存到本地（确保非空）
       if (this.data.selectedRole && this.data.selectedRole.trim() !== '') {
-        wx.setStorageSync('userRole', this.data.selectedRole);
-        app.globalData.userRole = this.data.selectedRole;
+        wx.setStorageSync('userEntry', this.data.selectedRole);
+        app.globalData.userEntry = this.data.selectedRole;
       }
 
       // 保存到云端

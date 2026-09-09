@@ -6,7 +6,7 @@
 const BEHAVIOR_KEYWORDS = [
   { words: ['坐不住', '多动', '好动', '静不下来', '乱跑', '坐立不安'], dim: '体素', min: 3 },
   { words: ['爱哭', '脾气大', '情绪化', '敏感', '易怒', '暴躁', '爱发脾气'], dim: '心素', min: 3 },
-  { words: ['不爱看书', '学不进去', '不爱学习', '成绩差', '注意力差', '分心'], dim: '智素', min: 3 },
+  { words: ['不爱看书', '学不进去', '不爱探索', '成绩差', '注意力差', '分心'], dim: '智素', min: 3 },
   { words: ['胆小', '不敢说话', '怕人', '内向', '不合群', '社恐', '不爱交流'], dim: '交素', min: 2 },
   { words: ['磨蹭', '拖拉', '懒散', '懒惰', '做事慢', '拖延', '不爱动'], dim: '行素', min: 2 },
   { words: ['不懂事', '不感恩', '叛逆', '顶嘴', '不听话', '自私', '没礼貌'], dim: '灵素', min: 3 },
@@ -139,7 +139,7 @@ function orderedSeq(q, target) {
 }
 
 /**
- * 综合筛选：搜索 + 维度 + 星级 + 问题 + 分类 + 专题 + 学段排序（AND）
+ * 综合筛选：搜索 + 维度 + 星级 + 问题 + 分类 + 专题 + 难度排序（AND）
  * @param {Array} locations 已带 _searchText 的地点数组
  * @param {object} filter { search, dims, starDims, issues, cats, topics, stage }
  * @returns {Array} 按相关度降序
@@ -168,20 +168,20 @@ function getFilteredLocations(locations, filter) {
   // 专题分类过滤
   if (f.topics && f.topics.length > 0) {
     list = list.filter(x => {
-      if (f.topics.includes('红色研学')) {
+      if (f.topics.includes('红色文化探索')) {
         return x.loc.hasRedSlices === true;
       }
       return true;
     });
   }
 
-  // 学段排序：选了学段后，有对应学段切片的点位优先
+  // 难度排序：选了难度后，有对应难度切片的点位优先
   if (f.stage && f.stage !== '全部') {
     list = list.map(x => {
       const hasStageSlices = (x.loc.slices || []).some(s => {
-        if (f.stage === '小学') return s.age === '6-12岁';
-        if (f.stage === '初中') return s.age === '12-15岁';
-        if (f.stage === '高中') return s.age === '15-18岁';
+        if (f.stage === '基础') return s.age === '6-12岁';
+        if (f.stage === '进阶') return s.age === '12-15岁';
+        if (f.stage === '高级') return s.age === '15-18岁';
         return false;
       });
       return { ...x, sc: { ...x.sc, score: x.sc.score + (hasStageSlices ? 50 : 0) } };

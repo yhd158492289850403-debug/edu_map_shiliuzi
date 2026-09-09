@@ -20,7 +20,7 @@ const ROLE_CONFIGS = {
   [ROLE_TYPES.TEAM]: {
     label: '团队入口',
     icon: '👥',
-    description: '适合团体活动、班级出游、旅行社带团',
+    description: '适合团体活动、团队出游、旅行社带团',
     reportStyle: 'group',  // 团体协作型
     permissions: ['view_group_data', 'export_group_report']
   }

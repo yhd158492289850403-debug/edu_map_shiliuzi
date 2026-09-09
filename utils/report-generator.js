@@ -30,7 +30,7 @@ function generateFamilyReport(scores, behaviors, options) {
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个出行攻略的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个出行攻略的探索，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     
@@ -106,9 +106,9 @@ function formatDimensions(scores, style) {
     const color = getDimColor(dim);
     
     let description = '';
-    if (style === 'parent') {
+    if (style === 'family') {
       description = getParentDescription(dim, score);
-    } else if (style === 'student') {
+    } else if (style === 'exploration') {
       description = getStudentDescription(dim, score);
     } else {
       description = getTeacherDescription(dim, score);
@@ -157,7 +157,7 @@ function getScoreLevel(score) {
 }
 
 function getParentDescription(dim, score) {
-  // 根据维度和分数生成家长风格的描述
+  // 根据维度和分数生成家庭用户风格的描述
   const descriptions = {
     '体素': {
       high: '孩子在身体素质方面表现优秀，运动能力较强！',
@@ -175,9 +175,9 @@ function getParentDescription(dim, score) {
       low: '可以多和孩子讨论价值观问题，帮助他/她树立正确的价值观。'
     },
     '智素': {
-      high: '孩子在认知能力方面表现优秀，学习能力较强！',
+      high: '孩子在认知能力方面表现优秀，探索能力较强！',
       medium: '孩子在认知能力方面发展良好，继续保持！',
-      low: '可以多鼓励孩子阅读和学习，提升认知能力。'
+      low: '可以多鼓励孩子阅读和探索，提升认知能力。'
     },
     '行素': {
       high: '孩子在行动力方面表现优秀，做事有计划有执行！',
@@ -196,12 +196,12 @@ function getParentDescription(dim, score) {
 }
 
 function getStudentDescription(dim, score) {
-  // 生成学生风格的描述
+  // 生成成员风格的描述
   return `${getDimLabel(dim)}：${score}分 ${getStarEmoji(score)}`;
 }
 
 function getTeacherDescription(dim, score) {
-  // 生成教师风格的描述
+  // 生成领队风格的描述
   return `${getDimLabel(dim)}得分${score}分，${getScoreLevel(score)}水平`;
 }
 
@@ -224,7 +224,7 @@ function generateHighlights(scores, style) {
 
 function generateSuggestions(scores, style) {
   // 生成建议
-  return ['建议每周安排一次亲子活动', '可以多关注价值素养类教案'];
+  return ['建议每周安排一次亲子活动', '可以多关注价值素养类攻略'];
 }
 
 function getEncouragement(scores) {
@@ -253,7 +253,7 @@ function getEvaluationPeriod(behaviors) {
 }
 
 function getDataSources(behaviors) {
-  return '3次实地探访记录、5个教案学习数据、6次行为观察';
+  return '3次实地探访记录、5个攻略探索数据、6次行为观察';
 }
 
 function getKeyFindings(scores, classData) {
@@ -271,8 +271,8 @@ function generateAnalysis(scores, classData) {
 function generateRecommendations(scores, style) {
   return [
     '建议增加团队合作类活动',
-    '可采用情境模拟教学法',
-    '定期反馈学生在家庭环境中的表现'
+    '可采用情境模拟讲解法',
+    '定期反馈成员在家庭环境中的表现'
   ];
 }
 

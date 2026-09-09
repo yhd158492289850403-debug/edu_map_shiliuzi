@@ -265,7 +265,7 @@
   line-height: 1.5;
 }
 
-/* 展开的教案 */
+/* 展开的攻略 */
 .slice-detail {
   background: #fffdf5;
   border: 1rpx solid #fde68a;

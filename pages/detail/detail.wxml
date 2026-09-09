@@ -134,7 +134,7 @@
             <view class="slice-meta">{{item.loc}} · {{item.age}} · {{item.subsTxt}}</view>
           </view>
           
-          <!-- 展开的切片教案 - 在卡片下方 -->
+          <!-- 展开的切片攻略 - 在卡片下方 -->
           <view class="slice-detail" wx:if="{{expandedSlice && expandedSlice.gIdx === gIdx && expandedSlice.iIdx === iIdx}}">
             <view class="slice-detail-stars" wx:if="{{expandedSlice.starItems.length > 0}}">
               <view class="slice-detail-star" wx:for="{{expandedSlice.starItems}}" wx:for-item="starItem" wx:key="dim" style="color: {{starItem.color}};">

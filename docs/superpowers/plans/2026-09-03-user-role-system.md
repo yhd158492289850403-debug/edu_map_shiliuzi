@@ -39,21 +39,21 @@ const ROLE_TYPES = {
 
 const ROLE_CONFIGS = {
   [ROLE_TYPES.PARENT]: {
-    label: '家长',
+    label: '家庭用户',
     icon: '👨‍👩‍👧',
     description: '查看孩子成长报告，获取育儿建议',
     reportStyle: 'warm'  // 温馨鼓励型
   },
   [ROLE_TYPES.STUDENT]: {
-    label: '学生',
+    label: '成员',
     icon: '👦',
     description: '查看自己的成长勋章和能力图',
     reportStyle: 'playful'  // 活泼游戏型
   },
   [ROLE_TYPES.TEACHER]: {
-    label: '教师',
+    label: '领队',
     icon: '👨‍🏫',
-    description: '查看班级学生数据，生成教学报告',
+    description: '查看团队成员数据，生成讲解报告',
     reportStyle: 'professional',  // 专业数据型
     permissions: ['view_class_data', 'export_class_report']
   }
@@ -514,7 +514,7 @@ exports.main = async (event, context) => {
           nickname: '微信用户',
           avatar: '',
           role: 'parent',  // 默认角色
-          class_id: '',     // 班级ID（教师用）
+          class_id: '',     // 团队ID（领队用）
           created_at: new Date(),
           updated_at: new Date()
         }

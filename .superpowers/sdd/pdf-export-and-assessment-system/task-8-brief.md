@@ -1,12 +1,12 @@
-# Task 8: 教师权限与班级数据
+# Task 8: 领队权限与团队数据
 
 ## 任务概述
 
-创建教师权限系统，教师可以查看班级所有学生的数据，生成班级汇总报告。
+创建领队权限系统，领队可以查看团队所有成员的数据，生成团队汇总报告。
 
 ## 需要创建的文件
 
-### 1. `cloudfunctions/getClassStudents/index.js` - 获取班级学生云函数
+### 1. `cloudfunctions/getClassStudents/index.js` - 获取团队成员云函数
 
 ```javascript
 const cloud = require('wx-server-sdk');
@@ -18,30 +18,30 @@ exports.main = async (event, context) => {
   const { class_id } = event;
   
   try {
-    // 验证教师权限
+    // 验证领队权限
     const { data: teacher } = await db.collection('users').where({
       _openid: wxContext.OPENID,
       role: 'teacher'
     }).get();
     
     if (teacher.length === 0) {
-      return { success: false, error: '无教师权限' };
+      return { success: false, error: '无领队权限' };
     }
     
     const teacherData = teacher[0];
     const targetClassId = class_id || teacherData.class_id;
     
     if (!targetClassId) {
-      return { success: false, error: '未绑定班级' };
+      return { success: false, error: '未绑定团队' };
     }
     
-    // 获取班级学生
+    // 获取团队成员
     const { data: students } = await db.collection('users').where({
       class_id: targetClassId,
       role: 'student'
     }).get();
     
-    // 获取每个学生的行为数据
+    // 获取每个成员的行为数据
     const studentsWithBehaviors = await Promise.all(
       students.map(async (student) => {
         const { data: behaviors } = await db.collection('behaviors').where({
@@ -55,7 +55,7 @@ exports.main = async (event, context) => {
       })
     );
     
-    // 计算班级统计
+    // 计算团队统计
     const classStats = calculateClassStats(studentsWithBehaviors);
     
     return {
@@ -64,7 +64,7 @@ exports.main = async (event, context) => {
       classStats
     };
   } catch (err) {
-    console.error('获取班级数据失败:', err);
+    console.error('获取团队数据失败:', err);
     return { success: false, error: err.message };
   }
 };
@@ -108,7 +108,7 @@ function calculateClassStats(students) {
 {
   "name": "getClassStudents",
   "version": "1.0.0",
-  "description": "获取班级学生数据",
+  "description": "获取团队成员数据",
   "main": "index.js",
   "dependencies": {
     "wx-server-sdk": "~2.6.3"
@@ -118,7 +118,7 @@ function calculateClassStats(students) {
 
 ## 需要修改的文件
 
-### 3. `pages/profile/profile.js` - 添加教师数据视图
+### 3. `pages/profile/profile.js` - 添加领队数据视图
 
 在 `Page({...})` 中添加：
 
@@ -157,12 +157,12 @@ Page({
         });
       }
     } catch (err) {
-      console.error('加载班级数据失败:', err);
+      console.error('加载团队数据失败:', err);
     }
   },
   
   onExportClassReport() {
-    // 导出班级汇总表
+    // 导出团队汇总表
     wx.showToast({ title: '功能开发中', icon: 'none' });
   },
   
@@ -175,22 +175,22 @@ Page({
 });
 ```
 
-### 4. `pages/profile/profile.wxml` - 添加教师视图
+### 4. `pages/profile/profile.wxml` - 添加领队视图
 
 在页面中添加：
 
 ```xml
 <view class="teacher-section" wx:if="{{isTeacher}}">
-  <view class="section-title">班级数据</view>
+  <view class="section-title">团队数据</view>
   
   <view class="class-stats">
     <view class="stat-item">
       <text class="stat-value">{{classData.totalStudents}}</text>
-      <text class="stat-label">学生总数</text>
+      <text class="stat-label">成员总数</text>
     </view>
     <view class="stat-item">
       <text class="stat-value">{{classData.activeStudents}}</text>
-      <text class="stat-label">活跃学生</text>
+      <text class="stat-label">活跃成员</text>
     </view>
     <view class="stat-item">
       <text class="stat-value">{{classData.averageCheckins}}</text>
@@ -212,12 +212,12 @@ Page({
   </view>
   
   <button class="export-class-btn" bindtap="onExportClassReport">
-    导出班级汇总表
+    导出团队汇总表
   </button>
 </view>
 ```
 
-### 5. `pages/profile/profile.wxss` - 添加教师视图样式
+### 5. `pages/profile/profile.wxss` - 添加领队视图样式
 
 ```css
 .teacher-section {
@@ -299,11 +299,11 @@ Page({
 
 ## 测试要求
 
-1. 教师角色能正确识别
-2. 班级数据能正确加载
-3. 学生列表能正确显示
-4. 班级统计能正确计算
-5. 导出班级汇总表按钮功能正常
+1. 领队角色能正确识别
+2. 团队数据能正确加载
+3. 成员列表能正确显示
+4. 团队统计能正确计算
+5. 导出团队汇总表按钮功能正常
 
 ## 提交要求
 

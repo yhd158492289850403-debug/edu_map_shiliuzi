@@ -1,16 +1,16 @@
 /**
- * 行为 → 子素养 → 对症切片教案 推荐逻辑（纯函数）
+ * 行为 → 子素养 → 对症切片攻略 推荐逻辑（纯函数）
  *
  * 完整链路：
- *   家长输入一个"行为"（顶嘴/磨蹭/怕黑…）
+ *   家庭用户输入一个"行为"（顶嘴/磨蹭/怕黑…）
  *   → 匹配 data/behaviors.js 的 BEHAVIORS（含别名）
  *   → 得到该行为对应的子素养集合 subs
- *   → 在 data/locations.js 的 480 个切片中，找出 subs 重叠且星级较高者作为"对症切片教案"
- *   → 每个切片带所属点位名 + 四段教案（pre/talk/act/post），供展示与点进详情页。
+ *   → 在 data/locations.js 的 480 个切片中，找出 subs 重叠且星级较高者作为"对症切片攻略"
+ *   → 每个切片带所属点位名 + 四段攻略（pre/talk/act/post），供展示与点进详情页。
  *
  * 参考：
  *   - BEHAVIORS 来自归档 behavior_map_extended + behavior_slice_index_extended
- *   - 完整教案来自工作区 locations.js 的 slices（比归档行为切片多了 edu/pre/talk/act/post）
+ *   - 完整攻略来自工作区 locations.js 的 slices（比归档行为切片多了 edu/pre/talk/act/post）
  */
 const { LOCATIONS } = require('../data/locations');
 const { BEHAVIORS } = require('../data/behaviors');
@@ -58,7 +58,7 @@ function behaviorSubs(name) {
 }
 
 /**
- * 推荐：输入行为文本 -> 对症切片教案列表
+ * 推荐：输入行为文本 -> 对症切片攻略列表
  * @param {string} text 行为文本
  * @param {object} opts { owner: 'behavior'|'sub', minN? , limit? }
  * @returns {Array<{behavior, subs, matchedSlices}>}

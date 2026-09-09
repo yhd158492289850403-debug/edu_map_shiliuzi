@@ -38,7 +38,7 @@ async function shouldStartAssessment() {
     }
   }
   
-  // 条件3：查看教案≥10个
+  // 条件3：查看攻略≥10个
   if (stats.viewedSlices.length >= TRIGGERS.VIEWED_SLICES) {
     return { ready: true, reason: 'viewed_slices', progress: 100 };
   }
@@ -81,11 +81,11 @@ function getNextStepMessage(stats) {
   const sliceRemain = TRIGGERS.VIEWED_SLICES - stats.viewedSlices.length;
   
   if (checkinRemain > 0 && sliceRemain > 0) {
-    return `再完成${checkinRemain}次打卡或学习${sliceRemain}个教案即可生成报告`;
+    return `再完成${checkinRemain}次打卡或探索${sliceRemain}个攻略即可生成报告`;
   } else if (checkinRemain > 0) {
     return `再完成${checkinRemain}次打卡即可生成报告`;
   } else if (sliceRemain > 0) {
-    return `再学习${sliceRemain}个教案即可生成报告`;
+    return `再探索${sliceRemain}个攻略即可生成报告`;
   }
   
   return '继续加油！';

@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 实现PDF导出功能和基于行为数据的六维素养评估系统，包含观察期机制、角色化报告和教师数据权限。
+**Goal:** 实现PDF导出功能和基于行为数据的六维素养评估系统，包含观察期机制、角色化报告和领队数据权限。
 
 **Architecture:** 
 - 前端：小程序原生Canvas绘制雷达图 + 无感行为采集
 - 后端：云函数生成PDF（pdf-lib） + 数据库存储行为记录
 - 评估算法：基于用户行为数据（查看/打卡/停留时长）推断六维素养得分
-- 冷启动：观察期（打卡3次/使用7天/查看10个教案）后才开始评分
+- 冷启动：观察期（打卡3次/使用7天/查看10个攻略）后才开始评分
 
 **Tech Stack:** 微信小程序原生 + 微信云开发 + pdf-lib + Canvas API
 
@@ -19,7 +19,7 @@
 - 所有数据采集必须"无感"，不增加用户操作负担
 - 观察期必须给出积极反馈和下一步建议
 - 角色选择首次使用时弹出，支持之后更改
-- 教师只能看到自己班级的学生数据
+- 领队只能看到自己团队的成员数据
 - PDF导出支持单次和多选两种模式
 
 ---
@@ -32,7 +32,7 @@
 |----------|------|
 | `utils/tracker.js` | 行为采集核心：页面访问、停留时长、点击行为 |
 | `utils/assessment.js` | 六维素养评估算法 |
-| `utils/report-generator.js` | 报告生成：家长/学生/教师三种模板 |
+| `utils/report-generator.js` | 报告生成：家庭用户/成员/领队三种模板 |
 | `utils/radar-chart.js` | Canvas雷达图绘制 |
 | `utils/pdf-export.js` | PDF导出前端逻辑 |
 | `data/user-roles.js` | 角色配置和权限定义 |
@@ -44,7 +44,7 @@
 | `cloudfunctions/generatePDF/` | PDF生成云函数 |
 | `cloudfunctions/getBehaviors/` | 获取行为数据云函数 |
 | `cloudfunctions/saveBehavior/` | 保存行为数据云函数 |
-| `cloudfunctions/getClassStudents/` | 获取班级学生数据云函数 |
+| `cloudfunctions/getClassStudents/` | 获取团队成员数据云函数 |
 
 ### 修改文件
 
@@ -89,21 +89,21 @@ const ROLE_TYPES = {
 
 const ROLE_CONFIGS = {
   [ROLE_TYPES.PARENT]: {
-    label: '家长',
+    label: '家庭用户',
     icon: '👨‍👩‍👧',
     description: '查看孩子成长报告，获取育儿建议',
     reportStyle: 'warm'  // 温馨鼓励型
   },
   [ROLE_TYPES.STUDENT]: {
-    label: '学生',
+    label: '成员',
     icon: '👦',
     description: '查看自己的成长勋章和能力图',
     reportStyle: 'playful'  // 活泼游戏型
   },
   [ROLE_TYPES.TEACHER]: {
-    label: '教师',
+    label: '领队',
     icon: '👨‍🏫',
-    description: '查看班级学生数据，生成教学报告',
+    description: '查看团队成员数据，生成讲解报告',
     reportStyle: 'professional',  // 专业数据型
     permissions: ['view_class_data', 'export_class_report']
   }
@@ -229,7 +229,7 @@ if (data.length === 0) {
       nickname: '微信用户',
       avatar: '',
       role: 'parent',  // 默认角色
-      class_id: '',     // 班级ID（教师用）
+      class_id: '',     // 团队ID（领队用）
       created_at: new Date(),
       updated_at: new Date()
     }
@@ -757,7 +757,7 @@ async function shouldStartAssessment() {
     }
   }
   
-  // 条件3：查看教案≥10个
+  // 条件3：查看攻略≥10个
   if (stats.viewedSlices.length >= TRIGGERS.VIEWED_SLICES) {
     return { ready: true, reason: 'viewed_slices', progress: 100 };
   }
@@ -800,11 +800,11 @@ function getNextStepMessage(stats) {
   const sliceRemain = TRIGGERS.VIEWED_SLICES - stats.viewedSlices.length;
   
   if (checkinRemain > 0 && sliceRemain > 0) {
-    return `再完成${checkinRemain}次打卡或学习${sliceRemain}个教案即可生成报告`;
+    return `再完成${checkinRemain}次打卡或探索${sliceRemain}个攻略即可生成报告`;
   } else if (checkinRemain > 0) {
     return `再完成${checkinRemain}次打卡即可生成报告`;
   } else if (sliceRemain > 0) {
-    return `再学习${sliceRemain}个教案即可生成报告`;
+    return `再探索${sliceRemain}个攻略即可生成报告`;
   }
   
   return '继续加油！';
@@ -1055,7 +1055,7 @@ function calculateSixDimScores(behaviors) {
 }
 
 /**
- * 计算关注度（查看教案数量和星级）
+ * 计算关注度（查看攻略数量和星级）
  */
 function calcRecognition(viewedSlices, dimKey) {
   const dimSlices = viewedSlices.filter(s => s.dimKey === dimKey);
@@ -1126,7 +1126,7 @@ function calcFeedback(feedbacks, dimKey) {
 function calculateInitialScores(behaviors) {
   const scores = {};
   
-  // 基于已查看的教案维度分布
+  // 基于已查看的攻略维度分布
   const dimViewCount = {};
   for (const slice of (behaviors.viewedSlices || [])) {
     dimViewCount[slice.dimKey] = (dimViewCount[slice.dimKey] || 0) + 1;
@@ -1538,7 +1538,7 @@ function generateReport(role, scores, behaviors, options = {}) {
 }
 
 /**
- * 家长报告（温馨鼓励型）
+ * 家庭用户报告（温馨鼓励型）
  */
 function generateParentReport(scores, behaviors, options) {
   const { nickname = '孩子', checkinCount = 0 } = options;
@@ -1548,7 +1548,7 @@ function generateParentReport(scores, behaviors, options) {
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的探索，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     
@@ -1565,7 +1565,7 @@ function generateParentReport(scores, behaviors, options) {
 }
 
 /**
- * 学生报告（活泼游戏型）
+ * 成员报告（活泼游戏型）
  */
 function generateStudentReport(scores, behaviors, options) {
   const { nickname = '同学', checkinCount = 0 } = options;
@@ -1587,13 +1587,13 @@ function generateStudentReport(scores, behaviors, options) {
 }
 
 /**
- * 教师报告（专业数据型）
+ * 领队报告（专业数据型）
  */
 function generateTeacherReport(scores, behaviors, options) {
-  const { studentName = '学生', checkinCount = 0, classData = {} } = options;
+  const { studentName = '成员', checkinCount = 0, classData = {} } = options;
   
   return {
-    title: `学生素养发展评估报告 - ${studentName}`,
+    title: `成员素养发展评估报告 - ${studentName}`,
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }),
     
     summary: {
@@ -1675,7 +1675,7 @@ function getScoreLevel(score) {
 }
 
 function getParentDescription(dim, score) {
-  // 根据维度和分数生成家长风格的描述
+  // 根据维度和分数生成家庭用户风格的描述
   const descriptions = {
     '体素': {
       high: '孩子在身体素质方面表现优秀，运动能力较强！',
@@ -1690,12 +1690,12 @@ function getParentDescription(dim, score) {
 }
 
 function getStudentDescription(dim, score) {
-  // 生成学生风格的描述
+  // 生成成员风格的描述
   return `${getDimLabel(dim)}：${score}分 ${getStarEmoji(score)}`;
 }
 
 function getTeacherDescription(dim, score) {
-  // 生成教师风格的描述
+  // 生成领队风格的描述
   return `${getDimLabel(dim)}得分${score}分，${getScoreLevel(score)}水平`;
 }
 
@@ -1718,7 +1718,7 @@ function generateHighlights(scores, style) {
 
 function generateSuggestions(scores, style) {
   // 生成建议
-  return ['建议每周安排一次亲子活动', '可以多关注价值素养类教案'];
+  return ['建议每周安排一次亲子活动', '可以多关注价值素养类攻略'];
 }
 
 function getEncouragement(scores) {
@@ -1747,7 +1747,7 @@ function getEvaluationPeriod(behaviors) {
 }
 
 function getDataSources(behaviors) {
-  return '3次实地探访记录、5个教案学习数据、6次行为观察';
+  return '3次实地探访记录、5个攻略探索数据、6次行为观察';
 }
 
 function getKeyFindings(scores, classData) {
@@ -1765,8 +1765,8 @@ function generateAnalysis(scores, classData) {
 function generateRecommendations(scores, style) {
   return [
     '建议增加团队合作类活动',
-    '可采用情境模拟教学法',
-    '定期反馈学生在家庭环境中的表现'
+    '可采用情境模拟讲解法',
+    '定期反馈成员在家庭环境中的表现'
   ];
 }
 
@@ -1774,7 +1774,7 @@ function generateClassComparison(scores, classData) {
   return {
     average: classData.average || {},
     ranking: '前30%',
-    comparison: '高于班级平均水平'
+    comparison: '高于团队平均水平'
   };
 }
 
@@ -2347,7 +2347,7 @@ git commit -m "feat: add PDF export with selective checkin records"
 
 ---
 
-## Task 8: 教师权限与班级数据
+## Task 8: 领队权限与团队数据
 
 **Files:**
 - Create: `cloudfunctions/getClassStudents/index.js`
@@ -2356,9 +2356,9 @@ git commit -m "feat: add PDF export with selective checkin records"
 - Modify: `pages/profile/profile.wxml`
 
 **Interfaces:**
-- Produces: `getClassStudents()`, 教师数据视图
+- Produces: `getClassStudents()`, 领队数据视图
 
-- [ ] **Step 1: 创建获取班级学生云函数**
+- [ ] **Step 1: 创建获取团队成员云函数**
 
 ```javascript
 // cloudfunctions/getClassStudents/index.js
@@ -2371,30 +2371,30 @@ exports.main = async (event, context) => {
   const { class_id } = event;
   
   try {
-    // 验证教师权限
+    // 验证领队权限
     const { data: teacher } = await db.collection('users').where({
       _openid: wxContext.OPENID,
       role: 'teacher'
     }).get();
     
     if (teacher.length === 0) {
-      return { success: false, error: '无教师权限' };
+      return { success: false, error: '无领队权限' };
     }
     
     const teacherData = teacher[0];
     const targetClassId = class_id || teacherData.class_id;
     
     if (!targetClassId) {
-      return { success: false, error: '未绑定班级' };
+      return { success: false, error: '未绑定团队' };
     }
     
-    // 获取班级学生
+    // 获取团队成员
     const { data: students } = await db.collection('users').where({
       class_id: targetClassId,
       role: 'student'
     }).get();
     
-    // 获取每个学生的行为数据
+    // 获取每个成员的行为数据
     const studentsWithBehaviors = await Promise.all(
       students.map(async (student) => {
         const { data: behaviors } = await db.collection('behaviors').where({
@@ -2408,7 +2408,7 @@ exports.main = async (event, context) => {
       })
     );
     
-    // 计算班级统计
+    // 计算团队统计
     const classStats = calculateClassStats(studentsWithBehaviors);
     
     return {
@@ -2417,7 +2417,7 @@ exports.main = async (event, context) => {
       classStats
     };
   } catch (err) {
-    console.error('获取班级数据失败:', err);
+    console.error('获取团队数据失败:', err);
     return { success: false, error: err.message };
   }
 };
@@ -2455,10 +2455,10 @@ function calculateClassStats(students) {
 }
 ```
 
-- [ ] **Step 2: 修改个人档案页，添加教师视图**
+- [ ] **Step 2: 修改个人档案页，添加领队视图**
 
 ```javascript
-// pages/profile/profile.js - 添加教师数据视图
+// pages/profile/profile.js - 添加领队数据视图
 Page({
   data: {
     // ... 其他数据
@@ -2493,12 +2493,12 @@ Page({
         });
       }
     } catch (err) {
-      console.error('加载班级数据失败:', err);
+      console.error('加载团队数据失败:', err);
     }
   },
   
   onExportClassReport() {
-    // 导出班级汇总表
+    // 导出团队汇总表
     wx.showToast({ title: '功能开发中', icon: 'none' });
   },
   
@@ -2512,18 +2512,18 @@ Page({
 ```
 
 ```xml
-<!-- pages/profile/profile.wxml - 添加教师视图 -->
+<!-- pages/profile/profile.wxml - 添加领队视图 -->
 <view class="teacher-section" wx:if="{{isTeacher}}">
-  <view class="section-title">班级数据</view>
+  <view class="section-title">团队数据</view>
   
   <view class="class-stats">
     <view class="stat-item">
       <text class="stat-value">{{classData.totalStudents}}</text>
-      <text class="stat-label">学生总数</text>
+      <text class="stat-label">成员总数</text>
     </view>
     <view class="stat-item">
       <text class="stat-value">{{classData.activeStudents}}</text>
-      <text class="stat-label">活跃学生</text>
+      <text class="stat-label">活跃成员</text>
     </view>
     <view class="stat-item">
       <text class="stat-value">{{classData.averageCheckins}}</text>
@@ -2545,14 +2545,14 @@ Page({
   </view>
   
   <button class="export-class-btn" bindtap="onExportClassReport">
-    导出班级汇总表
+    导出团队汇总表
   </button>
 </view>
 ```
 
-- [ ] **Step 3: 测试教师权限功能**
+- [ ] **Step 3: 测试领队权限功能**
 
-运行：微信开发者工具 → 编译 → 使用教师账号登录 → 查看班级数据
+运行：微信开发者工具 → 编译 → 使用领队账号登录 → 查看团队数据
 
 - [ ] **Step 4: 提交代码**
 
@@ -2573,7 +2573,7 @@ git commit -m "feat: add teacher permissions and class data view"
 4. 评估算法 → 六维得分
 5. 报告生成 → 三种角色
 6. PDF导出 → 单次/多选
-7. 教师权限 → 班级数据
+7. 领队权限 → 团队数据
 
 - [ ] **Step 2: 部署云函数**
 
@@ -2611,6 +2611,6 @@ git push origin main
 5. **Task 5**: 雷达图组件（可视化）
 6. **Task 6**: 报告生成系统（核心功能）
 7. **Task 7**: PDF导出功能（用户需求）
-8. **Task 8**: 教师权限（扩展功能）
+8. **Task 8**: 领队权限（扩展功能）
 
 每个Task完成后都应该进行测试，确保功能正常后再进入下一个Task。

@@ -52,7 +52,7 @@
           <view class="action-item {{item.checked ? 'action-checked' : ''}}" wx:for="{{actionList}}" wx:key="name" data-name="{{item.name}}" bindtap="selectAction">
             <view class="action-check">{{item.checked ? '☑' : '☐'}}</view>
             <text class="action-name">{{item.name}}</text>
-            <text class="action-count" wx:if="{{item.sliceCount > 0}}">{{item.sliceCount}}个教案</text>
+            <text class="action-count" wx:if="{{item.sliceCount > 0}}">{{item.sliceCount}}个攻略</text>
           </view>
         </view>
 

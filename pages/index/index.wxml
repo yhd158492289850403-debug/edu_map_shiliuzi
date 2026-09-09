@@ -9,7 +9,7 @@
     </view>
   </view>
 
-  <!-- ===== 统一搜索栏：地点 / 行为特征 / 子素养 / 教案 ===== -->
+  <!-- ===== 统一搜索栏：地点 / 行为特征 / 子素养 / 攻略 ===== -->
   <view class="global-search" style="top: {{searchTop}}px;">
     <view class="gs-box">
       <text class="gs-icon">🔍</text>
@@ -54,10 +54,10 @@
       <text class="result-count">找到 <text class="count-num">{{resultCount}}</text> 个地点</text>
     </view>
 
-    <!-- 行为 → 子素养 → 对症教案 推荐（方案A：内嵌在卡片列表上方） -->
+    <!-- 行为 → 子素养 → 对症攻略 推荐（方案A：内嵌在卡片列表上方） -->
     <view class="behavior-rec" wx:if="{{behaviorRecs.length > 0}}">
       <view class="rec-head-row">
-        <view class="rec-title">👶 行为教案推荐</view>
+        <view class="rec-title">👶 行为攻略推荐</view>
         <text class="rec-clear" bindtap="clearBehaviorRecs">✕ 清除</text>
       </view>
       <view class="rec-label" wx:if="{{selectedBehaviorLabel}}">{{selectedBehaviorLabel}}</view>
@@ -83,7 +83,7 @@
           </view>
         </view>
       </view>
-      <view class="rec-hint">点切片可查看该点位详情与教案，上述结果基于行为→子素养匹配</view>
+      <view class="rec-hint">点切片可查看该点位详情与攻略，上述结果基于行为→子素养匹配</view>
     </view>
 
     <view class="card-grid" wx:if="{{cardItems.length > 0}}">

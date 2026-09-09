@@ -7,7 +7,7 @@ Component({
   data: {
     isLoading: true,
     isObserving: true,
-    isStudent: false,
+    isGuest: false,
     progress: 0,
     message: '',
     nextStep: '',
@@ -17,8 +17,8 @@ Component({
   
   lifetimes: {
     attached() {
-      const userRole = (app && app.globalData.userRole) || 'parent';
-      this.setData({ isStudent: userRole === 'student' });
+      const userEntry = (app && app.globalData.userEntry) || 'guest';
+      this.setData({ isGuest: userEntry === 'guest' });
       this.checkStatus();
     }
   },
@@ -41,7 +41,7 @@ Component({
           isLoading: false,
           isObserving: !result.ready,
           progress: result.progress || 0,
-          message: result.message || getProgressMessage(result.progress || 0, {}, this.data.isStudent ? 'student' : 'parent'),
+          message: result.message || getProgressMessage(result.progress || 0, {}, this.data.isGuest ? 'guest' : 'family'),
           nextStep: getNextStepMessage(result.stats || {}),
           stats: result.stats || {}
         });

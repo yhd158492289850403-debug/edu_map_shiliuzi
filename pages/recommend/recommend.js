@@ -1,5 +1,5 @@
 /**
- * 行为导引页 - 行为 → 子素养 → 对症教案 完整链路
+ * 行为导引页 - 行为 → 子素养 → 对症攻略 完整链路
  */
 const { recommend, matchBehaviors } = require('../../utils/behavior');
 const { getDimColor } = require('../../utils/util');
@@ -12,8 +12,8 @@ Page({
     empty: false,
     // 结果
     recs: [],           // [{behavior, subs, guide, scene, matchedSlices:[...]}]
-    activeRec: 0,       // 当前展开的教案切片 index（全局）
-    activeSlice: null,  // 当前展开展示的切片教案
+    activeRec: 0,       // 当前展开的攻略切片 index（全局）
+    activeSlice: null,  // 当前展开展示的切片攻略
     hotBehaviors: ['顶嘴', '磨蹭', '怕黑', '挑食', '不爱运动', '沉迷手机', '逆反', '害羞', '撒谎', '不专注']
   },
 
@@ -116,7 +116,7 @@ Page({
     updatedRecs[g] = { ...updatedRecs[g], matchedSlices: updatedSlices };
     this.setData({ recs: updatedRecs });
 
-    // 展开教案时，启用右上角胶囊菜单的分享入口
+    // 展开攻略时，启用右上角胶囊菜单的分享入口
     if (isExpanding) {
       this._shareData = {
         behavior: rec.behavior,
@@ -163,7 +163,7 @@ Page({
       };
     }
     const top3 = d.slices.slice(0, 3).map(s => s.title).join('、');
-    const suffix = d.slices.length > 3 ? `等${d.slices.length}个教案` : '';
+    const suffix = d.slices.length > 3 ? `等${d.slices.length}个攻略` : '';
     return {
       title: `「${d.behavior}」的出行方案：${d.subs.join('、')}`,
       path: `/pages/recommend/recommend?behavior=${encodeURIComponent(d.behavior)}`,
@@ -182,7 +182,7 @@ Page({
       };
     }
     return {
-      title: `「${d.behavior}」怎么办？${d.subs.join('、')}对症教案`,
+      title: `「${d.behavior}」怎么办？${d.subs.join('、')}对症攻略`,
       query: `behavior=${encodeURIComponent(d.behavior)}`
     };
   }

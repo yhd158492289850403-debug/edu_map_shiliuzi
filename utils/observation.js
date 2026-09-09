@@ -83,7 +83,7 @@ async function shouldStartAssessment() {
     viewedSlices,
     firstUseTime
   });
-  const userRole = (app && app.globalData.userRole) || 'parent';
+  const userEntry = (app && app.globalData.userEntry) || 'guest';
   
   console.log('观察期进度:', progress + '%');
   
@@ -92,7 +92,7 @@ async function shouldStartAssessment() {
     reason: 'observing',
     progress,
     stats: { totalCheckins, viewedSlices, firstUseTime },
-    message: getProgressMessage(progress, { totalCheckins, viewedSlices }, userRole)
+    message: getProgressMessage(progress, { totalCheckins, viewedSlices }, userEntry)
   };
 }
 
@@ -106,13 +106,13 @@ function calculateProgress(stats) {
   return Math.min(100, Math.max(checkinProgress, daysProgress, sliceProgress));
 }
 
-function getProgressMessage(progress, stats, userRole) {
-  const isStudent = userRole === 'student';
+function getProgressMessage(progress, stats, userEntry) {
+  const isGuest = userEntry === 'guest';
   
   if (progress < 30) {
-    return isStudent ? '🌱 正在记录你的学习轨迹...' : '🌱 正在观察孩子的成长轨迹...';
+    return isGuest ? '🌱 正在记录你的探索轨迹...' : '🌱 正在观察孩子的成长轨迹...';
   } else if (progress < 60) {
-    return isStudent ? '🌿 数据收集中，你正在很好地成长！' : '🌿 数据收集中，孩子正在很好地成长！';
+    return isGuest ? '🌿 数据收集中，你正在很好地成长！' : '🌿 数据收集中，孩子正在很好地成长！';
   } else if (progress < 90) {
     return '🌳 即将完成数据收集，再努力一点点！';
   } else {
@@ -125,11 +125,11 @@ function getNextStepMessage(stats) {
   const sliceRemain = TRIGGERS.VIEWED_SLICES - (stats.viewedSlices || []).length;
   
   if (checkinRemain > 0 && sliceRemain > 0) {
-    return `再完成${checkinRemain}次打卡或学习${sliceRemain}个教案即可生成报告`;
+    return `再完成${checkinRemain}次打卡或探索${sliceRemain}个攻略即可生成报告`;
   } else if (checkinRemain > 0) {
     return `再完成${checkinRemain}次打卡即可生成报告`;
   } else if (sliceRemain > 0) {
-    return `再学习${sliceRemain}个教案即可生成报告`;
+    return `再探索${sliceRemain}个攻略即可生成报告`;
   }
   
   return '继续加油！';

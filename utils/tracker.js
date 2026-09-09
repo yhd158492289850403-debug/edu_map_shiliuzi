@@ -127,7 +127,7 @@ function addToQueue(behavior) {
   const app = getApp();
   if (app && app.globalData) {
     behavior.openid = app.globalData.openid;
-    behavior.userRole = app.globalData.userRole;
+    behavior.userRole = app.globalData.userEntry;
   }
   behaviorQueue.push(behavior);
   

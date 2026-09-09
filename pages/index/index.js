@@ -48,7 +48,7 @@ Page({
     cardItems: [],
     resultCount: 0,
 
-    // 方案A：选中行为后内嵌的教案推荐
+    // 方案A：选中行为后内嵌的攻略推荐
     behaviorRecs: [],
     selectedBehaviorLabel: '', // 如 "顶嘴 → 情绪调节/共情回应/协商与冲突解决"
 
@@ -309,7 +309,7 @@ Page({
     this.onFilterChange({ detail: { ...this.data.filter, topics } });
   },
 
-  // ===== 搜索（统一入口：地点/行为/子素养/教案） =====
+  // ===== 搜索（统一入口：地点/行为/子素养/攻略） =====
   onSearchInput(e) {
     const search = e.detail.value;
     // 检测行为关键词，自动转换为星级条件
@@ -323,7 +323,7 @@ Page({
       starDims = this.data.filter.starDims;
     }
     const payload = { ...this.data.filter, search, starDims };
-    // 有输入时自动切到卡片视图，同时展示地点结果与行为教案推荐
+    // 有输入时自动切到卡片视图，同时展示地点结果与行为攻略推荐
     const set = { searchValue: search, filter: payload, view: search.trim() ? 'card' : 'map' };
     // 若从键盘输入（非无意义字符），保持卡片视图
     this.setData(set, () => this.refreshAll());
@@ -335,7 +335,7 @@ Page({
   },
 
   onSearchConfirm(e) {
-    // 确认搜索：行为/子素养类关键词，跳转行为导引页获得教案推荐
+    // 确认搜索：行为/子素养类关键词，跳转行为导引页获得攻略推荐
     wx.navigateTo({ url: '/pages/recommend/recommend' });
   },
 

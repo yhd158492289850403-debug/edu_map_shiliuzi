@@ -19,7 +19,7 @@
     <view class="hot-tags">
       <view class="hot-tag" wx:for="{{hotBehaviors}}" wx:key="*this" data-b="{{item}}" bindtap="onHot">{{item}}</view>
     </view>
-    <view class="rec-desc">输入一个行为特征 → 匹配 1-3 项子素养 → 推荐对症的出行攻略教案 → 点开可看四段教案并导航去点位。</view>
+    <view class="rec-desc">输入一个行为特征 → 匹配 1-3 项子素养 → 推荐对症的出行攻略攻略 → 点开可看四段攻略并导航去点位。</view>
   </view>
 
   <!-- 结果 -->
@@ -48,7 +48,7 @@
             <view class="slice-meta">{{s.point}} · {{s.age}} · {{s.starTxt}}</view>
           </view>
 
-          <!-- 展开教案（仅在选中切片时显示） -->
+          <!-- 展开攻略（仅在选中切片时显示） -->
           <view class="lesson" wx:if="{{s._expanded}}">
             <view class="lesson-seg" wx:if="{{s.edu}}"><text class="ls-label">出行价值</text><text class="ls-text">{{s.edu}}</text></view>
             <view class="lesson-seg" wx:if="{{s.pre}}"><text class="ls-label">行前准备</text><text class="ls-text">{{s.pre}}</text></view>

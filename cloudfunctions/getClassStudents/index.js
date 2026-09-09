@@ -7,30 +7,30 @@ exports.main = async (event, context) => {
   const { class_id } = event;
   
   try {
-    // 验证教师权限
+    // 验证领队权限
     const { data: teacher } = await db.collection('users').where({
       _openid: wxContext.OPENID,
-      role: 'teacher'
+      role: 'team'
     }).get();
     
     if (teacher.length === 0) {
-      return { success: false, error: '无教师权限' };
+      return { success: false, error: '无领队权限' };
     }
     
     const teacherData = teacher[0];
     const targetClassId = class_id || teacherData.class_id;
     
     if (!targetClassId) {
-      return { success: false, error: '未绑定班级' };
+      return { success: false, error: '未绑定团队' };
     }
     
-    // 获取班级学生
+    // 获取团队成员
     const { data: students } = await db.collection('users').where({
       class_id: targetClassId,
-      role: 'student'
+      role: 'guest'
     }).get();
     
-    // 获取每个学生的行为数据
+    // 获取每个成员的行为数据
     const studentsWithBehaviors = await Promise.all(
       students.map(async (student) => {
         const { data: behaviors } = await db.collection('behaviors').where({
@@ -44,7 +44,7 @@ exports.main = async (event, context) => {
       })
     );
     
-    // 计算班级统计
+    // 计算团队统计
     const classStats = calculateClassStats(studentsWithBehaviors);
     
     return {
@@ -53,7 +53,7 @@ exports.main = async (event, context) => {
       classStats
     };
   } catch (err) {
-    console.error('获取班级数据失败:', err);
+    console.error('获取团队数据失败:', err);
     return { success: false, error: err.message };
   }
 };

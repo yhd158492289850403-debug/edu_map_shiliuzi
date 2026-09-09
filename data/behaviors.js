@@ -1044,7 +1044,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -1165,7 +1165,7 @@ const BEHAVIORS = {
     "dimKey": "行素",
     "dimLabel": "行动素养",
     "cat": "独立性",
-    "scene": "凡事要家长代劳",
+    "scene": "凡事要家庭用户代劳",
     "guide": "微目标+复盘习惯",
     "subs": [
       "独立性",
@@ -1392,7 +1392,7 @@ const BEHAVIORS = {
     "dimKey": "行素",
     "dimLabel": "行动素养",
     "cat": "习惯",
-    "scene": "忘带文具/作业/水杯",
+    "scene": "忘带文具/任务/水杯",
     "guide": "角色扮演+协作任务",
     "subs": [
       "条理整理",
@@ -1524,7 +1524,7 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习品质",
+    "cat": "探索品质",
     "scene": "会做但总错、漏题",
     "guide": "苏格拉底追问+项目探究",
     "subs": [
@@ -1932,7 +1932,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -2064,7 +2064,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -3040,7 +3040,7 @@ const BEHAVIORS = {
     "dimKey": "灵素",
     "dimLabel": "价值素养",
     "cat": "礼仪",
-    "scene": "对爷爷奶奶/老师说话不敬",
+    "scene": "对爷爷奶奶/领队说话不敬",
     "guide": "价值两难讨论+榜样故事",
     "subs": [
       "恭敬礼让",
@@ -3329,8 +3329,8 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习动力",
-    "scene": "对阅读/学习无兴趣",
+    "cat": "探索动力",
+    "scene": "对阅读/探索无兴趣",
     "guide": "苏格拉底追问+项目探究",
     "subs": [
       "好奇追问",
@@ -3463,13 +3463,13 @@ const BEHAVIORS = {
     "observe": "能追问、比较、独立判断",
     "sliceType": "探究思考类切片"
   },
-  "写作业拖拉": {
-    "name": "写作业拖拉",
+  "写任务拖拉": {
+    "name": "写任务拖拉",
     "dim": "行动",
     "dimKey": "行素",
     "dimLabel": "行动素养",
     "cat": "行动拖延",
-    "scene": "作业一写几小时",
+    "scene": "任务一写几小时",
     "guide": "微目标+复盘习惯",
     "subs": [
       "启动执行",
@@ -3595,7 +3595,7 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习品质",
+    "cat": "探索品质",
     "scene": "听讲注意力分散",
     "guide": "微目标+复盘习惯",
     "subs": [
@@ -3725,7 +3725,7 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习动力",
+    "cat": "探索动力",
     "scene": "遇到问题不问、闷头卡住",
     "guide": "角色扮演+协作任务",
     "subs": [
@@ -4119,7 +4119,7 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习品质",
+    "cat": "探索品质",
     "scene": "做事三分钟热度",
     "guide": "教情绪命名+暂停三步法",
     "subs": [
@@ -4999,7 +4999,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -5967,7 +5967,7 @@ const BEHAVIORS = {
       },
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -6125,7 +6125,7 @@ const BEHAVIORS = {
     "dimKey": "交素",
     "dimLabel": "社交素养",
     "cat": "独立",
-    "scene": "小事频繁告老师/家长",
+    "scene": "小事频繁告领队/家庭用户",
     "guide": "角色扮演+协作任务",
     "subs": [
       "协商与冲突解决",
@@ -6645,7 +6645,7 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习策略",
+    "cat": "探索策略",
     "scene": "不理解只背诵",
     "guide": "苏格拉底追问+项目探究",
     "subs": [
@@ -7447,7 +7447,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -7617,7 +7617,7 @@ const BEHAVIORS = {
       },
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -7701,8 +7701,8 @@ const BEHAVIORS = {
     "dim": "认知",
     "dimKey": "智素",
     "dimLabel": "认知素养",
-    "cat": "学习品质",
-    "scene": "课堂注意力分散",
+    "cat": "探索品质",
+    "scene": "展区注意力分散",
     "guide": "苏格拉底追问+项目探究",
     "subs": [
       "专注力",
@@ -8524,8 +8524,8 @@ const BEHAVIORS = {
       },
       {
         "point": "包头市少年宫(总部)",
-        "location": "心理与成长课堂",
-        "name": "成长课堂——认识自己的情绪",
+        "location": "心理与成长展区",
+        "name": "成长展区——认识自己的情绪",
         "subs": [
           "情绪觉知",
           "情绪觉知"
@@ -10301,12 +10301,12 @@ const BEHAVIORS = {
     "observe": "能设定目标并坚持执行",
     "sliceType": "行动坚持类切片"
   },
-  "作业拖拉": {
-    "name": "作业拖拉",
+  "任务拖拉": {
+    "name": "任务拖拉",
     "dim": "行动",
     "dimKey": "行素",
     "dimLabel": "行动素养",
-    "scene": "写作业磨蹭、拖延",
+    "scene": "写任务磨蹭、拖延",
     "guide": "微目标+复盘习惯",
     "subs": [
       "启动执行",
@@ -10617,7 +10617,7 @@ const BEHAVIORS = {
       },
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -11134,7 +11134,7 @@ const BEHAVIORS = {
       },
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -11213,12 +11213,12 @@ const BEHAVIORS = {
     "observe": "能在具体情境中做出正直/诚信/感恩的选择",
     "sliceType": "品德价值类切片"
   },
-  "爱依赖家长": {
-    "name": "爱依赖家长",
+  "爱依赖家庭用户": {
+    "name": "爱依赖家庭用户",
     "dim": "行动",
     "dimKey": "行素",
     "dimLabel": "行动素养",
-    "scene": "凡事要家长代劳",
+    "scene": "凡事要家庭用户代劳",
     "guide": "苏格拉底追问+项目探究",
     "subs": [
       "独立性",
@@ -11489,7 +11489,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -11623,7 +11623,7 @@ const BEHAVIORS = {
     "slices": [
       {
         "point": "包头博物馆",
-        "location": "社教活动·石磨盘研学",
+        "location": "社教活动·石磨盘文化探索",
         "name": "石磨盘——寻找消失的劳作工具",
         "subs": [
           "勤劳",
@@ -14200,8 +14200,8 @@ const BEHAVIORS = {
       },
       {
         "point": "包头市少年宫(总部)",
-        "location": "艺术培训教室",
-        "name": "艺术课堂——用身体和声音表达",
+        "location": "艺术活动教室",
+        "name": "艺术展区——用身体和声音表达",
         "subs": [
           "身体自信",
           "审美感知"

@@ -25,7 +25,7 @@ const DIMENSIONS = {
     key: '智素',
     label: '认知素养',
     color: '#96CEB4',
-    description: '科学思维、学习能力、信息素养'
+    description: '科学思维、探索能力、信息素养'
   },
   '行素': {
     key: '行素',

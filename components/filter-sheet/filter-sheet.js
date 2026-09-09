@@ -28,7 +28,7 @@ Component({
     subList: [],
     actionList: [],
     topicChips: [
-      { key: '红色研学', label: '红色研学', active: false }
+      { key: '红色文化探索', label: '红色文化探索', active: false }
     ]
   },
 
@@ -68,7 +68,7 @@ Component({
 
       const selectedTopics = topics || [];
       const topicChips = [
-        { key: '红色研学', label: '红色研学', active: selectedTopics.includes('红色研学') }
+        { key: '红色文化探索', label: '红色文化探索', active: selectedTopics.includes('红色文化探索') }
       ];
 
       this.setData({ localSearch: this.properties.searchValue || '', dimChips, subList, actionList, topicChips, selectedTopics });

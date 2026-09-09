@@ -47,7 +47,7 @@ function calculateSixDimScores(behaviors) {
 }
 
 /**
- * 计算关注度（查看教案数量和星级）
+ * 计算关注度（查看攻略数量和星级）
  */
 function calcRecognition(viewedSlices, dimKey) {
   const dimSlices = viewedSlices.filter(s => s.dimKey === dimKey);
@@ -118,7 +118,7 @@ function calcFeedback(feedbacks, dimKey) {
 function calculateInitialScores(behaviors) {
   const scores = {};
   
-  // 基于已查看的教案维度分布
+  // 基于已查看的攻略维度分布
   const dimViewCount = {};
   for (const slice of (behaviors.viewedSlices || [])) {
     dimViewCount[slice.dimKey] = (dimViewCount[slice.dimKey] || 0) + 1;

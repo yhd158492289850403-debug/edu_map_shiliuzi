@@ -7,7 +7,7 @@ const INDEX_GUIDE_STEPS = [
   {
     target: '.gs-box',
     title: '🔍 搜索功能',
-    desc: '输入行为特征（如"顶嘴"）或地点名称，快速找到对症教案',
+    desc: '输入行为特征（如"顶嘴"）或地点名称，快速找到对症攻略',
     position: 'bottom',
     finger: 'point',
     demo: '试试输入"顶嘴"'

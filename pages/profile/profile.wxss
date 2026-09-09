@@ -71,7 +71,7 @@
   margin-top: 8rpx;
 }
 
-/* 学段设置 */
+/* 难度设置 */
 .stage-section {
   padding: 24rpx;
   margin: 0 24rpx 24rpx;
@@ -209,7 +209,7 @@
   line-height: 1.5;
 }
 
-/* 教师班级数据 */
+/* 领队团队数据 */
 .teacher-section {
   margin: 24rpx;
   padding: 30rpx;
@@ -398,7 +398,7 @@
   font-size: 24rpx;
 }
 
-/* 学生专属提示 */
+/* 成员专属提示 */
 .student-tip {
   padding: 24rpx;
 }

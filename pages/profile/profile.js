@@ -244,7 +244,7 @@ Page({
         });
       }
     } catch (err) {
-      console.error('加载班级数据失败:', err);
+      console.error('加载团队数据失败:', err);
     }
   },
 

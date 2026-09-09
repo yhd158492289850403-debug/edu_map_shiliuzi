@@ -2,7 +2,7 @@
 
 ## 任务概述
 
-创建报告生成系统，支持家长、学生、教师三种角色的报告模板，生成个性化的六维素养报告。
+创建报告生成系统，支持家庭用户、成员、领队三种角色的报告模板，生成个性化的六维素养报告。
 
 ## 需要创建的文件
 
@@ -31,7 +31,7 @@ function generateReport(role, scores, behaviors, options = {}) {
 }
 
 /**
- * 家长报告（温馨鼓励型）
+ * 家庭用户报告（温馨鼓励型）
  */
 function generateParentReport(scores, behaviors, options) {
   const { nickname = '孩子', checkinCount = 0 } = options;
@@ -41,7 +41,7 @@ function generateParentReport(scores, behaviors, options) {
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }),
     
     summary: {
-      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的学习，在多个素养维度上都有了可喜的变化。`,
+      text: `在过去的这段时间里，${nickname}通过${checkinCount}次实地探访、多个旅游攻略的探索，在多个素养维度上都有了可喜的变化。`,
       highlight: getTopImprovement(scores)
     },
     
@@ -58,7 +58,7 @@ function generateParentReport(scores, behaviors, options) {
 }
 
 /**
- * 学生报告（活泼游戏型）
+ * 成员报告（活泼游戏型）
  */
 function generateStudentReport(scores, behaviors, options) {
   const { nickname = '同学', checkinCount = 0 } = options;
@@ -80,13 +80,13 @@ function generateStudentReport(scores, behaviors, options) {
 }
 
 /**
- * 教师报告（专业数据型）
+ * 领队报告（专业数据型）
  */
 function generateTeacherReport(scores, behaviors, options) {
-  const { studentName = '学生', checkinCount = 0, classData = {} } = options;
+  const { studentName = '成员', checkinCount = 0, classData = {} } = options;
   
   return {
-    title: `学生素养发展评估报告 - ${studentName}`,
+    title: `成员素养发展评估报告 - ${studentName}`,
     subtitle: new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }),
     
     summary: {
@@ -168,7 +168,7 @@ function getScoreLevel(score) {
 }
 
 function getParentDescription(dim, score) {
-  // 根据维度和分数生成家长风格的描述
+  // 根据维度和分数生成家庭用户风格的描述
   const descriptions = {
     '体素': {
       high: '孩子在身体素质方面表现优秀，运动能力较强！',
@@ -186,9 +186,9 @@ function getParentDescription(dim, score) {
       low: '可以多和孩子讨论价值观问题，帮助他/她树立正确的价值观。'
     },
     '智素': {
-      high: '孩子在认知能力方面表现优秀，学习能力较强！',
+      high: '孩子在认知能力方面表现优秀，探索能力较强！',
       medium: '孩子在认知能力方面发展良好，继续保持！',
-      low: '可以多鼓励孩子阅读和学习，提升认知能力。'
+      low: '可以多鼓励孩子阅读和探索，提升认知能力。'
     },
     '行素': {
       high: '孩子在行动力方面表现优秀，做事有计划有执行！',
@@ -207,12 +207,12 @@ function getParentDescription(dim, score) {
 }
 
 function getStudentDescription(dim, score) {
-  // 生成学生风格的描述
+  // 生成成员风格的描述
   return `${getDimLabel(dim)}：${score}分 ${getStarEmoji(score)}`;
 }
 
 function getTeacherDescription(dim, score) {
-  // 生成教师风格的描述
+  // 生成领队风格的描述
   return `${getDimLabel(dim)}得分${score}分，${getScoreLevel(score)}水平`;
 }
 
@@ -235,7 +235,7 @@ function generateHighlights(scores, style) {
 
 function generateSuggestions(scores, style) {
   // 生成建议
-  return ['建议每周安排一次亲子活动', '可以多关注价值素养类教案'];
+  return ['建议每周安排一次亲子活动', '可以多关注价值素养类攻略'];
 }
 
 function getEncouragement(scores) {
@@ -264,7 +264,7 @@ function getEvaluationPeriod(behaviors) {
 }
 
 function getDataSources(behaviors) {
-  return '3次实地探访记录、5个教案学习数据、6次行为观察';
+  return '3次实地探访记录、5个攻略探索数据、6次行为观察';
 }
 
 function getKeyFindings(scores, classData) {
@@ -282,8 +282,8 @@ function generateAnalysis(scores, classData) {
 function generateRecommendations(scores, style) {
   return [
     '建议增加团队合作类活动',
-    '可采用情境模拟教学法',
-    '定期反馈学生在家庭环境中的表现'
+    '可采用情境模拟讲解法',
+    '定期反馈成员在家庭环境中的表现'
   ];
 }
 
@@ -291,7 +291,7 @@ function generateClassComparison(scores, classData) {
   return {
     average: classData.average || {},
     ranking: '前30%',
-    comparison: '高于班级平均水平'
+    comparison: '高于团队平均水平'
   };
 }
 
@@ -638,9 +638,9 @@ Page({
 
 ## 测试要求
 
-1. 家长报告能正确生成
-2. 学生报告能正确生成
-3. 教师报告能正确生成
+1. 家庭用户报告能正确生成
+2. 成员报告能正确生成
+3. 领队报告能正确生成
 4. 雷达图能正确显示
 5. 维度详情能正确显示
 6. 亮点和建议能正确显示

@@ -187,8 +187,8 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
       <div class="choice-box">
         <h2 id="choiceTitle">点击行为后…</h2>
         <p id="choiceDesc"></p>
-        <button class="choice-btn b1" id="choiceA" onclick="doChoice('A')">✅ 方案A：在卡片视图内直接展示该行为对应的切片教案（原地展开）</button>
-        <button class="choice-btn b2" id="choiceB" onclick="doChoice('B')">🚀 方案B：跳转到「行为导引页」看完整四段教案（离开首页）</button>
+        <button class="choice-btn b1" id="choiceA" onclick="doChoice('A')">✅ 方案A：在卡片视图内直接展示该行为对应的切片攻略（原地展开）</button>
+        <button class="choice-btn b2" id="choiceB" onclick="doChoice('B')">🚀 方案B：跳转到「行为导引页」看完整四段攻略（离开首页）</button>
       </div>
     </div>
   </div>
@@ -218,7 +218,7 @@ const LITERACY = {
   ],
   "行素": [
     { sub: "启动执行", actions: ["说做就做，5分钟内开始", "制定明日计划并执行"] },
-    { sub: "时间管理", actions: ["用番茄钟完成作业", "不拖延起床"] },
+    { sub: "时间管理", actions: ["用番茄钟完成任务", "不拖延起床"] },
   ],
   "交素": [
     { sub: "共情回应", actions: ["朋友难过时说'我理解你'", "主动关心他人"] },
@@ -268,7 +268,7 @@ function renderSubList() {
           <div class="a-name">${a}</div>
         </div>`
       ).join('');
-      hint.innerHTML = '点击行为 → ' + (mode==='A'?'在卡片视图内展示对应点位 & 切片':'跳转寻课页查看四段教案');
+      hint.innerHTML = '点击行为 → ' + (mode==='A'?'在卡片视图内展示对应点位 & 切片':'跳转寻课页查看四段攻略');
     }
   } else {
     al.innerHTML = ''; hint.innerHTML = '';
@@ -319,9 +319,9 @@ function doChoice(choice) {
   document.getElementById('choicePanel').classList.remove('open');
   if(choice==='A') setMode('A'); else setMode('B');
   if(choice==='A') {
-    showToast(`<strong>方案A 预览</strong><br>卡片视图会插入「<b>${pendingSub}</b> · <b>${pendingAction?.slice(0,12)}</b>」的推荐切片，可在首页直接看到教案摘要`);
+    showToast(`<strong>方案A 预览</strong><br>卡片视图会插入「<b>${pendingSub}</b> · <b>${pendingAction?.slice(0,12)}</b>」的推荐切片，可在首页直接看到攻略摘要`);
   } else {
-    showToast(`<strong>方案B 预览</strong><br>页面跳转到「行为导引页」，输入「${pendingSub}」展示完整四段教案（行前/路上/到馆/返程）`);
+    showToast(`<strong>方案B 预览</strong><br>页面跳转到「行为导引页」，输入「${pendingSub}」展示完整四段攻略（行前/路上/到馆/返程）`);
   }
 }
 
